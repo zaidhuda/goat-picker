@@ -14,7 +14,7 @@ const LandingPage = () => {
   }, [user, history]);
 
   return (
-    <div className="flex h-screen items-center justify-center w-screen">
+    <div className="flex h-screen items-center justify-center">
       <LoginButton />
     </div>
   );
