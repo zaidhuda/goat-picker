@@ -2,6 +2,7 @@ import firebase from "firebase/app";
 import "firebase/firestore";
 import "firebase/auth";
 import { useState, useEffect } from "react";
+import { DateTime } from "luxon";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAvV7o3gZ8nE-DtaWBuyHca2d8dh0iDn4o",
@@ -22,6 +23,8 @@ const useFirebase = () => {
 
   const [db] = useState(firebase.firestore());
   const [user, setUser] = useState();
+  const [options, setOptions] = useState([]);
+  const [currentUserVotes, setCurrentUserVotes] = useState([]);
 
   // *** Auth API ***
 
@@ -37,19 +40,22 @@ const useFirebase = () => {
 
   // *** Firestore API ***
 
-  const getOptions = (resolver) => {
-    db.collection(OPTIONS)
-      .get()
-      .then((querySnapshot) => {
-        const data = [];
-        querySnapshot.forEach((doc) => {
-          data.push({
-            id: doc.id,
-            ...doc.data(),
-          });
-        });
-        resolver(data);
-      });
+  const addVote = (option, resolver) => {
+    if (!user.uid || user.uid === option) return;
+
+    const now = DateTime.now();
+    const year = now.year;
+    const week = now.weekNumber;
+
+    db.collection(VOTES)
+      .doc(`${year}-${week}-${option}-${user.uid}`)
+      .set({ voter: user.uid, option, week, year })
+      .then(resolver)
+      .catch(console.error);
+  };
+
+  const removeVote = (id, resolver) => {
+    db.collection(VOTES).doc(id).delete().then(resolver).catch(console.error);
   };
 
   useEffect(() => {
@@ -67,9 +73,56 @@ const useFirebase = () => {
     if (user) addUserToOptions(user);
   }, [db, user]);
 
+  useEffect(() => {
+    const getOptions = (resolver) => {
+      db.collection(OPTIONS)
+        .onSnapshot((querySnapshot) => {
+          const data = [];
+          querySnapshot.forEach((doc) => {
+            if (doc.id !== user.uid) {
+              data.push({
+                id: doc.id,
+                ...doc.data(),
+              });
+            }
+          });
+          resolver(data);
+        });
+    };
+  
+    const getCurrentUserVotes = (resolver) => {
+      const now = DateTime.now();
+      const year = now.year;
+      const week = now.weekNumber;
+  
+      db.collection(VOTES)
+        .where("year", "==", year)
+        .where("week", "==", week)
+        .where("voter", "==", user.uid)
+        .onSnapshot((querySnapshot) => {
+          const data = [];
+          querySnapshot.forEach((doc) => {
+            data.push({
+              id: doc.id,
+              ...doc.data(),
+            });
+          });
+          resolver(data);
+        });
+    };
+
+    if (user) {
+      getOptions(setOptions);
+      getCurrentUserVotes(setCurrentUserVotes);
+    }
+  }, [db, user])
+
   return {
+    currentUserVotes,
+    options,
     user,
-    getOptions,
+    addVote,
+    removeVote,
     signInWithPopup,
     signOut,
   };

@@ -1,24 +1,28 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 
-import { FirebaseContext } from '../contexts'
+import { FirebaseContext } from "../contexts";
 
 import withUser from "../components/withUser";
 import Navbar from "../components/Navbar";
-import Selection from "../components/Selection";
+import Selection from "../components/VoteButton";
 
 const VotesPage = () => {
-  const { getOptions } = useContext(FirebaseContext);
-  const [options, setOptions] = useState([]);
-  
-  useEffect(()=>{
-    getOptions(setOptions)
-  }, [getOptions]);
+  const { options, currentUserVotes } = useContext(FirebaseContext);
 
   return (
     <div>
       <Navbar />
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      {options.map(({id, ...option}) => <Selection key={id} {...option} />)}
+        {options
+          .map((option) => ({
+            ...option,
+            voteId: currentUserVotes.find(
+              ({ option: votedOption }) => votedOption === option.id
+            )?.id,
+          }))
+          .map((option) => (
+            <Selection key={option.id} {...option} />
+          ))}
       </div>
     </div>
   );
