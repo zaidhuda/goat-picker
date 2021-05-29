@@ -10,14 +10,16 @@ function App() {
   const firebase = useFirebase();
 
   return (
-    <FirebaseContext.Provider value={firebase}>
-      <BrowserRouter>
-        <Switch>
-          <Route path="/" exact component={LandingPage}></Route>
-          <Route path="/votes" component={VotesPage}></Route>
-        </Switch>
-      </BrowserRouter>
-    </FirebaseContext.Provider>
+    <div className="container mx-auto">
+      <FirebaseContext.Provider value={firebase}>
+        <BrowserRouter>
+          <Switch>
+            <Route path="/" exact component={LandingPage}></Route>
+            <Route path="/votes" component={VotesPage}></Route>
+          </Switch>
+        </BrowserRouter>
+      </FirebaseContext.Provider>
+    </div>
   );
 }
 

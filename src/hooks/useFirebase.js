@@ -12,7 +12,8 @@ const firebaseConfig = {
   appId: "1:413537459528:web:119f3c0bf23f961bb4a77d",
 };
 
-export const PAGINATE_PER = 10;
+const OPTIONS = "options";
+const VOTES = "votes";
 
 const useFirebase = () => {
   if (firebase.apps.length === 0) {
@@ -21,10 +22,6 @@ const useFirebase = () => {
 
   const [db] = useState(firebase.firestore());
   const [user, setUser] = useState();
-
-  useEffect(() => {
-    firebase.auth().onAuthStateChanged(setUser);
-  }, []);
 
   // *** Auth API ***
 
@@ -40,8 +37,39 @@ const useFirebase = () => {
 
   // *** Firestore API ***
 
+  const getOptions = (resolver) => {
+    db.collection(OPTIONS)
+      .get()
+      .then((querySnapshot) => {
+        const data = [];
+        querySnapshot.forEach((doc) => {
+          data.push({
+            id: doc.id,
+            ...doc.data(),
+          });
+        });
+        resolver(data);
+      });
+  };
+
+  useEffect(() => {
+    firebase.auth().onAuthStateChanged(setUser);
+  }, []);
+
+  useEffect(() => {
+    const addUserToOptions = ({ displayName, uid, photoURL }) => {
+      db.collection(OPTIONS)
+        .doc(uid)
+        .set({ displayName, photoURL })
+        .catch(console.error);
+    };
+
+    if (user) addUserToOptions(user);
+  }, [db, user]);
+
   return {
     user,
+    getOptions,
     signInWithPopup,
     signOut,
   };
