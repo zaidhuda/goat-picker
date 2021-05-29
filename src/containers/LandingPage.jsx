@@ -3,9 +3,11 @@ import { useHistory } from "react-router-dom";
 
 import { FirebaseContext } from "../contexts";
 
+import LoginButton from "../components/LoginButton";
+
 const LandingPage = () => {
   const history = useHistory();
-  const { user, signInWithPopup } = useContext(FirebaseContext);
+  const { user } = useContext(FirebaseContext);
 
   useEffect(() => {
     console.log(user);
@@ -13,9 +15,8 @@ const LandingPage = () => {
   }, [user, history]);
 
   return (
-    <div>
-      <h1>Sign In</h1>
-      <button onClick={signInWithPopup}>Sign In</button>
+    <div className="flex h-screen items-center justify-center w-screen">
+      <LoginButton />
     </div>
   );
 };
