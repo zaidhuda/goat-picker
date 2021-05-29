@@ -1,4 +1,3 @@
-import { createContext } from "react";
 import { Route, BrowserRouter, Switch } from "react-router-dom";
 
 import { FirebaseContext } from "../contexts";

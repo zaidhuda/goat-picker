@@ -20,7 +20,6 @@ const useFirebase = () => {
   }
 
   const [db] = useState(firebase.firestore());
-  const [connections, setConnections] = useState([]);
   const [user, setUser] = useState();
 
   useEffect(() => {
@@ -40,14 +39,6 @@ const useFirebase = () => {
   };
 
   // *** Firestore API ***
-
-  // *** close connections ***
-  const close = () => {
-    connections.forEach((disconnect) => {
-      if (typeof disconnect === "function") disconnect();
-    });
-    setConnections([]);
-  };
 
   return {
     user,
