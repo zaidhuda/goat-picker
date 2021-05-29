@@ -25,6 +25,7 @@ const useFirebase = () => {
   const [user, setUser] = useState();
   const [options, setOptions] = useState([]);
   const [currentUserVotes, setCurrentUserVotes] = useState([]);
+  const [currentWeekVotes, setCurrentWeekVotes] = useState([]);
 
   // *** Auth API ***
 
@@ -59,7 +60,12 @@ const useFirebase = () => {
   };
 
   useEffect(() => {
-    firebase.auth().onAuthStateChanged(setUser);
+    firebase.auth().onAuthStateChanged((user) => {
+      setUser(user);
+      setOptions([]);
+      setCurrentUserVotes([]);
+      setCurrentWeekVotes([]);
+    });
   }, []);
 
   useEffect(() => {
@@ -75,26 +81,23 @@ const useFirebase = () => {
 
   useEffect(() => {
     const getOptions = (resolver) => {
-      db.collection(OPTIONS)
-        .onSnapshot((querySnapshot) => {
-          const data = [];
-          querySnapshot.forEach((doc) => {
-            if (doc.id !== user.uid) {
-              data.push({
-                id: doc.id,
-                ...doc.data(),
-              });
-            }
+      db.collection(OPTIONS).onSnapshot((querySnapshot) => {
+        const data = [];
+        querySnapshot.forEach((doc) => {
+          data.push({
+            id: doc.id,
+            ...doc.data(),
           });
-          resolver(data);
         });
+        resolver(data);
+      });
     };
-  
+
     const getCurrentUserVotes = (resolver) => {
       const now = DateTime.now();
       const year = now.year;
       const week = now.weekNumber;
-  
+
       db.collection(VOTES)
         .where("year", "==", year)
         .where("week", "==", week)
@@ -111,14 +114,36 @@ const useFirebase = () => {
         });
     };
 
+    const getCurrentWeekVotes = (resolver) => {
+      const now = DateTime.now();
+      const year = now.year;
+      const week = now.weekNumber;
+
+      db.collection(VOTES)
+        .where("year", "==", year)
+        .where("week", "==", week)
+        .onSnapshot((querySnapshot) => {
+          const data = [];
+          querySnapshot.forEach((doc) => {
+            data.push({
+              id: doc.id,
+              ...doc.data(),
+            });
+          });
+          resolver(data);
+        });
+    };
+
     if (user) {
       getOptions(setOptions);
       getCurrentUserVotes(setCurrentUserVotes);
+      getCurrentWeekVotes(setCurrentWeekVotes);
     }
   }, [db, user])
 
   return {
     currentUserVotes,
+    currentWeekVotes,
     options,
     user,
     addVote,

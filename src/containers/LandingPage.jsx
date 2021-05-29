@@ -10,7 +10,7 @@ const LandingPage = () => {
   const { user } = useContext(FirebaseContext);
 
   useEffect(() => {
-    if (user) return history.push("/votes");
+    if (user) return history.push("/vote");
   }, [user, history]);
 
   return (

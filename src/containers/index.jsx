@@ -4,7 +4,8 @@ import { FirebaseContext } from "../contexts";
 import useFirebase from "../hooks/useFirebase";
 
 import LandingPage from "./LandingPage";
-import VotesPage from "./VotesPage";
+import VotePage from "./VotePage";
+import StandingPage from "./StandingPage";
 
 function App() {
   const firebase = useFirebase();
@@ -15,7 +16,8 @@ function App() {
         <BrowserRouter>
           <Switch>
             <Route path="/" exact component={LandingPage}></Route>
-            <Route path="/votes" component={VotesPage}></Route>
+            <Route path="/vote" component={VotePage}></Route>
+            <Route path="/standing" component={StandingPage}></Route>
           </Switch>
         </BrowserRouter>
       </FirebaseContext.Provider>
