@@ -84,11 +84,13 @@ const useFirebase = () => {
 
   // Reset state on auth state change
   useEffect(() => {
-    firebase.auth().onAuthStateChanged((user) => {
+    const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
       setUser(user);
       setOptions([]);
       setCurrentWeekVotes([]);
     });
+
+    return unsubscribe;
   }, []);
 
   // Add user to options
@@ -103,12 +105,12 @@ const useFirebase = () => {
     if (user) addUserToOptions(user);
   }, [db, user]);
 
-  // Subsbscribe to /options
+  // Subscribe to /options
   useEffect(() => {
-    let listener = null;
+    let unsubscribe = null;
 
     if (user) {
-      listener = db.collection(OPTIONS).onSnapshot((querySnapshot) => {
+      unsubscribe = db.collection(OPTIONS).onSnapshot((querySnapshot) => {
         const data = [];
         querySnapshot.forEach((doc) => {
           data.push({
@@ -120,15 +122,15 @@ const useFirebase = () => {
       });
     }
 
-    return listener ? listener.unsubscribe : null;
+    return unsubscribe;
   }, [db, user]);
 
-  // Subsbscribe to votes for /year/week
+  // Subscribe to votes for /year/week
   useEffect(() => {
-    let listener = null;
+    let unsubscribe = null;
 
     if (user) {
-      listener = db
+      unsubscribe = db
         .collection(`${VOTES}/${currentYear}/${currentWeek}`)
         .onSnapshot((querySnapshot) => {
           const data = [];
@@ -143,7 +145,7 @@ const useFirebase = () => {
         });
     }
 
-    return listener ? listener.unsubscribe : null;
+    return unsubscribe;
   }, [db, user, currentWeek, currentYear]);
 
   return {
