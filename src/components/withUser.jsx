@@ -3,6 +3,8 @@ import { Redirect } from "react-router";
 
 import { FirebaseContext } from "../contexts";
 
+import Navbar from "../components/Navbar";
+
 const withUser = (WrappedComponent) => {
   return ({ ...props }) => {
     const { user } = useContext(FirebaseContext);
@@ -11,7 +13,14 @@ const withUser = (WrappedComponent) => {
       return <Redirect to="/" />;
     }
 
-    return <WrappedComponent {...props} />;
+    return (
+      <>
+        <Navbar />
+        <div className="container mx-auto pt-12">
+          <WrappedComponent {...props} />
+        </div>
+      </>
+    );
   };
 };
 

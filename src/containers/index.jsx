@@ -11,17 +11,16 @@ function App() {
   const firebase = useFirebase();
 
   return (
-    <div className="container mx-auto">
-      <FirebaseContext.Provider value={firebase}>
-        <BrowserRouter>
-          <Switch>
-            <Route path="/" exact component={LandingPage}></Route>
-            <Route path="/vote" component={VotePage}></Route>
-            <Route path="/standing" component={StandingPage}></Route>
-          </Switch>
-        </BrowserRouter>
-      </FirebaseContext.Provider>
-    </div>
+    <FirebaseContext.Provider value={firebase}>
+      <BrowserRouter>
+        <Switch>
+          <Route path="/vote" component={VotePage}></Route>
+          <Route path="/standing" component={StandingPage}></Route>
+          <Route path="/goat/:year/:week" component={StandingPage}></Route>
+          <Route path="/" component={LandingPage}></Route>
+        </Switch>
+      </BrowserRouter>
+    </FirebaseContext.Provider>
   );
 }
 

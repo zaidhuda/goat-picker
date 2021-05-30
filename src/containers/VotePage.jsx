@@ -3,7 +3,6 @@ import React, { useContext } from "react";
 import { FirebaseContext } from "../contexts";
 
 import withUser from "../components/withUser";
-import Navbar from "../components/Navbar";
 import VoteButton from "../components/VoteButton";
 
 const VotePage = () => {
@@ -17,7 +16,6 @@ const VotePage = () => {
 
   return (
     <div>
-      <Navbar />
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {options
           .filter(({ id }) => id !== userId)

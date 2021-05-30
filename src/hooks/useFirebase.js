@@ -2,7 +2,7 @@ import firebase from "firebase/app";
 import "firebase/firestore";
 import "firebase/auth";
 import { useState, useEffect } from "react";
-import { DateTime } from "luxon";
+import useWeek from "./useWeek";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAvV7o3gZ8nE-DtaWBuyHca2d8dh0iDn4o",
@@ -21,9 +21,7 @@ const useFirebase = () => {
     firebase.initializeApp(firebaseConfig);
   }
 
-  const now = DateTime.now();
-  const year = now.year;
-  const week = now.weekNumber;
+  const { week, year } = useWeek();
 
   const [db] = useState(firebase.firestore());
   const [user, setUser] = useState();
