@@ -6,6 +6,7 @@ import useFirebase from "../hooks/useFirebase";
 import LandingPage from "./LandingPage";
 import VotePage from "./VotePage";
 import StandingPage from "./StandingPage";
+import GoatPage from "./GoatPage";
 
 function App() {
   const firebase = useFirebase();
@@ -16,7 +17,7 @@ function App() {
         <Switch>
           <Route path="/vote" component={VotePage}></Route>
           <Route path="/standing" component={StandingPage}></Route>
-          <Route path="/goat/:year/:week" component={StandingPage}></Route>
+          <Route path="/goat/:year/:week" component={GoatPage}></Route>
           <Route path="/" component={LandingPage}></Route>
         </Switch>
       </BrowserRouter>

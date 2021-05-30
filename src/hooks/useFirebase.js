@@ -67,6 +67,21 @@ const useFirebase = () => {
       .catch(console.error);
   };
 
+  const getVotes = (year, week, resolver) => {
+    db.collection(`${VOTES}/${year}/${week}`)
+      .get()
+      .then((querySnapshot) => {
+        const data = [];
+        querySnapshot.forEach((doc) => {
+          data.push({
+            id: doc.id,
+            ...doc.data(),
+          });
+        });
+        resolver(data);
+      });
+  };
+
   // Reset state on auth state change
   useEffect(() => {
     firebase.auth().onAuthStateChanged((user) => {
@@ -136,6 +151,7 @@ const useFirebase = () => {
     options,
     user,
     addVote,
+    getVotes,
     removeVote,
     signInWithPopup,
     signOut,

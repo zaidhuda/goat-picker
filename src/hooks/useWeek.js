@@ -2,23 +2,32 @@ import { DateTime } from "luxon";
 
 const useWeek = () => {
   const now = DateTime.now();
-  const year = now.year;
-  const week = now.weekNumber;
-  const firstWeek = week === 1;
+  const currentYear = now.year;
+  const currentWeek = now.weekNumber;
 
-  const getLastWeek = () => {
-    const lastYear = year - 1;
-    const lastWeek = firstWeek
-      ? DateTime.local(lastYear).weeksInWeekYear
+  const getPreviousWeek = (year = currentYear, week = currentWeek) => {
+    const firstWeek = week === 1;
+    const previousYear = year - 1;
+    const previousWeek = firstWeek
+      ? DateTime.local(previousYear).weeksInWeekYear
       : week - 1;
 
-    return { week: lastWeek, year: firstWeek ? lastYear : year };
+    return { week: previousWeek, year: firstWeek ? previousYear : year };
+  };
+
+  const getNextWeek = (year = currentYear, week = currentYear) => {
+    const lastWeek = week === DateTime.local(year).weeksInWeekYear;
+    const nextYear = year + 1;
+    const nextWeek = lastWeek ? 1 : week + 1;
+
+    return { week: nextWeek, year: lastWeek ? nextYear : year };
   };
 
   return {
-    getLastWeek,
-    week,
-    year,
+    getPreviousWeek,
+    getNextWeek,
+    week: currentWeek,
+    year: currentYear,
   };
 };
 

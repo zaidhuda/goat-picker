@@ -1,20 +1,20 @@
 import React, { useContext } from "react";
-import { useParams } from "react-router-dom";
 
 import { FirebaseContext } from "../contexts";
 
 import withUser from "../components/withUser";
 
-const VotePage = () => {
-  const { year, week } = useParams();
-  console.log({ year, week });
+const StandingPage = () => {
   const { options, currentWeekVotes } = useContext(FirebaseContext);
   const votes = currentWeekVotes
     .flatMap(({ votes }) => votes)
     .reduce((res, vote) => ({ [vote]: (res[vote] || 0) + 1 }), {});
 
   return (
-    <div>
+    <div className="space-y-8">
+      <h1 className="font-bold text-4xl">
+        GOAT <span className="font-light">wannabes</span>
+      </h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <ul className="space-y-1">
           {options
@@ -39,4 +39,4 @@ const VotePage = () => {
   );
 };
 
-export default withUser(VotePage);
+export default withUser(StandingPage);

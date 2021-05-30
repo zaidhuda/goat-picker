@@ -12,8 +12,8 @@ import useWeek from "../hooks/useWeek";
 const Navbar = () => {
   const { signOut } = useContext(FirebaseContext);
   const { pathname } = useLocation();
-  const { getLastWeek } = useWeek();
-  const { week, year } = getLastWeek();
+  const { getPreviousWeek } = useWeek();
+  const { week, year } = getPreviousWeek();
 
   const navigation = [
     {
