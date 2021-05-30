@@ -4,14 +4,16 @@ import { FirebaseContext } from "../contexts";
 
 import withUser from "../components/withUser";
 import Navbar from "../components/Navbar";
-import Selection from "../components/VoteButton";
+import VoteButton from "../components/VoteButton";
 
 const VotePage = () => {
   const {
     user: { uid: userId },
     options,
-    currentUserVotes,
+    currentWeekVotes,
   } = useContext(FirebaseContext);
+
+  const votes = currentWeekVotes.find(({ id }) => id === userId)?.votes || [];
 
   return (
     <div>
@@ -21,12 +23,10 @@ const VotePage = () => {
           .filter(({ id }) => id !== userId)
           .map((option) => ({
             ...option,
-            voteId: currentUserVotes.find(
-              ({ option: votedOption }) => votedOption === option.id
-            )?.id,
+            voted: votes.some((votedId) => votedId === option.id),
           }))
           .map((option) => (
-            <Selection key={option.id} {...option} />
+            <VoteButton key={option.id} {...option} />
           ))}
       </div>
     </div>

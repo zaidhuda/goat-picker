@@ -7,6 +7,9 @@ import Navbar from "../components/Navbar";
 
 const VotePage = () => {
   const { options, currentWeekVotes } = useContext(FirebaseContext);
+  const votes = currentWeekVotes
+    .flatMap(({ votes }) => votes)
+    .reduce((res, vote) => ({ [vote]: (res[vote] || 0) + 1 }), {});
 
   return (
     <div>
@@ -16,9 +19,7 @@ const VotePage = () => {
           {options
             .map((option) => ({
               ...option,
-              votes: currentWeekVotes.filter(
-                ({ option: votedOption }) => votedOption === option.id
-              ).length,
+              votes: votes[option.id] || 0,
             }))
             .sort((a, b) => b.votes - a.votes)
             .map(({ id, displayName, photoURL }) => (

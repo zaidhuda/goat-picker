@@ -21,10 +21,13 @@ const useFirebase = () => {
     firebase.initializeApp(firebaseConfig);
   }
 
+  const now = DateTime.now();
+  const year = now.year;
+  const week = now.weekNumber;
+
   const [db] = useState(firebase.firestore());
   const [user, setUser] = useState();
   const [options, setOptions] = useState([]);
-  const [currentUserVotes, setCurrentUserVotes] = useState([]);
   const [currentWeekVotes, setCurrentWeekVotes] = useState([]);
 
   // *** Auth API ***
@@ -42,32 +45,40 @@ const useFirebase = () => {
   // *** Firestore API ***
 
   const addVote = (option, resolver) => {
-    if (!user.uid || user.uid === option) return;
-
-    const now = DateTime.now();
-    const year = now.year;
-    const week = now.weekNumber;
+    if (user.uid === option) return;
 
     db.collection(VOTES)
-      .doc(`${year}-${week}-${option}-${user.uid}`)
-      .set({ voter: user.uid, option, week, year })
+      .doc(`${year}/${week}/${user.uid}`)
+      .set(
+        {
+          votes: firebase.firestore.FieldValue.arrayUnion(option),
+        },
+        { merge: true }
+      )
       .then(resolver)
       .catch(console.error);
   };
 
-  const removeVote = (id, resolver) => {
-    db.collection(VOTES).doc(id).delete().then(resolver).catch(console.error);
+  const removeVote = (option, resolver) => {
+    db.collection(VOTES)
+      .doc(`${year}/${week}/${user.uid}`)
+      .update({
+        votes: firebase.firestore.FieldValue.arrayRemove(option),
+      })
+      .then(resolver)
+      .catch(console.error);
   };
 
+  // Reset state on auth state change
   useEffect(() => {
     firebase.auth().onAuthStateChanged((user) => {
       setUser(user);
       setOptions([]);
-      setCurrentUserVotes([]);
       setCurrentWeekVotes([]);
     });
   }, []);
 
+  // Add user to options
   useEffect(() => {
     const addUserToOptions = ({ displayName, uid, photoURL }) => {
       db.collection(OPTIONS)
@@ -79,9 +90,12 @@ const useFirebase = () => {
     if (user) addUserToOptions(user);
   }, [db, user]);
 
+  // Subsbscribe to /options
   useEffect(() => {
-    const getOptions = (resolver) => {
-      db.collection(OPTIONS).onSnapshot((querySnapshot) => {
+    let listener = null;
+
+    if (user) {
+      listener = db.collection(OPTIONS).onSnapshot((querySnapshot) => {
         const data = [];
         querySnapshot.forEach((doc) => {
           data.push({
@@ -89,60 +103,37 @@ const useFirebase = () => {
             ...doc.data(),
           });
         });
-        resolver(data);
+        setOptions(data);
       });
-    };
+    }
 
-    const getCurrentUserVotes = (resolver) => {
-      const now = DateTime.now();
-      const year = now.year;
-      const week = now.weekNumber;
+    return listener ? listener.unsubscribe : null;
+  }, [db, user]);
 
-      db.collection(VOTES)
-        .where("year", "==", year)
-        .where("week", "==", week)
-        .where("voter", "==", user.uid)
-        .onSnapshot((querySnapshot) => {
-          const data = [];
-          querySnapshot.forEach((doc) => {
-            data.push({
-              id: doc.id,
-              ...doc.data(),
-            });
-          });
-          resolver(data);
-        });
-    };
-
-    const getCurrentWeekVotes = (resolver) => {
-      const now = DateTime.now();
-      const year = now.year;
-      const week = now.weekNumber;
-
-      db.collection(VOTES)
-        .where("year", "==", year)
-        .where("week", "==", week)
-        .onSnapshot((querySnapshot) => {
-          const data = [];
-          querySnapshot.forEach((doc) => {
-            data.push({
-              id: doc.id,
-              ...doc.data(),
-            });
-          });
-          resolver(data);
-        });
-    };
+  // Subsbscribe to votes for /year/week
+  useEffect(() => {
+    let listener = null;
 
     if (user) {
-      getOptions(setOptions);
-      getCurrentUserVotes(setCurrentUserVotes);
-      getCurrentWeekVotes(setCurrentWeekVotes);
+      listener = db
+        .collection(`${VOTES}/${year}/${week}`)
+        .onSnapshot((querySnapshot) => {
+          const data = [];
+          querySnapshot.forEach((doc) => {
+            data.push({
+              id: doc.id,
+              ...doc.data(),
+            });
+          });
+
+          setCurrentWeekVotes(data);
+        });
     }
-  }, [db, user])
+
+    return listener ? listener.unsubscribe : null;
+  }, [db, user, week, year]);
 
   return {
-    currentUserVotes,
     currentWeekVotes,
     options,
     user,
