@@ -8,17 +8,10 @@ const VoteButton = ({ id, displayName, photoURL, voted }) => {
   const { addVote, removeVote } = useContext(FirebaseContext);
   const [disabled, setDisabled] = useState(false);
 
-  const enableButton = () => {
-    setTimeout(() => setDisabled(false), 500);
-  };
-
   const handleOnClick = () => {
     setDisabled(true);
-    if (voted) {
-      removeVote(id, enableButton);
-    } else {
-      addVote(id, enableButton);
-    }
+    setTimeout(() => setDisabled(false), 500);
+    voted ? removeVote(id) : addVote(id); 
   };
 
   return (
@@ -28,7 +21,8 @@ const VoteButton = ({ id, displayName, photoURL, voted }) => {
       disabled={disabled}
       className={classnames(
         "border-2 sm:flex-col inline-flex items-center focus:outline-none p-2 rounded space-x-2 sm:space-x-0",
-        { "border-green-400": voted }
+        { "border-green-400": voted },
+        { "bg-gray-100 cursor-default": disabled }
       )}
     >
       <img
