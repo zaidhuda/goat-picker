@@ -5,11 +5,13 @@ import NavigateNext from "@material-ui/icons/NavigateNext";
 
 import { FirebaseContext } from "../contexts";
 import useWeek from "../hooks/useWeek";
+import useOptions from "../hooks/useOptions";
 
 import withUser from "../components/withUser";
+import OptionCard from "../components/OptionCard";
 
 const GoatPage = () => {
-  const { currentWeek, currentYear, getPreviousWeek, getNextWeek } = useWeek();
+  const { currentWeek, currentYear, getPrevWeek, getNextWeek } = useWeek();
   const { options, getVotes } = useContext(FirebaseContext);
   const { week: weekParam, year: yearParam } = useParams();
 
@@ -18,19 +20,14 @@ const GoatPage = () => {
 
   let [votes, setVotes] = useState([]);
 
-  const optionVotes = votes
-    .flatMap(({ votes }) => votes)
-    .reduce((res, vote) => ({ [vote]: (res[vote] || 0) + 1 }), {});
+  const { votedOptions } = useOptions(options, votes);
 
-  const previousWeek = () => {
-    const { week: previousWeek, year: previousYear } = getPreviousWeek(
-      year,
-      week
-    );
-    return `/goat/${previousYear}/${previousWeek}`;
+  const prevWeekPath = () => {
+    const { week: prevWeek, year: prevYear } = getPrevWeek(year, week);
+    return `/goat/${prevYear}/${prevWeek}`;
   };
 
-  const nextWeek = () => {
+  const nextWeekPath = () => {
     const { week: nextWeek, year: nextYear } = getNextWeek(year, week);
     return `/goat/${nextYear}/${nextWeek}`;
   };
@@ -43,40 +40,26 @@ const GoatPage = () => {
   return (
     <div className="space-y-8">
       <div>
-        <Link to={previousWeek()} className="p-1 space-x-1">
+        <Link to={prevWeekPath()} className="p-1 space-x-1">
           <NavigateBefore />
           <span>Previous Week</span>
         </Link>
         {!(week > currentWeek - 2 && year === currentYear) && (
-          <Link to={nextWeek()} className="p-1 space-x-1">
+          <Link to={nextWeekPath()} className="p-1 space-x-1">
             <span>Next Week</span>
             <NavigateNext />
           </Link>
         )}
       </div>
+
       <h1 className="font-light text-5xl">
         <span className="font-bold">GOAT</span>s of week {week}
       </h1>
+
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        <ul className="space-y-1">
-          {options
-            .map((option) => ({
-              ...option,
-              votes: optionVotes[option.id],
-            }))
-            .filter(({ votes }) => votes)
-            .sort((a, b) => b.votes - a.votes)
-            .map(({ id, displayName, photoURL }) => (
-              <li key={id}>
-                <img
-                  src={photoURL}
-                  alt={displayName}
-                  className="inline mr-2 rounded-full w-10"
-                />
-                <span>{displayName}</span>
-              </li>
-            ))}
-        </ul>
+        {votedOptions.map(({ id, displayName, photoURL }) => (
+          <OptionCard key={id} displayName={displayName} photoURL={photoURL} />
+        ))}
       </div>
     </div>
   );

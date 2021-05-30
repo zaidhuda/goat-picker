@@ -12,7 +12,19 @@ const VotePage = () => {
     currentWeekVotes,
   } = useContext(FirebaseContext);
 
-  const votes = currentWeekVotes.find(({ id }) => id === userId)?.votes || [];
+  const userVotes =
+    currentWeekVotes.find(({ id }) => id === userId)?.votes || [];
+
+  const optionsWithoutUser = options.filter(({ id }) => id !== userId);
+
+  const sortedOptions = optionsWithoutUser.sort((a, b) =>
+    a.displayName.localeCompare(b.displayName)
+  );
+
+  const optionsWithVoted = sortedOptions.map((option) => ({
+    ...option,
+    voted: userVotes.some((votedId) => votedId === option.id),
+  }));
 
   return (
     <div className="space-y-12">
@@ -20,15 +32,9 @@ const VotePage = () => {
         Decide the next <span className="font-bold">GOAT</span>s
       </h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        {options
-          .filter(({ id }) => id !== userId)
-          .map((option) => ({
-            ...option,
-            voted: votes.some((votedId) => votedId === option.id),
-          }))
-          .map((option) => (
-            <VoteButton key={option.id} {...option} />
-          ))}
+        {optionsWithVoted.map((option) => (
+          <VoteButton key={option.id} {...option} />
+        ))}
       </div>
     </div>
   );

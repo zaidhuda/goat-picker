@@ -5,7 +5,7 @@ const useWeek = () => {
   const currentYear = now.year;
   const currentWeek = now.weekNumber;
 
-  const getPreviousWeek = (year = currentYear, week = currentWeek) => {
+  const getPrevWeek = (year = currentYear, week = currentWeek) => {
     const firstWeek = week === 1;
     const previousYear = year - 1;
     const previousWeek = firstWeek
@@ -24,7 +24,7 @@ const useWeek = () => {
   };
 
   return {
-    getPreviousWeek,
+    getPrevWeek,
     getNextWeek,
     currentWeek,
     currentYear,
