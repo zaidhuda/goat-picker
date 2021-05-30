@@ -21,7 +21,7 @@ const useFirebase = () => {
     firebase.initializeApp(firebaseConfig);
   }
 
-  const { week, year } = useWeek();
+  const { currentWeek, currentYear } = useWeek();
 
   const [db] = useState(firebase.firestore());
   const [user, setUser] = useState();
@@ -46,7 +46,7 @@ const useFirebase = () => {
     if (user.uid === option) return;
 
     db.collection(VOTES)
-      .doc(`${year}/${week}/${user.uid}`)
+      .doc(`${currentYear}/${currentWeek}/${user.uid}`)
       .set(
         {
           votes: firebase.firestore.FieldValue.arrayUnion(option),
@@ -59,7 +59,7 @@ const useFirebase = () => {
 
   const removeVote = (option, resolver) => {
     db.collection(VOTES)
-      .doc(`${year}/${week}/${user.uid}`)
+      .doc(`${currentYear}/${currentWeek}/${user.uid}`)
       .update({
         votes: firebase.firestore.FieldValue.arrayRemove(option),
       })
@@ -67,8 +67,8 @@ const useFirebase = () => {
       .catch(console.error);
   };
 
-  const getVotes = (year, week, resolver) => {
-    db.collection(`${VOTES}/${year}/${week}`)
+  const getVotes = (currentYear, currentWeek, resolver) => {
+    db.collection(`${VOTES}/${currentYear}/${currentWeek}`)
       .get()
       .then((querySnapshot) => {
         const data = [];
@@ -129,7 +129,7 @@ const useFirebase = () => {
 
     if (user) {
       listener = db
-        .collection(`${VOTES}/${year}/${week}`)
+        .collection(`${VOTES}/${currentYear}/${currentWeek}`)
         .onSnapshot((querySnapshot) => {
           const data = [];
           querySnapshot.forEach((doc) => {
@@ -144,7 +144,7 @@ const useFirebase = () => {
     }
 
     return listener ? listener.unsubscribe : null;
-  }, [db, user, week, year]);
+  }, [db, user, currentWeek, currentYear]);
 
   return {
     currentWeekVotes,

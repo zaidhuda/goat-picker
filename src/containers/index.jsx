@@ -5,7 +5,7 @@ import useFirebase from "../hooks/useFirebase";
 
 import LandingPage from "./LandingPage";
 import VotePage from "./VotePage";
-import StandingPage from "./StandingPage";
+import UpcomingPage from "./UpcomingPage";
 import GoatPage from "./GoatPage";
 
 function App() {
@@ -16,7 +16,7 @@ function App() {
       <BrowserRouter>
         <Switch>
           <Route path="/vote" component={VotePage}></Route>
-          <Route path="/standing" component={StandingPage}></Route>
+          <Route path="/upcoming" component={UpcomingPage}></Route>
           <Route path="/goat/:year/:week" component={GoatPage}></Route>
           <Route path="/" component={LandingPage}></Route>
         </Switch>

@@ -15,11 +15,11 @@ const VotePage = () => {
   const votes = currentWeekVotes.find(({ id }) => id === userId)?.votes || [];
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-12">
       <h1 className="font-light text-4xl">
-        Who have been helpful to you this week?
+        Decide the next <span className="font-bold">GOAT</span>s
       </h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {options
           .filter(({ id }) => id !== userId)
           .map((option) => ({

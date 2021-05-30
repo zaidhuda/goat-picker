@@ -26,8 +26,8 @@ const useWeek = () => {
   return {
     getPreviousWeek,
     getNextWeek,
-    week: currentWeek,
-    year: currentYear,
+    currentWeek,
+    currentYear,
   };
 };
 

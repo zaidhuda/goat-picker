@@ -9,12 +9,7 @@ import useWeek from "../hooks/useWeek";
 import withUser from "../components/withUser";
 
 const GoatPage = () => {
-  const {
-    week: currentWeek,
-    year: currentYear,
-    getPreviousWeek,
-    getNextWeek,
-  } = useWeek();
+  const { currentWeek, currentYear, getPreviousWeek, getNextWeek } = useWeek();
   const { options, getVotes } = useContext(FirebaseContext);
   const { week: weekParam, year: yearParam } = useParams();
 
@@ -59,10 +54,10 @@ const GoatPage = () => {
           </Link>
         )}
       </div>
-      <h1 className="font-bold text-6xl">
-        GOAT <span className="font-light">of week {week}</span>
+      <h1 className="font-light text-5xl">
+        <span className="font-bold">GOAT</span>s of week {week}
       </h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         <ul className="space-y-1">
           {options
             .map((option) => ({
