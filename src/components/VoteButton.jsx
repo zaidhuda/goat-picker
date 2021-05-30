@@ -12,8 +12,7 @@ const VoteButton = ({ id, displayName, photoURL, voted }) => {
 
   const handleOnClick = () => {
     setDisabled(true);
-    setTimeout(() => setDisabled(false), 500);
-    voted ? removeVote(id) : addVote(id); 
+    voted ? removeVote(id, setDisabled) : addVote(id, setDisabled); 
   };
 
   return (

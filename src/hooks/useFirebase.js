@@ -4,26 +4,14 @@ import "firebase/auth";
 import { useState, useEffect } from "react";
 import useWeek from "./useWeek";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyAvV7o3gZ8nE-DtaWBuyHca2d8dh0iDn4o",
-  authDomain: "goat-picker.firebaseapp.com",
-  projectId: "goat-picker",
-  storageBucket: "goat-picker.appspot.com",
-  messagingSenderId: "413537459528",
-  appId: "1:413537459528:web:119f3c0bf23f961bb4a77d",
-};
-
 const OPTIONS = "options";
 const VOTES = "votes";
 
 const useFirebase = () => {
-  if (firebase.apps.length === 0) {
-    firebase.initializeApp(firebaseConfig);
-  }
-
   const { currentWeek, currentYear } = useWeek();
 
-  const [db] = useState(firebase.firestore());
+  const [app, setApp] = useState();
+  const [db, setDatabase] = useState();
   const [user, setUser] = useState();
   const [options, setOptions] = useState([]);
   const [currentWeekVotes, setCurrentWeekVotes] = useState([]);
@@ -33,11 +21,11 @@ const useFirebase = () => {
   const signInWithPopup = () => {
     const provider = new firebase.auth.GoogleAuthProvider();
     provider.addScope("profile");
-    firebase.auth().signInWithPopup(provider).catch(console.error);
+    app.auth().signInWithPopup(provider).catch(console.error);
   };
 
   const signOut = () => {
-    firebase.auth().signOut().catch(console.error);
+    app.auth().signOut().catch(console.error);
   };
 
   // *** Firestore API ***
@@ -82,35 +70,54 @@ const useFirebase = () => {
       });
   };
 
+  // Initialize Firebase app
+  useEffect(() => {
+    if (firebase.apps.length === 0) {
+      fetch("/__/firebase/init.json").then(async (response) => {
+        setApp(firebase.initializeApp(await response.json()));
+      });
+    } else {
+      setApp(firebase.apps[0]);
+    }
+
+    return setApp;
+  }, []);
+
+  // Set up firestore
+  useEffect(() => {
+    if (!app) return;
+
+    setDatabase(app.firestore());
+
+    return setDatabase;
+  }, [app]);
+
   // Reset state on auth state change
   useEffect(() => {
-    const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
-      setUser(user);
-      setOptions([]);
-      setCurrentWeekVotes([]);
-    });
-
-    return unsubscribe;
-  }, []);
+    if (app) {
+      return app.auth().onAuthStateChanged((user) => {
+        setUser(user);
+        setOptions([]);
+        setCurrentWeekVotes([]);
+      });
+    }
+  }, [app]);
 
   // Add user to options
   useEffect(() => {
-    const addUserToOptions = ({ displayName, uid, photoURL }) => {
+    if (db && user) {
+      const { displayName, uid, photoURL } = user;
       db.collection(OPTIONS)
         .doc(uid)
         .set({ displayName, photoURL })
         .catch(console.error);
-    };
-
-    if (user) addUserToOptions(user);
+    }
   }, [db, user]);
 
   // Subscribe to /options
   useEffect(() => {
-    let unsubscribe = null;
-
-    if (user) {
-      unsubscribe = db.collection(OPTIONS).onSnapshot((querySnapshot) => {
+    if (db && user) {
+      return db.collection(OPTIONS).onSnapshot((querySnapshot) => {
         const data = [];
         querySnapshot.forEach((doc) => {
           data.push({
@@ -121,16 +128,12 @@ const useFirebase = () => {
         setOptions(data);
       });
     }
-
-    return unsubscribe;
   }, [db, user]);
 
   // Subscribe to votes for /year/week
   useEffect(() => {
-    let unsubscribe = null;
-
-    if (user) {
-      unsubscribe = db
+    if (db && user) {
+      return db
         .collection(`${VOTES}/${currentYear}/${currentWeek}`)
         .onSnapshot((querySnapshot) => {
           const data = [];
@@ -144,13 +147,12 @@ const useFirebase = () => {
           setCurrentWeekVotes(data);
         });
     }
-
-    return unsubscribe;
-  }, [db, user, currentWeek, currentYear]);
+  }, [currentWeek, currentYear, db, user]);
 
   return {
     currentWeekVotes,
     options,
+    ready: app && db,
     user,
     addVote,
     getVotes,

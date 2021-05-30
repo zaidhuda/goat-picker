@@ -10,6 +10,9 @@ import GoatPage from "./GoatPage";
 
 function App() {
   const firebase = useFirebase();
+  const { ready } = firebase;
+
+  if (!ready) return null;
 
   return (
     <FirebaseContext.Provider value={firebase}>

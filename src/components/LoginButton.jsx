@@ -20,10 +20,10 @@ const LoginButton = () => {
       onMouseDown={() => setGoogleButton(LightPressed)}
       onMouseUp={() => setGoogleButton(LightNormal)}
       onBlur={() => setGoogleButton(LightNormal)}
-      className="bg-blue-500 border border-gray-100 flex items-center m-0 pr-2 rounded space-x-1.5 text-white"
+      className="bg-blue-500 border border-gray-100 flex items-center m-0 rounded text-white"
     >
       <GoogleButton />
-      <span className="font-semibold">Sign in with Google</span>
+      <span className="font-semibold ml-1.5 mr-2.5">Sign in with Google</span>
     </button>
   );
 };
