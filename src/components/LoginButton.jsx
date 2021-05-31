@@ -22,7 +22,7 @@ const LoginButton = () => {
       onBlur={() => setGoogleButton(LightNormal)}
       className="bg-blue-500 border border-gray-100 flex items-center m-0 rounded text-white"
     >
-      <GoogleButton />
+      <GoogleButton style={{ pointerEvents: "none" }} />
       <span className="font-semibold ml-1.5 mr-2.5">Sign in with Google</span>
     </button>
   );
