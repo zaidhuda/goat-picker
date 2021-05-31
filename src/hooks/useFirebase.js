@@ -99,14 +99,14 @@ const useFirebase = () => {
   useEffect(() => {
     if (app) {
       return app.auth().onAuthStateChanged((user) => {
-        // if (user?.email?.endsWith(EMAIL_DOMAIN)) {
-        setUser(user);
-        // } else if (user?.email) {
-        // alert(`${EMAIL_DOMAIN} email only`);
-        // signOut();
-        // } else {
-        // setUser();
-        // }
+        if (user?.email?.endsWith(EMAIL_DOMAIN)) {
+          setUser(user);
+        } else if (user?.email) {
+          alert(`${EMAIL_DOMAIN} email only`);
+          signOut();
+        } else {
+          setUser();
+        }
       });
     }
   }, [app, signOut]);

@@ -21,5 +21,6 @@ code {
 }
 
 .switch-wrapper > div {
+  @apply w-screen;
   position: absolute;
 }

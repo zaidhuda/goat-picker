@@ -8,7 +8,7 @@ import useWeek from "../hooks/useWeek";
 import useOptions from "../hooks/useOptions";
 
 import withUser from "../components/withUser";
-import OptionCard from "../components/OptionCard";
+import Ranking from "../components/Ranking";
 
 const GoatPage = () => {
   const { currentWeek, currentYear, getPrevWeek, getNextWeek } = useWeek();
@@ -56,11 +56,7 @@ const GoatPage = () => {
         <span className="font-bold">GOAT</span>s of week {week}
       </h1>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        {votedOptions.map(({ id, displayName, photoURL }) => (
-          <OptionCard key={id} displayName={displayName} photoURL={photoURL} />
-        ))}
-      </div>
+      <Ranking options={votedOptions} />
     </div>
   );
 };
