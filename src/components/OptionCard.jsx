@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import classnames from "classnames";
 
-const OptionCard = ({ displayName, photoURL, voted }) => {
+const OptionCard = ({ displayName, photoURL, voted, votes }) => {
   return (
     <div
       className={classnames(
@@ -16,6 +16,7 @@ const OptionCard = ({ displayName, photoURL, voted }) => {
         className="h-12 rounded-full w-12"
       />
       <figcaption className="font-semibold text-lg">{displayName}</figcaption>
+      <span>{votes}</span>
     </div>
   );
 };

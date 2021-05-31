@@ -16,8 +16,13 @@ const UpcomingPage = () => {
         Upcoming <span className="font-bold">GOAT</span>s
       </h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        {votedOptions.map(({ id, displayName, photoURL }) => (
-          <OptionCard key={id} displayName={displayName} photoURL={photoURL} />
+        {votedOptions.map(({ id, displayName, photoURL, votes }) => (
+          <OptionCard
+            key={id}
+            displayName={displayName}
+            photoURL={photoURL}
+            votes={votes}
+          />
         ))}
       </div>
     </div>

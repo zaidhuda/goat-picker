@@ -3,14 +3,14 @@ const useOptions = (options = [], votes = []) => {
     .flatMap(({ votes }) => votes)
     .reduce((res, vote) => ({ ...res, [vote]: (res[vote] || 0) + 1 }), {});
 
-  const voteSortedOptions = options.sort((a, b) => b.votes - a.votes);
-
-  const optionsWithVotes = voteSortedOptions.map((option) => ({
+  const optionsWithVotes = options.map((option) => ({
     ...option,
     votes: optionVotes[option.id],
   }));
 
-  const votedOptions = optionsWithVotes.filter(({ votes }) => votes);
+  const voteSortedOptions = optionsWithVotes.sort((a, b) => b.votes - a.votes);
+
+  const votedOptions = voteSortedOptions.filter(({ votes }) => votes);
 
   return {
     optionsWithVotes,
