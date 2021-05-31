@@ -6,6 +6,7 @@ import useWeek from "./useWeek";
 
 const OPTIONS = "options";
 const VOTES = "votes";
+const EMAIL_DOMAIN = "@surialabs.com";
 
 const useFirebase = () => {
   const { currentWeek, currentYear } = useWeek();
@@ -25,8 +26,10 @@ const useFirebase = () => {
   };
 
   const signOut = useCallback(() => {
+    if (!app || !user) return;
+
     app.auth().signOut().catch(console.error);
-  }, [app]);
+  }, [app, user]);
 
   // *** Firestore API ***
 
@@ -85,9 +88,9 @@ const useFirebase = () => {
 
   // Set up firestore
   useEffect(() => {
-    if (!app) return;
-
-    setDatabase(app.firestore());
+    if (app) {
+      setDatabase(app.firestore());
+    }
 
     return setDatabase;
   }, [app]);
@@ -96,12 +99,10 @@ const useFirebase = () => {
   useEffect(() => {
     if (app) {
       return app.auth().onAuthStateChanged((user) => {
-        if (user?.email?.endsWith("@surialabs.com")) {
+        if (user?.email?.endsWith(EMAIL_DOMAIN)) {
           setUser(user);
-          setOptions([]);
-          setCurrentWeekVotes([]);
         } else if (user?.email) {
-          alert("@surialabs.com email only");
+          alert(`${EMAIL_DOMAIN} email only`);
           signOut();
         } else {
           setUser();
@@ -109,6 +110,8 @@ const useFirebase = () => {
       });
     }
   }, [app, signOut]);
+
+  useEffect(() => signOut, [signOut]);
 
   // Add user to options
   useEffect(() => {

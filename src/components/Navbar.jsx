@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Disclosure } from "@headlessui/react";
 import ExitToApp from "@material-ui/icons/ExitToApp";
@@ -6,11 +6,9 @@ import CloseIcon from "@material-ui/icons/Close";
 import MenuIcon from "@material-ui/icons/Menu";
 import classnames from "classnames";
 
-import { FirebaseContext } from "../contexts";
 import useWeek from "../hooks/useWeek";
 
 const Navbar = () => {
-  const { signOut } = useContext(FirebaseContext);
   const { pathname } = useLocation();
   const { getPrevWeek } = useWeek();
   const { week, year } = getPrevWeek();
@@ -78,13 +76,13 @@ const Navbar = () => {
                 </div>
               </div>
               <div className="absolute inset-y-0 right-0 flex items-center sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                <button
-                  onClick={signOut}
+                <Link
+                  to="/signout"
                   className="bg-gray-800 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
                 >
                   <span className="sr-only">Logout</span>
                   <ExitToApp aria-hidden="true" />
-                </button>
+                </Link>
               </div>
             </div>
           </div>
