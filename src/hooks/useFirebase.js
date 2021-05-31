@@ -1,7 +1,7 @@
 import firebase from "firebase/app";
 import "firebase/firestore";
 import "firebase/auth";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import useWeek from "./useWeek";
 
 const OPTIONS = "options";
@@ -24,9 +24,9 @@ const useFirebase = () => {
     app.auth().signInWithPopup(provider).catch(console.error);
   };
 
-  const signOut = () => {
+  const signOut = useCallback(() => {
     app.auth().signOut().catch(console.error);
-  };
+  }, [app]);
 
   // *** Firestore API ***
 
@@ -96,12 +96,19 @@ const useFirebase = () => {
   useEffect(() => {
     if (app) {
       return app.auth().onAuthStateChanged((user) => {
-        setUser(user);
-        setOptions([]);
-        setCurrentWeekVotes([]);
+        if (user?.email?.endsWith("@surialabs.com")) {
+          setUser(user);
+          setOptions([]);
+          setCurrentWeekVotes([]);
+        } else if (user?.email) {
+          alert("@surialabs.com email only");
+          signOut();
+        } else {
+          setUser();
+        }
       });
     }
-  }, [app]);
+  }, [app, signOut]);
 
   // Add user to options
   useEffect(() => {
