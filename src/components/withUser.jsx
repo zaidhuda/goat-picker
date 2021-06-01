@@ -12,8 +12,10 @@ const withUser = (WrappedComponent) => {
     }
 
     return (
-      <div className="container mx-auto mt-24">
-        <WrappedComponent {...props} />
+      <div className="w-screen">
+        <div className="container mx-auto pt-12">
+          <WrappedComponent {...props} />
+        </div>
       </div>
     );
   };

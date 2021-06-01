@@ -13,6 +13,21 @@ function App() {
   return (
     <FirebaseProvider>
       <AnimatedSwitch
+        atEnter={{ opacity: 0, top: -400 }}
+        atLeave={{ opacity: 0, top: 400 }}
+        atActive={{ opacity: 1, top: 0 }}
+        className="switch-wrapper"
+      >
+        <Route path="/" exact component={LandingPage} />
+      </AnimatedSwitch>
+      <AnimatedRoute
+        atEnter={{ opacity: 0 }}
+        atLeave={{ opacity: 0 }}
+        atActive={{ opacity: 1 }}
+        path={["/vote", "/upcoming", "/goat/:year/:week"]}
+        component={Navbar}
+      />
+      <AnimatedSwitch
         atEnter={{ opacity: 0, left: 400 }}
         atLeave={{ opacity: 0, left: -400 }}
         atActive={{ opacity: 1, left: 0 }}
@@ -22,14 +37,6 @@ function App() {
         <Route path="/upcoming" component={UpcomingPage} />
         <Route path="/goat/:year/:week" component={GoatPage} />
       </AnimatedSwitch>
-      <Route path="/" exact component={LandingPage} />
-      <AnimatedRoute
-        atEnter={{ opacity: 0 }}
-        atLeave={{ opacity: 0 }}
-        atActive={{ opacity: 1 }}
-        path={["/vote", "/upcoming", "/goat/:year/:week"]}
-        component={Navbar}
-      />
     </FirebaseProvider>
   );
 }
