@@ -5,7 +5,7 @@ import { Flipped } from "react-flip-toolkit";
 
 const OptionCard = ({ id, displayName, photoURL, voted }) => {
   return (
-    <Flipped flipId={id} stagger staggerConfig={{ reverse: true }}>
+    <Flipped flipId={id} stagger>
       <div
         className={classnames(
           "bg-white border-2 h-full flex items-center px-4 py-2 rounded sm:flex-col space-x-4 space-y-0 sm:space-x-0 sm:space-y-2 w-full",

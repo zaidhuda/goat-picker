@@ -17,9 +17,10 @@ code {
 }
 
 .switch-wrapper {
+  @apply relative w-full;
   position: relative;
 }
 
 .switch-wrapper > div {
-  position: absolute;
+  @apply absolute w-full;
 }
