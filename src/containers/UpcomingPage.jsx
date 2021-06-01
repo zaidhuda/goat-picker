@@ -15,6 +15,7 @@ const UpcomingPage = () => {
       <h1 className="font-light text-4xl">
         Upcoming <span className="font-bold">GOAT</span>s
       </h1>
+
       <Ranking options={votedOptions} />
     </div>
   );
