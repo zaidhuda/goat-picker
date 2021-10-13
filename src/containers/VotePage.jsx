@@ -1,16 +1,16 @@
-import React, { useContext } from "react";
+import React from 'react';
 
-import { FirebaseContext } from "../contexts";
+import useFirebase from '../hooks/useFirebase';
 
-import withUser from "../components/withUser";
-import VoteButton from "../components/VoteButton";
+import withUser from '../components/withUser';
+import VoteButton from '../components/VoteButton';
 
 const VotePage = () => {
   const {
     user: { uid: userId },
     options,
     currentWeekVotes,
-  } = useContext(FirebaseContext);
+  } = useFirebase();
 
   const userVotes =
     currentWeekVotes.find(({ id }) => id === userId)?.votes || [];

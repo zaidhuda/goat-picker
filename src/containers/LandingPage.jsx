@@ -1,16 +1,16 @@
-import React, { useEffect, useContext } from "react";
-import { useHistory } from "react-router-dom";
+import React, { useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 
-import { FirebaseContext } from "../contexts";
+import useFirebase from '../hooks/useFirebase';
 
-import LoginButton from "../components/LoginButton";
+import LoginButton from '../components/LoginButton';
 
 const LandingPage = () => {
   const history = useHistory();
-  const { user } = useContext(FirebaseContext);
+  const { user } = useFirebase();
 
   useEffect(() => {
-    if (user) return history.push("/vote");
+    if (user) return history.push('/vote');
   }, [user, history]);
 
   return (

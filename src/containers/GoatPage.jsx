@@ -1,18 +1,18 @@
-import React, { useContext, useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import NavigateBefore from "@material-ui/icons/NavigateBefore";
-import NavigateNext from "@material-ui/icons/NavigateNext";
+import React, { useEffect, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import NavigateBefore from '@material-ui/icons/NavigateBefore';
+import NavigateNext from '@material-ui/icons/NavigateNext';
 
-import { FirebaseContext } from "../contexts";
-import useWeek from "../hooks/useWeek";
-import useOptions from "../hooks/useOptions";
+import useFirebase from '../hooks/useFirebase';
+import useWeek from '../hooks/useWeek';
+import useOptions from '../hooks/useOptions';
 
-import withUser from "../components/withUser";
-import Ranking from "../components/Ranking";
+import withUser from '../components/withUser';
+import Ranking from '../components/Ranking';
 
 const GoatPage = () => {
   const { currentWeek, currentYear, getPrevWeek, getNextWeek } = useWeek();
-  const { options, getVotes } = useContext(FirebaseContext);
+  const { options, getVotes } = useFirebase();
   const { week: weekParam, year: yearParam } = useParams();
 
   const week = parseInt(weekParam, 10);

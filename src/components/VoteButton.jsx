@@ -1,18 +1,18 @@
-import React, { useContext, useState } from "react";
-import PropTypes from "prop-types";
-import classnames from "classnames";
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
+import classnames from 'classnames';
 
-import { FirebaseContext } from "../contexts";
+import useFirebase from '../hooks/useFirebase';
 
-import OptionCard from "./OptionCard";
+import OptionCard from './OptionCard';
 
 const VoteButton = ({ id, displayName, photoURL, voted }) => {
-  const { addVote, removeVote } = useContext(FirebaseContext);
+  const { addVote, removeVote } = useFirebase();
   const [disabled, setDisabled] = useState(false);
 
   const handleOnClick = () => {
     setDisabled(true);
-    voted ? removeVote(id, setDisabled) : addVote(id, setDisabled); 
+    voted ? removeVote(id, setDisabled) : addVote(id, setDisabled);
   };
 
   return (
@@ -20,9 +20,7 @@ const VoteButton = ({ id, displayName, photoURL, voted }) => {
       type="button"
       onClick={handleOnClick}
       disabled={disabled}
-      className={classnames(
-        { "bg-gray-100 cursor-default": disabled }
-      )}
+      className={classnames({ 'bg-gray-100 cursor-default': disabled })}
     >
       <OptionCard displayName={displayName} photoURL={photoURL} voted={voted} />
     </button>
