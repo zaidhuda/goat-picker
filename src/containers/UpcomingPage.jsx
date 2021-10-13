@@ -1,13 +1,13 @@
-import React, { useContext } from "react";
+import React from 'react';
 
-import { FirebaseContext } from "../contexts";
-import useOptions from "../hooks/useOptions";
+import useFirebase from '../hooks/useFirebase';
+import useOptions from '../hooks/useOptions';
 
-import Ranking from "../components/Ranking";
-import withUser from "../components/withUser";
+import Ranking from '../components/Ranking';
+import withUser from '../components/withUser';
 
 const UpcomingPage = () => {
-  const { options, currentWeekVotes } = useContext(FirebaseContext);
+  const { options, currentWeekVotes } = useFirebase();
   const { votedOptions } = useOptions(options, currentWeekVotes);
 
   return (

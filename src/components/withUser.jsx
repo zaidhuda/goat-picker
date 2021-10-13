@@ -1,11 +1,11 @@
-import React, { useContext } from "react";
-import { Redirect } from "react-router";
+import React from 'react';
+import { Redirect } from 'react-router';
 
-import { FirebaseContext } from "../contexts";
+import useFirebase from '../hooks/useFirebase';
 
 const withUser = (WrappedComponent) => {
   return ({ ...props }) => {
-    const { user } = useContext(FirebaseContext);
+    const { user } = useFirebase();
 
     if (!user) {
       return <Redirect to="/" />;

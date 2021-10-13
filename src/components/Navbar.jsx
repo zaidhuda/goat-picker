@@ -1,30 +1,30 @@
-import React, { useContext } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { Disclosure } from "@headlessui/react";
-import ExitToApp from "@material-ui/icons/ExitToApp";
-import CloseIcon from "@material-ui/icons/Close";
-import MenuIcon from "@material-ui/icons/Menu";
-import classnames from "classnames";
+import React from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { Disclosure } from '@headlessui/react';
+import ExitToApp from '@material-ui/icons/ExitToApp';
+import CloseIcon from '@material-ui/icons/Close';
+import MenuIcon from '@material-ui/icons/Menu';
+import classnames from 'classnames';
 
-import { FirebaseContext } from "../contexts";
-import useWeek from "../hooks/useWeek";
+import useFirebase from '../hooks/useFirebase';
+import useWeek from '../hooks/useWeek';
 
 const Navbar = () => {
-  const { signOut } = useContext(FirebaseContext);
+  const { signOut } = useFirebase();
   const { pathname } = useLocation();
   const { getPrevWeek } = useWeek();
   const { week, year } = getPrevWeek();
 
   const navigation = [
     {
-      name: "Vote",
-      href: "/vote",
-      current: pathname === "/vote",
+      name: 'Vote',
+      href: '/vote',
+      current: pathname === '/vote',
     },
     {
-      name: "Upcoming",
-      href: "/upcoming",
-      current: pathname === "/upcoming",
+      name: 'Upcoming',
+      href: '/upcoming',
+      current: pathname === '/upcoming',
     },
   ];
 
@@ -51,7 +51,7 @@ const Navbar = () => {
                     to={`/goat/${year}/${week}`}
                     className="font-bold text-lg text-white"
                     aria-current={
-                      pathname.startsWith("/goat") ? "page" : undefined
+                      pathname.startsWith('/goat') ? 'page' : undefined
                     }
                   >
                     GOAT
@@ -65,11 +65,11 @@ const Navbar = () => {
                         to={item.href}
                         className={classnames(
                           item.current
-                            ? "bg-gray-900 text-white"
-                            : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                          "px-3 py-2 rounded-md text-sm font-medium"
+                            ? 'bg-gray-900 text-white'
+                            : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                          'px-3 py-2 rounded-md text-sm font-medium'
                         )}
-                        aria-current={item.current ? "page" : undefined}
+                        aria-current={item.current ? 'page' : undefined}
                       >
                         {item.name}
                       </Link>
@@ -97,11 +97,11 @@ const Navbar = () => {
                   to={item.href}
                   className={classnames(
                     item.current
-                      ? "bg-gray-900 text-white"
-                      : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                    "block px-3 py-2 rounded-md text-base font-medium"
+                      ? 'bg-gray-900 text-white'
+                      : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                    'block px-3 py-2 rounded-md text-base font-medium'
                   )}
-                  aria-current={item.current ? "page" : undefined}
+                  aria-current={item.current ? 'page' : undefined}
                 >
                   {item.name}
                 </Link>

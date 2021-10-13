@@ -1,10 +1,10 @@
 import React from "react";
 
 import { FirebaseContext } from "../contexts";
-import useFirebase from "../hooks/useFirebase";
+import useFirebaseProvider from '../hooks/useFirebaseProvider';
 
 const FirebaseProvider = (props) => {
-  const firebase = useFirebase();
+  const firebase = useFirebaseProvider();
   const { ready } = firebase;
 
   if (!ready) return null;
