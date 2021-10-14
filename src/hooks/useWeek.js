@@ -9,14 +9,14 @@ const useWeek = () => {
     const firstWeek = week === 1;
     const previousYear = year - 1;
     const previousWeek = firstWeek
-      ? DateTime.local(previousYear).weeksInWeekYear
+      ? DateTime.local(previousYear, 2).weeksInWeekYear
       : week - 1;
 
     return { week: previousWeek, year: firstWeek ? previousYear : year };
   };
 
-  const getNextWeek = (year = currentYear, week = currentYear) => {
-    const lastWeek = week === DateTime.local(year).weeksInWeekYear;
+  const getNextWeek = (year = currentYear, week = currentWeek) => {
+    const lastWeek = week === DateTime.local(year, 2).weeksInWeekYear;
     const nextYear = year + 1;
     const nextWeek = lastWeek ? 1 : week + 1;
 
