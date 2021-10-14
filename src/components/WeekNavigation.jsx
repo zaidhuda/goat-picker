@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import NavigateNext from '@material-ui/icons/NavigateNext';
 import NavigateBefore from '@material-ui/icons/NavigateBefore';
@@ -21,3 +22,8 @@ export default function WeekNavigation({ prevWeekPath, nextWeekPath }) {
     </div>
   );
 }
+
+WeekNavigation.propTypes = {
+  prevWeekPath: PropTypes.func.isRequired,
+  nextWeekPath: PropTypes.func.isRequired,
+};

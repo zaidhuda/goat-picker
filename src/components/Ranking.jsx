@@ -1,9 +1,9 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { Flipper } from "react-flip-toolkit";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { useLocation } from 'react-router';
+import { Flipper } from 'react-flip-toolkit';
 
-import OptionCard from "./OptionCard";
-import { useLocation } from "react-router";
+import OptionCard from './OptionCard';
 
 const Ranking = ({ options }) => {
   const { pathname } = useLocation();
