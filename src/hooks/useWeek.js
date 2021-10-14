@@ -1,4 +1,4 @@
-import { DateTime } from "luxon";
+import { DateTime } from 'luxon';
 
 const useWeek = () => {
   const now = DateTime.now();
