@@ -1,21 +1,23 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useRouter } from 'next/router';
 import { DateTime } from 'luxon';
 import { ButtonBase } from '@material-ui/core';
 
 import useFirebase from '../hooks/useFirebase';
 import useWeek from '../hooks/useWeek';
 
-import withUser from '../components/withUser';
 import WeekNavigation from '../components/WeekNavigation';
 import AttendanceDay from '../components/AttendanceDay';
 import Avatar from '../components/Avatar';
+import { getLayout } from '../components/Layout';
 
-const AttendancePage = () => {
+export default function AttendancePage() {
   const { getPrevWeek, getNextWeek } = useWeek();
   const { users, user, getAttendances, addAttendance, removeAttendance } =
     useFirebase();
-  const { week: weekParam, year: yearParam } = useParams();
+  const {
+    query: { week: weekParam, year: yearParam },
+  } = useRouter();
 
   const week = Number(weekParam);
   const year = Number(yearParam);
@@ -24,12 +26,12 @@ const AttendancePage = () => {
 
   const prevWeekPath = () => {
     const { week: prevWeek, year: prevYear } = getPrevWeek(year, week);
-    return `/attendances/${prevYear}/${prevWeek}`;
+    return `/attendances?year=${prevYear}&week=${prevWeek}`;
   };
 
   const nextWeekPath = () => {
     const { week: nextWeek, year: nextYear } = getNextWeek(year, week);
-    return `/attendances/${nextYear}/${nextWeek}`;
+    return `/attendances?year=${nextYear}&week=${nextWeek}`;
   };
 
   const getDate = (weekday) =>
@@ -132,6 +134,10 @@ const AttendancePage = () => {
       </div>
     </div>
   );
-};
+}
 
-export default withUser(AttendancePage);
+AttendancePage.options = {
+  withUser: true,
+  layout: getLayout,
+  head: { title: 'Attendances' },
+};

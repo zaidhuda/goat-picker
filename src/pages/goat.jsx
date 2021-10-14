@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useRouter } from 'next/router';
 
 import useFirebase from '../hooks/useFirebase';
 import useWeek from '../hooks/useWeek';
 import useOptions from '../hooks/useOptions';
 
-import withUser from '../components/withUser';
 import Ranking from '../components/Ranking';
 import WeekNavigation from '../components/WeekNavigation';
+import { getLayout } from '../components/Layout';
 
-const GoatPage = () => {
+export default function GoatPage() {
   const { currentWeek, currentYear, getPrevWeek, getNextWeek } = useWeek();
   const { options, getVotes } = useFirebase();
-  const { week: weekParam, year: yearParam } = useParams();
+  const {
+    query: { week: weekParam, year: yearParam },
+  } = useRouter();
 
   const week = Number(weekParam);
   const year = Number(yearParam);
@@ -23,12 +25,12 @@ const GoatPage = () => {
 
   const prevWeekPath = () => {
     const { week: prevWeek, year: prevYear } = getPrevWeek(year, week);
-    return `/goat/${prevYear}/${prevWeek}`;
+    return `/goat?year=${prevYear}&week=${prevWeek}`;
   };
 
   const nextWeekPath = () => {
     const { week: nextWeek, year: nextYear } = getNextWeek(year, week);
-    return `/goat/${nextYear}/${nextWeek}`;
+    return `/goat?year=${nextYear}&week=${nextWeek}`;
   };
 
   useEffect(() => {
@@ -54,6 +56,10 @@ const GoatPage = () => {
       <Ranking options={votedOptions} />
     </div>
   );
-};
+}
 
-export default withUser(GoatPage);
+GoatPage.options = {
+  withUser: true,
+  layout: getLayout,
+  head: { title: 'GOATs' },
+};

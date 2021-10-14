@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useLocation } from 'react-router';
+import { useRouter } from 'next/dist/client/router';
 import { Flipper } from 'react-flip-toolkit';
 
 import OptionCard from './OptionCard';
 
 const Ranking = ({ options }) => {
-  const { pathname } = useLocation();
+  const { pathname } = useRouter();
 
   return (
     <Flipper flipKey={`${pathname}-${options.map(({ id }) => id).join()}`}>

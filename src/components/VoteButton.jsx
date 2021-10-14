@@ -26,7 +26,12 @@ const VoteButton = ({ id, displayName, photoURL, voted }) => {
       disabled={disabled}
       className={classnames({ 'bg-gray-100 cursor-default': disabled })}
     >
-      <OptionCard displayName={displayName} photoURL={photoURL} voted={voted} />
+      <OptionCard
+        id={id}
+        displayName={displayName}
+        photoURL={photoURL}
+        voted={voted}
+      />
     </button>
   );
 };

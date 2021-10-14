@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+@import 'nprogress/nprogress.css';
+
 body {
   @apply text-gray-900 m-0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
@@ -14,13 +16,4 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
-}
-
-.switch-wrapper {
-  @apply relative w-full;
-  position: relative;
-}
-
-.switch-wrapper > div {
-  @apply absolute w-full;
 }

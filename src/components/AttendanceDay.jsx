@@ -12,5 +12,5 @@ export default function AttendanceDay({ label, children }) {
 
 AttendanceDay.propTypes = {
   label: PropTypes.node.isRequired,
-  children: PropTypes.node.isRequired,
+  children: PropTypes.node,
 };
