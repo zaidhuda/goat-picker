@@ -4,9 +4,9 @@ import useFirebase from '../hooks/useFirebase';
 import useOptions from '../hooks/useOptions';
 
 import Ranking from '../components/Ranking';
-import withUser from '../components/withUser';
+import { getLayout } from '../components/Layout';
 
-const UpcomingPage = () => {
+export default function UpcomingPage() {
   const { options, currentWeekVotes } = useFirebase();
   const { votedOptions } = useOptions(options, currentWeekVotes);
 
@@ -19,6 +19,10 @@ const UpcomingPage = () => {
       <Ranking options={votedOptions} />
     </div>
   );
-};
+}
 
-export default withUser(UpcomingPage);
+UpcomingPage.options = {
+  withUser: true,
+  layout: getLayout,
+  head: { title: 'Upcoming GOATs' },
+};

@@ -1,30 +1,24 @@
-import React, { useState } from 'react';
+import React from 'react';
 
+import { ButtonBase } from '@material-ui/core';
 import useFirebase from '../hooks/useFirebase';
-
-import { ReactComponent as LightNormal } from '../google_login/btn_google_light_normal_ios.svg';
-import { ReactComponent as LightPressed } from '../google_login/btn_google_light_pressed_ios.svg';
-// import { ReactComponent as LightDisabled } from "../google_login/btn_google_light_disabled_ios.svg";
-// import { ReactComponent as DarkNormal } from "../google_login/btn_google_dark_normal_ios.svg";
-// import { ReactComponent as DarkPressed } from "../google_login/btn_google_dark_pressed_ios.svg";
-// import { ReactComponent as DarkDisabled } from "../google_login/btn_google_dark_disabled_ios.svg";
 
 const LoginButton = () => {
   const { signInWithPopup } = useFirebase();
-  const [GoogleButton, setGoogleButton] = useState(LightNormal);
 
   return (
-    <button
+    <ButtonBase
       type="button"
       onClick={signInWithPopup}
-      onMouseDown={() => setGoogleButton(LightPressed)}
-      onMouseUp={() => setGoogleButton(LightNormal)}
-      onBlur={() => setGoogleButton(LightNormal)}
-      className="bg-blue-500 border border-gray-100 flex items-center m-0 rounded text-white"
+      className="!rounded relative"
     >
-      <GoogleButton style={{ pointerEvents: 'none' }} />
-      <span className="font-semibold ml-1.5 mr-2.5">Sign in with Google</span>
-    </button>
+      <img
+        src="/images/google/btn_google_signin_dark_normal_web@2x.png"
+        alt="Google Login Button"
+        width={224.217}
+        height={54}
+      />
+    </ButtonBase>
   );
 };
 

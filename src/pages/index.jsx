@@ -1,17 +1,18 @@
+import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
-
-import useFirebase from '../hooks/useFirebase';
 
 import LoginButton from '../components/LoginButton';
+import useFirebase from '../hooks/useFirebase';
 
-const LandingPage = () => {
-  const history = useHistory();
+export default function LandingPage() {
+  const { push } = useRouter();
   const { user } = useFirebase();
 
   useEffect(() => {
-    if (user) return history.push('/vote');
-  }, [user, history]);
+    if (user) {
+      push('/vote');
+    }
+  }, [user, push]);
 
   return (
     <div className="fixed flex flex-col h-screen items-center justify-center space-y-12 w-screen">
@@ -19,6 +20,8 @@ const LandingPage = () => {
       <LoginButton />
     </div>
   );
-};
+}
 
-export default LandingPage;
+LandingPage.options = {
+  head: { title: 'GOAT Picker' },
+};

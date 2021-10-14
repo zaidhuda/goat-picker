@@ -2,10 +2,10 @@ import React from 'react';
 
 import useFirebase from '../hooks/useFirebase';
 
-import withUser from '../components/withUser';
 import VoteButton from '../components/VoteButton';
+import { getLayout } from '../components/Layout';
 
-const VotePage = () => {
+export default function VotePage() {
   const {
     user: { uid: userId },
     options,
@@ -38,6 +38,10 @@ const VotePage = () => {
       </div>
     </div>
   );
-};
+}
 
-export default withUser(VotePage);
+VotePage.options = {
+  withUser: true,
+  layout: getLayout,
+  head: { title: 'Vote for GOATs' },
+};

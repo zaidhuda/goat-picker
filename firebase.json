@@ -10,24 +10,12 @@
   "hosting": [
     {
       "site": "goat-picker",
-      "public": "build",
-      "rewrites": [
-        {
-          "source": "**",
-          "destination": "/index.html"
-        }
-      ],
+      "public": "out",
       "ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
     },
     {
       "site": "goatpicker",
-      "public": "build",
-      "rewrites": [
-        {
-          "source": "**",
-          "destination": "/index.html"
-        }
-      ],
+      "public": "out",
       "ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
     }
   ]

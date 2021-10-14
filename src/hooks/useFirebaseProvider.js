@@ -143,7 +143,7 @@ const useFirebaseProvider = () => {
           alert(`${EMAIL_DOMAIN} email only`);
           signOut();
         } else {
-          setUser();
+          setUser(newUser);
         }
       });
     }

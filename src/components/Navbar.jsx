@@ -1,5 +1,6 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { Disclosure } from '@headlessui/react';
 import ExitToApp from '@material-ui/icons/ExitToApp';
 import CloseIcon from '@material-ui/icons/Close';
@@ -9,9 +10,9 @@ import classnames from 'classnames';
 import useFirebase from '../hooks/useFirebase';
 import useWeek from '../hooks/useWeek';
 
-const Navbar = () => {
+export default function Navbar() {
   const { signOut } = useFirebase();
-  const { pathname } = useLocation();
+  const { pathname } = useRouter();
   const { getPrevWeek, currentWeek, currentYear } = useWeek();
   const { week, year } = getPrevWeek();
 
@@ -28,7 +29,7 @@ const Navbar = () => {
     },
     {
       name: 'Attendance',
-      href: `/attendances/${currentYear}/${currentWeek}`,
+      href: `/attendances?year=${currentYear}&week=${currentWeek}`,
       current: pathname.startsWith('/attendances'),
     },
   ];
@@ -51,31 +52,32 @@ const Navbar = () => {
               </div>
               <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
                 <div className="flex-shrink-0 flex items-center">
-                  <Link
-                    to={`/goat/${year}/${week}`}
-                    className="font-bold text-lg text-white"
-                    aria-current={
-                      pathname.startsWith('/goat') ? 'page' : undefined
-                    }
-                  >
-                    GOAT
+                  <Link href={`/goat?year=${year}&week=${week}`}>
+                    <a
+                      className="font-bold text-lg text-white"
+                      aria-current={
+                        pathname.startsWith('/goat') ? 'page' : undefined
+                      }
+                    >
+                      GOAT
+                    </a>
                   </Link>
                 </div>
                 <div className="hidden sm:block sm:ml-6">
                   <div className="flex space-x-4">
                     {navigation.map((item) => (
-                      <Link
-                        key={item.name}
-                        to={item.href}
-                        className={classnames(
-                          item.current
-                            ? 'bg-gray-900 text-white'
-                            : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                          'px-3 py-2 rounded-md text-sm font-medium'
-                        )}
-                        aria-current={item.current ? 'page' : undefined}
-                      >
-                        {item.name}
+                      <Link key={item.name} href={item.href}>
+                        <a
+                          className={classnames(
+                            item.current
+                              ? 'bg-gray-900 text-white'
+                              : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                            'px-3 py-2 rounded-md text-sm font-medium'
+                          )}
+                          aria-current={item.current ? 'page' : undefined}
+                        >
+                          {item.name}
+                        </a>
                       </Link>
                     ))}
                   </div>
@@ -97,18 +99,18 @@ const Navbar = () => {
           <Disclosure.Panel className="sm:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1">
               {navigation.map((item) => (
-                <Link
-                  key={item.name}
-                  to={item.href}
-                  className={classnames(
-                    item.current
-                      ? 'bg-gray-900 text-white'
-                      : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                    'block px-3 py-2 rounded-md text-base font-medium'
-                  )}
-                  aria-current={item.current ? 'page' : undefined}
-                >
-                  {item.name}
+                <Link key={item.name} href={item.href}>
+                  <a
+                    className={classnames(
+                      item.current
+                        ? 'bg-gray-900 text-white'
+                        : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                      'block px-3 py-2 rounded-md text-base font-medium'
+                    )}
+                    aria-current={item.current ? 'page' : undefined}
+                  >
+                    {item.name}
+                  </a>
                 </Link>
               ))}
             </div>
@@ -117,6 +119,4 @@ const Navbar = () => {
       )}
     </Disclosure>
   );
-};
-
-export default Navbar;
+}
