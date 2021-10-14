@@ -1,11 +1,11 @@
-import firebase from "firebase/app";
-import "firebase/firestore";
-import "firebase/auth";
-import { useState, useEffect, useCallback } from "react";
-import useWeek from "./useWeek";
+import firebase from 'firebase/app';
+import 'firebase/firestore';
+import 'firebase/auth';
+import { useState, useEffect, useCallback } from 'react';
+import useWeek from './useWeek';
 
-const OPTIONS = "options";
-const VOTES = "votes";
+const OPTIONS = 'options';
+const VOTES = 'votes';
 const ATTENDANCES = 'attendances';
 const EMAIL_DOMAIN = '@surialabs.com';
 
@@ -97,8 +97,8 @@ const useFirebaseProvider = () => {
       .catch(console.error);
   };
 
-  const getAttendances = (year, week, resolver) => {
-    return db
+  const getAttendances = (year, week, resolver) =>
+    db
       .collection(`${ATTENDANCES}/${year}/${week}`)
       .onSnapshot((querySnapshot) => {
         const data = [];
@@ -110,7 +110,6 @@ const useFirebaseProvider = () => {
         });
         resolver(data);
       });
-  };
 
   // Initialize Firebase app
   useEffect(() => {
