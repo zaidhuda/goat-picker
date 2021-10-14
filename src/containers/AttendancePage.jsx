@@ -88,7 +88,7 @@ const AttendancePage = () => {
                   <p className="text-gray-400">{date.toLocaleString()}</p>
                 </div>
                 {getAttendanceByDay(date)?.attendees?.length ? (
-                  <div>
+                  <div className="flex gap-2">
                     {getAttendanceByDay(date)?.attendees.map(
                       ({ photoURL, displayName }) => (
                         <img
