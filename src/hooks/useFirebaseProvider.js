@@ -6,7 +6,8 @@ import useWeek from "./useWeek";
 
 const OPTIONS = "options";
 const VOTES = "votes";
-const EMAIL_DOMAIN = "@surialabs.com";
+const ATTENDANCES = 'attendances';
+const EMAIL_DOMAIN = '@surialabs.com';
 
 const useFirebaseProvider = () => {
   const { currentWeek, currentYear } = useWeek();
@@ -62,6 +63,44 @@ const useFirebaseProvider = () => {
     db.collection(`${VOTES}/${currentYear}/${currentWeek}`)
       .get()
       .then((querySnapshot) => {
+        const data = [];
+        querySnapshot.forEach((doc) => {
+          data.push({
+            id: doc.id,
+            ...doc.data(),
+          });
+        });
+        resolver(data);
+      });
+  };
+
+  const addAttendance = (date, resolver) => {
+    db.collection(`${ATTENDANCES}/${date.year}/${date.weekNumber}`)
+      .doc(date.toISODate())
+      .set(
+        {
+          attendees: firebase.firestore.FieldValue.arrayUnion(user.uid),
+        },
+        { merge: true }
+      )
+      .then(resolver)
+      .catch(console.error);
+  };
+
+  const removeAttendance = (date, resolver) => {
+    db.collection(`${ATTENDANCES}/${date.year}/${date.weekNumber}`)
+      .doc(date.toISODate())
+      .update({
+        attendees: firebase.firestore.FieldValue.arrayRemove(user.uid),
+      })
+      .then(resolver)
+      .catch(console.error);
+  };
+
+  const getAttendances = (year, week, resolver) => {
+    return db
+      .collection(`${ATTENDANCES}/${year}/${week}`)
+      .onSnapshot((querySnapshot) => {
         const data = [];
         querySnapshot.forEach((doc) => {
           data.push({
@@ -162,11 +201,15 @@ const useFirebaseProvider = () => {
   return {
     currentWeekVotes,
     options,
+    users: options,
     ready: app && db,
     user,
     addVote,
     getVotes,
     removeVote,
+    addAttendance,
+    removeAttendance,
+    getAttendances,
     signInWithPopup,
     signOut,
   };

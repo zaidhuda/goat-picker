@@ -4,13 +4,17 @@ service cloud.firestore {
     match /{document=**} {
       allow read: if request.auth != null
     }
-    
+
     match /options/{uid} {
       allow write: if request.auth.uid == uid
     }
-    
+
     match /votes/{year}/{week}/{uid} {
       allow write: if request.auth.uid == uid
+    }
+
+    match /attendances/{year}/{week}/{date} {
+      allow write: if request.auth.uid != null
     }
   }
 }
