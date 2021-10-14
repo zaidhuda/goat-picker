@@ -12,19 +12,24 @@ import useWeek from '../hooks/useWeek';
 const Navbar = () => {
   const { signOut } = useFirebase();
   const { pathname } = useLocation();
-  const { getPrevWeek } = useWeek();
+  const { getPrevWeek, currentWeek, currentYear } = useWeek();
   const { week, year } = getPrevWeek();
 
   const navigation = [
     {
       name: 'Vote',
       href: '/vote',
-      current: pathname === '/vote',
+      current: pathname.startsWith('/vote'),
     },
     {
       name: 'Upcoming',
       href: '/upcoming',
-      current: pathname === '/upcoming',
+      current: pathname.startsWith('/upcoming'),
+    },
+    {
+      name: 'Attendance',
+      href: `/attendances/${currentYear}/${currentWeek}`,
+      current: pathname.startsWith('/attendances'),
     },
   ];
 

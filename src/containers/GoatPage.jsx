@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import NavigateBefore from '@material-ui/icons/NavigateBefore';
-import NavigateNext from '@material-ui/icons/NavigateNext';
+import { useParams } from 'react-router-dom';
 
 import useFirebase from '../hooks/useFirebase';
 import useWeek from '../hooks/useWeek';
@@ -9,14 +7,15 @@ import useOptions from '../hooks/useOptions';
 
 import withUser from '../components/withUser';
 import Ranking from '../components/Ranking';
+import WeekNavigation from '../components/WeekNavigation';
 
 const GoatPage = () => {
   const { currentWeek, currentYear, getPrevWeek, getNextWeek } = useWeek();
   const { options, getVotes } = useFirebase();
   const { week: weekParam, year: yearParam } = useParams();
 
-  const week = parseInt(weekParam, 10);
-  const year = parseInt(yearParam, 10);
+  const week = Number(weekParam);
+  const year = Number(yearParam);
 
   let [votes, setVotes] = useState([]);
 
@@ -39,18 +38,14 @@ const GoatPage = () => {
 
   return (
     <div className="space-y-8">
-      <div>
-        <Link to={prevWeekPath()} className="p-1 space-x-1">
-          <NavigateBefore />
-          <span>Previous Week</span>
-        </Link>
-        {!(week > currentWeek - 2 && year === currentYear) && (
-          <Link to={nextWeekPath()} className="p-1 space-x-1">
-            <span>Next Week</span>
-            <NavigateNext />
-          </Link>
-        )}
-      </div>
+      <WeekNavigation
+        prevWeekPath={prevWeekPath}
+        nextWeekPath={
+          !(week > currentWeek - 2 && year === currentYear)
+            ? nextWeekPath
+            : undefined
+        }
+      />
 
       <h1 className="font-light text-5xl">
         <span className="font-bold">GOAT</span>s of week {week}
