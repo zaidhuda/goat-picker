@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { DateTime } from 'luxon';
+import { ButtonBase } from '@material-ui/core';
 
 import useFirebase from '../hooks/useFirebase';
 import useWeek from '../hooks/useWeek';
 
 import withUser from '../components/withUser';
 import WeekNavigation from '../components/WeekNavigation';
-import { ButtonBase } from '@material-ui/core';
+import AttendanceDay from '../components/AttendanceDay';
+import Avatar from '../components/Avatar';
 
 const AttendancePage = () => {
   const { getPrevWeek, getNextWeek } = useWeek();
@@ -18,7 +20,7 @@ const AttendancePage = () => {
   const week = Number(weekParam);
   const year = Number(yearParam);
 
-  let [attendances, setAttendances] = useState([]);
+  const [attendances, setAttendances] = useState([]);
 
   const prevWeekPath = () => {
     const { week: prevWeek, year: prevYear } = getPrevWeek(year, week);
@@ -82,29 +84,51 @@ const AttendancePage = () => {
               title="Press to book or remove"
               disabled={date < DateTime.now().startOf('day')}
             >
-              <div className="border-2 flex flex-col sm:flex-row sm:items-center gap-4 min-h-[86px] p-4 rounded w-full">
-                <div className="min-w-[120px] text-left">
-                  <p className="text-xl">{date.weekdayLong}</p>
-                  <p className="text-gray-400">{date.toLocaleString()}</p>
-                </div>
+              <AttendanceDay
+                label={
+                  <>
+                    <p className="text-xl">{date.weekdayLong}</p>
+                    <p className="text-gray-400">{date.toLocaleString()}</p>
+                  </>
+                }
+              >
                 {getAttendanceByDay(date)?.attendees?.length ? (
                   <div className="flex gap-2">
                     {getAttendanceByDay(date)?.attendees.map(
                       ({ photoURL, displayName }) => (
-                        <img
-                          src={photoURL}
-                          alt={displayName}
-                          title={displayName}
-                          className="h-12 rounded-full w-12"
+                        <Avatar
+                          key={photoURL}
+                          photoURL={photoURL}
+                          displayName={displayName}
                         />
                       )
                     )}
                   </div>
                 ) : null}
-              </div>
+              </AttendanceDay>
             </ButtonBase>
           )
         )}
+        <AttendanceDay
+          label={
+            <>
+              <p className="text-xl">{getDate(6).weekdayLong}</p>
+              <p className="text-gray-400">{getDate(6).toLocaleString()}</p>
+            </>
+          }
+        >
+          <p className="text-xl">It's the weekend!</p>
+        </AttendanceDay>
+        <AttendanceDay
+          label={
+            <>
+              <p className="text-xl">{getDate(7).weekdayLong}</p>
+              <p className="text-gray-400">{getDate(7).toLocaleString()}</p>
+            </>
+          }
+        >
+          <p className="text-xl">It's the weekend!</p>
+        </AttendanceDay>
       </div>
     </div>
   );

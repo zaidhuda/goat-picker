@@ -17,7 +17,7 @@ const GoatPage = () => {
   const week = Number(weekParam);
   const year = Number(yearParam);
 
-  let [votes, setVotes] = useState([]);
+  const [votes, setVotes] = useState([]);
 
   const { votedOptions } = useOptions(options, votes);
 

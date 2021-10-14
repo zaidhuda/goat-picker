@@ -1,5 +1,5 @@
-const useOptions = (options = [], votes = []) => {
-  const optionVotes = votes
+const useOptions = (options = [], allVotes = []) => {
+  const optionVotes = allVotes
     .flatMap(({ votes }) => votes)
     .reduce((res, vote) => ({ ...res, [vote]: (res[vote] || 0) + 1 }), {});
 

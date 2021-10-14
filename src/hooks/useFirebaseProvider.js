@@ -59,8 +59,8 @@ const useFirebaseProvider = () => {
       .catch(console.error);
   };
 
-  const getVotes = (currentYear, currentWeek, resolver) => {
-    db.collection(`${VOTES}/${currentYear}/${currentWeek}`)
+  const getVotes = (year, week, resolver) => {
+    db.collection(`${VOTES}/${year}/${week}`)
       .get()
       .then((querySnapshot) => {
         const data = [];
@@ -136,10 +136,10 @@ const useFirebaseProvider = () => {
   // Reset state on auth state change
   useEffect(() => {
     if (app) {
-      return app.auth().onAuthStateChanged((user) => {
-        if (user?.email?.endsWith(EMAIL_DOMAIN)) {
-          setUser(user);
-        } else if (user?.email) {
+      return app.auth().onAuthStateChanged((newUser) => {
+        if (newUser?.email?.endsWith(EMAIL_DOMAIN)) {
+          setUser(newUser);
+        } else if (newUser?.email) {
           alert(`${EMAIL_DOMAIN} email only`);
           signOut();
         } else {

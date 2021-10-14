@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 
-import { FirebaseContext } from "../contexts";
+import { FirebaseContext } from '../contexts';
 import useFirebaseProvider from '../hooks/useFirebaseProvider';
 
 const FirebaseProvider = (props) => {

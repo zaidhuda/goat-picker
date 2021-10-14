@@ -12,7 +12,11 @@ const VoteButton = ({ id, displayName, photoURL, voted }) => {
 
   const handleOnClick = () => {
     setDisabled(true);
-    voted ? removeVote(id, setDisabled) : addVote(id, setDisabled);
+    if (voted) {
+      removeVote(id, setDisabled);
+    } else {
+      addVote(id, setDisabled);
+    }
   };
 
   return (

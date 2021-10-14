@@ -3,8 +3,8 @@ import { Redirect } from 'react-router';
 
 import useFirebase from '../hooks/useFirebase';
 
-const withUser = (WrappedComponent) => {
-  return ({ ...props }) => {
+export default function withUser(WrappedComponent) {
+  return function WithUser({ ...props }) {
     const { user } = useFirebase();
 
     if (!user) {
@@ -17,6 +17,4 @@ const withUser = (WrappedComponent) => {
       </div>
     );
   };
-};
-
-export default withUser;
+}
