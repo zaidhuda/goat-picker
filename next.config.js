@@ -1,5 +1,3 @@
 module.exports = {
-  images: {
-    domains: ['*.googleusercontent.com'],
-  },
+  trailingSlash: process.env.NODE_ENV === 'production',
 };
