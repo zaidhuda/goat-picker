@@ -1,13 +1,42 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
+import PropTypes from 'prop-types';
+import NavigateNext from '@material-ui/icons/NavigateNext';
+import NavigateBefore from '@material-ui/icons/NavigateBefore';
 
 import useFirebase from '../hooks/useFirebase';
 import useWeek from '../hooks/useWeek';
 import useOptions from '../hooks/useOptions';
 
 import Ranking from '../components/Ranking';
-import WeekNavigation from '../components/Attendance/WeekNavigation';
 import { getLayout } from '../components/Layout';
+
+const WeekNavigation = ({ prevWeekPath, nextWeekPath }) => (
+  <div className="flex gap-8">
+    {prevWeekPath ? (
+      <Link href={prevWeekPath()}>
+        <a className="flex items-center">
+          <NavigateBefore fontSize="large" />
+          <span>Previous Week</span>
+        </a>
+      </Link>
+    ) : null}
+    {nextWeekPath ? (
+      <Link href={nextWeekPath()}>
+        <a className="flex items-center">
+          <span>Next Week</span>
+          <NavigateNext fontSize="large" />
+        </a>
+      </Link>
+    ) : null}
+  </div>
+);
+
+WeekNavigation.propTypes = {
+  prevWeekPath: PropTypes.func,
+  nextWeekPath: PropTypes.func,
+};
 
 export default function GoatPage() {
   const { currentWeek, currentYear, getPrevWeek, getNextWeek } = useWeek();
