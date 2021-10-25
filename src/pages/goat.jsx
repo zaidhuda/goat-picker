@@ -6,7 +6,7 @@ import useWeek from '../hooks/useWeek';
 import useOptions from '../hooks/useOptions';
 
 import Ranking from '../components/Ranking';
-import WeekNavigation from '../components/WeekNavigation';
+import WeekNavigation from '../components/Attendance/WeekNavigation';
 import { getLayout } from '../components/Layout';
 
 export default function GoatPage() {
