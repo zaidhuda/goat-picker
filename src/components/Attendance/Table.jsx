@@ -65,11 +65,13 @@ export default function AttendanceTable() {
       {[getDate(1), getDate(2), getDate(3), getDate(4), getDate(5)].map(
         (date) => {
           const attendeesCount = getAttendanceByDay(date)?.attendees.length;
-          let attendeesStyle = 'gray-300';
-          if (attendeesCount >= 1) attendeesStyle = 'green-500';
+          let style = { border: 'border-gray-300', text: 'text-gray-400' };
+          if (attendeesCount >= 1)
+            style = { border: 'border-green-500', text: 'text-green-500' };
           if (attendeesCount >= MAX_ATTENDEES / 2)
-            attendeesStyle = 'yellow-500';
-          if (attendeesCount === MAX_ATTENDEES) attendeesStyle = 'red-500';
+            style = { border: 'border-yellow-500', text: 'text-yellow-500' };
+          if (attendeesCount === MAX_ATTENDEES)
+            style = { border: 'border-red-500', text: 'text-red-500' };
 
           const hasUser = getAttendanceByDay(date)?.attendees.some(
             ({ id }) => id === user.uid
@@ -98,7 +100,7 @@ export default function AttendanceTable() {
               }
             >
               <AttendanceDay
-                className={`border-${attendeesStyle}`}
+                className={style.border}
                 label={
                   <>
                     <div className="flex sm:flex-col items-baseline gap-2 sm:gap-0 text-center sm:text-left">
@@ -110,7 +112,7 @@ export default function AttendanceTable() {
                     <p
                       className={classnames(
                         'flex gap-1 sm:hidden text-sm sm:text-base',
-                        `text-${attendeesStyle}`
+                        style.text
                       )}
                     >
                       <CountContent />
@@ -122,7 +124,7 @@ export default function AttendanceTable() {
                   {getAttendanceByDay(date)?.attendees.map(
                     ({ photoURL, displayName }) => (
                       <Avatar
-                        size={8}
+                        size={32}
                         key={photoURL}
                         photoURL={photoURL}
                         displayName={displayName}
@@ -133,7 +135,7 @@ export default function AttendanceTable() {
                 <div
                   className={classnames(
                     'hidden sm:flex flex-col font-medium text-lg text-right w-14',
-                    `text-${attendeesStyle}`
+                    style.text
                   )}
                 >
                   <CountContent />

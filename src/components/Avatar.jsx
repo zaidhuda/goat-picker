@@ -4,11 +4,13 @@ import PropTypes from 'prop-types';
 export default function Avatar({ photoURL, displayName, size }) {
   return (
     <img
+      height={size}
+      width={size}
       rel="noreferrer"
       src={photoURL}
       alt={displayName}
       title={displayName}
-      className={`rounded-full h-${size} w-${size}`}
+      className="rounded-full"
     />
   );
 }
@@ -20,5 +22,5 @@ Avatar.propTypes = {
 };
 
 Avatar.defaultProps = {
-  size: 12,
+  size: 48,
 };
