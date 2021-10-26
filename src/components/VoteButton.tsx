@@ -1,21 +1,29 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
-import useFirebase from '../hooks/useFirebase';
-
 import OptionCard from './OptionCard';
+import { Profile } from 'types/profile';
+import useVotes from 'hooks/useVotes';
 
-const VoteButton = ({ id, displayName, photoURL, voted }) => {
-  const { addVote, removeVote } = useFirebase();
+interface Props extends Profile {
+  voted?: boolean;
+}
+
+export default function VoteButton({
+  id,
+  displayName,
+  photoURL,
+  voted,
+}: Props) {
+  const { addVote, removeVote } = useVotes();
   const [disabled, setDisabled] = useState(false);
 
   const handleOnClick = () => {
     setDisabled(true);
     if (voted) {
-      removeVote(id, setDisabled);
+      removeVote(id, () => setDisabled(false));
     } else {
-      addVote(id, setDisabled);
+      addVote(id, () => setDisabled(false));
     }
   };
 
@@ -34,17 +42,4 @@ const VoteButton = ({ id, displayName, photoURL, voted }) => {
       />
     </button>
   );
-};
-
-VoteButton.propTypes = {
-  id: PropTypes.string.isRequired,
-  displayName: PropTypes.string.isRequired,
-  photoURL: PropTypes.string.isRequired,
-  voted: PropTypes.bool,
-};
-
-VoteButton.defaultProps = {
-  voted: false,
-};
-
-export default VoteButton;
+}

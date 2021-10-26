@@ -1,7 +1,13 @@
-const useOptions = (options = [], allVotes = []) => {
+import { Profile } from 'types/profile';
+import { UserVote } from 'types/vote';
+
+const useOptions = (options: Profile[] = [], allVotes: UserVote[] = []) => {
   const optionVotes = allVotes
-    .flatMap(({ votes }) => votes)
-    .reduce((res, vote) => ({ ...res, [vote]: (res[vote] || 0) + 1 }), {});
+    .flatMap(({ votes = [] }) => votes)
+    .reduce<{ [key in string]: number }>(
+      (res, vote) => ({ ...res, [vote]: (res[vote] || 0) + 1 }),
+      {}
+    );
 
   const optionsWithVotes = options.map((option) => ({
     ...option,

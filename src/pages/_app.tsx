@@ -1,20 +1,33 @@
-import '../styles/global.css';
+import 'styles/global.css';
 
-import { useEffect } from 'react';
+import { ReactElement, ReactNode, useEffect } from 'react';
 import Head from 'next/head';
+import type { AppProps } from 'next/app';
 import Router, { useRouter } from 'next/router';
 import NProgress from 'nprogress';
-import PropTypes from 'prop-types';
 
-import { FirebaseContext } from '../contexts';
-
-import useFirebaseProvider from '../hooks/useFirebaseProvider';
-
-import Loader from '../components/Loader';
+import Loader from 'components/Loader';
+import { NextPage } from 'next';
+import { useFirebaseProvider } from 'hooks/useFirebase';
+import FirebaseContext from 'contexts/FirebaseContext';
 
 NProgress.configure({ showSpinner: false, trickleSpeed: 100 });
 
-export default function MyApp({ Component, pageProps }) {
+type NextPageWithLayout = NextPage & {
+  options?: {
+    layout?: (page: ReactElement) => ReactNode;
+    withUser?: boolean;
+    head?: {
+      title?: string;
+    };
+  };
+};
+
+type AppPropsWithLayout = AppProps & {
+  Component: NextPageWithLayout;
+};
+
+export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.options?.layout || ((page) => page);
 
   const { push } = useRouter();
@@ -53,8 +66,3 @@ export default function MyApp({ Component, pageProps }) {
     </FirebaseContext.Provider>
   );
 }
-
-MyApp.propTypes = {
-  Component: PropTypes.func.isRequired,
-  pageProps: PropTypes.object.isRequired,
-};

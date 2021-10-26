@@ -1,18 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import PropTypes from 'prop-types';
 import NavigateNext from '@material-ui/icons/NavigateNext';
 import NavigateBefore from '@material-ui/icons/NavigateBefore';
 
-import useFirebase from '../hooks/useFirebase';
-import useWeek from '../hooks/useWeek';
-import useOptions from '../hooks/useOptions';
+import useWeek from 'hooks/useWeek';
 
-import Ranking from '../components/Ranking';
-import { getLayout } from '../components/Layout';
+import Ranking from 'components/Ranking';
+import { getLayout } from 'components/Layout';
+import useVotes from 'hooks/useVotes';
+import useProfiles from 'hooks/useProfiles';
+import useOptions from 'hooks/useOptions';
+import { UserVote } from 'types/vote';
 
-const WeekNavigation = ({ prevWeekPath, nextWeekPath }) => (
+const WeekNavigation = ({
+  prevWeekPath,
+  nextWeekPath,
+}: {
+  prevWeekPath?: () => string;
+  nextWeekPath?: () => string;
+}) => (
   <div className="flex gap-8">
     {prevWeekPath ? (
       <Link href={prevWeekPath()}>
@@ -33,14 +40,10 @@ const WeekNavigation = ({ prevWeekPath, nextWeekPath }) => (
   </div>
 );
 
-WeekNavigation.propTypes = {
-  prevWeekPath: PropTypes.func,
-  nextWeekPath: PropTypes.func,
-};
-
 export default function GoatPage() {
   const { currentWeek, currentYear, getPrevWeek, getNextWeek } = useWeek();
-  const { options, getVotes } = useFirebase();
+  const profiles = useProfiles();
+  const { getVotes } = useVotes();
   const {
     query: { week: weekParam, year: yearParam },
   } = useRouter();
@@ -48,9 +51,9 @@ export default function GoatPage() {
   const week = Number(weekParam);
   const year = Number(yearParam);
 
-  const [votes, setVotes] = useState([]);
+  const [votes, setVotes] = useState<UserVote[]>([]);
 
-  const { votedOptions } = useOptions(options, votes);
+  const { votedOptions } = useOptions(profiles, votes);
 
   const prevWeekPath = () => {
     const { week: prevWeek, year: prevYear } = getPrevWeek(year, week);
@@ -63,8 +66,7 @@ export default function GoatPage() {
   };
 
   useEffect(() => {
-    setVotes([]);
-    getVotes(year, week, setVotes);
+    return getVotes(year, week, setVotes);
   }, [getVotes, week, year]);
 
   return (
