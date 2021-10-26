@@ -10,6 +10,8 @@ import Loader from 'components/Loader';
 import { NextPage } from 'next';
 import { useFirebaseProvider } from 'hooks/useFirebase';
 import FirebaseContext from 'contexts/FirebaseContext';
+import muiTheme from 'lib/muiTheme';
+import { ThemeProvider } from '@mui/material';
 
 NProgress.configure({ showSpinner: false, trickleSpeed: 100 });
 
@@ -62,7 +64,9 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
       <Head>
         <title>{Component.options?.head?.title || 'GOAT Picker'}</title>
       </Head>
-      {getLayout(<Component {...pageProps} />)}
+      <ThemeProvider theme={muiTheme}>
+        {getLayout(<Component {...pageProps} />)}
+      </ThemeProvider>
     </FirebaseContext.Provider>
   );
 }

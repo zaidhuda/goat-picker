@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import NavigateNext from '@material-ui/icons/NavigateNext';
-import NavigateBefore from '@material-ui/icons/NavigateBefore';
+import NavigateNext from '@mui/icons-material/NavigateNext';
+import NavigateBefore from '@mui/icons-material/NavigateBefore';
 
 import useWeek from 'hooks/useWeek';
 

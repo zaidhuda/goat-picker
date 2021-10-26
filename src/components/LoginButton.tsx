@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { ButtonBase } from '@material-ui/core';
+import { ButtonBase } from '@mui/material';
 import useFirebase from 'hooks/useFirebase';
 
 const LoginButton = () => {

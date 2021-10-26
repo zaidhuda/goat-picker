@@ -1,11 +1,10 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useRef, useEffect, useMemo, useState } from 'react';
 import classnames from 'classnames';
-import Avatar from 'components/Avatar';
 import useAttendances from 'hooks/useAttendances';
 import { Profile } from 'types/profile';
 import { DateTime } from 'luxon';
 import useFirebase from 'hooks/useFirebase';
-import { ButtonBase } from '@material-ui/core';
+import { Avatar, AvatarGroup, ButtonBase } from '@mui/material';
 
 const MAX_ATTENDEES = 10; // TODO: Set value from API
 
@@ -14,6 +13,7 @@ interface Props {
 }
 
 export default function AttendanceDay({ date }: Props) {
+  const avatarsContainer = useRef<HTMLDivElement | null>(null);
   const [disabled, setDisabled] = useState(false);
   const { user } = useFirebase();
   const { getAttendances, addAttendance, removeAttendance } = useAttendances();
@@ -40,6 +40,10 @@ export default function AttendanceDay({ date }: Props) {
       setAttendances(results);
     });
   }, [getAttendances, date]);
+
+  const maxAvatars = Math.floor(
+    (avatarsContainer.current?.clientWidth || 36 * 5) / 36
+  );
 
   const attendeesCount = attendances.length;
 
@@ -94,25 +98,25 @@ export default function AttendanceDay({ date }: Props) {
             </p>
           </>
         </div>
-        <div className="flex flex-1 gap-2">
-          <div className="grid gap-2 grid-cols-5 sm:grid-cols-10 w-full items-center justify-items-center">
+        <div ref={avatarsContainer} className="flex flex-1">
+          <AvatarGroup max={maxAvatars}>
             {attendances.map(({ photoURL, displayName }) => (
               <Avatar
-                size={32}
                 key={photoURL}
-                photoURL={photoURL}
-                displayName={displayName}
+                src={photoURL}
+                alt={displayName}
+                title={displayName}
               />
             ))}
-          </div>
-          <div
-            className={classnames(
-              'hidden sm:flex flex-col font-medium text-lg text-right w-14',
-              style.text
-            )}
-          >
-            <CountContent />
-          </div>
+          </AvatarGroup>
+        </div>
+        <div
+          className={classnames(
+            'hidden sm:flex flex-col font-medium text-lg text-right w-14',
+            style.text
+          )}
+        >
+          <CountContent />
         </div>
       </div>
     </ButtonBase>

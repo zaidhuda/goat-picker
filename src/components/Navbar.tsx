@@ -2,9 +2,9 @@ import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { Disclosure } from '@headlessui/react';
-import ExitToApp from '@material-ui/icons/ExitToApp';
-import CloseIcon from '@material-ui/icons/Close';
-import MenuIcon from '@material-ui/icons/Menu';
+import ExitToApp from '@mui/icons-material/ExitToApp';
+import CloseIcon from '@mui/icons-material/Close';
+import MenuIcon from '@mui/icons-material/Menu';
 import classnames from 'classnames';
 
 import useFirebase from 'hooks/useFirebase';
