@@ -2,8 +2,8 @@ import React from 'react';
 import classnames from 'classnames';
 import { Flipped } from 'react-flip-toolkit';
 
-import Avatar from './Avatar';
 import { Profile } from 'types/profile';
+import { Avatar } from '@mui/material';
 
 interface Props extends Profile {
   voted?: boolean;
@@ -23,7 +23,12 @@ export default function OptionCard({
           { 'border-green-400': voted }
         )}
       >
-        <Avatar displayName={displayName} photoURL={photoURL} />
+        <Avatar
+          alt={displayName}
+          title={displayName}
+          src={photoURL}
+          sx={{ width: 48, height: 48 }}
+        />
         <figcaption className="font-semibold text-lg">{displayName}</figcaption>
       </div>
     </Flipped>
