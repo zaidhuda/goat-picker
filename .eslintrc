@@ -1,25 +1,19 @@
 {
-  "extends": ["wesbos"],
+  "plugins": ["@typescript-eslint"],
+  "extends": [
+    "next",
+    "next/core-web-vitals",
+    "plugin:@typescript-eslint/recommended",
+    "prettier"
+  ],
   "rules": {
-    "no-console": [
+    "@next/next/no-img-element": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "@typescript-eslint/no-explicit-any": "warn",
+    "@typescript-eslint/no-unused-vars": [
       "error",
-      {
-        "allow": ["error"]
-      }
+      { "ignoreRestSiblings": true }
     ],
-    "prettier/prettier": [
-      "error",
-      {
-        "arrowParens": "always",
-        "bracketSpacing": true,
-        "endOfLine": "lf",
-        "printWidth": 80,
-        "semi": true,
-        "singleQuote": true,
-        "tabWidth": 2,
-        "trailingComma": "es5",
-        "useTabs": false
-      }
-    ]
+    "@typescript-eslint/no-var-requires": "off"
   }
 }

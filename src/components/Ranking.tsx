@@ -1,11 +1,15 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { useRouter } from 'next/dist/client/router';
 import { Flipper } from 'react-flip-toolkit';
 
 import OptionCard from './OptionCard';
+import { Profile } from 'types/profile';
 
-const Ranking = ({ options }) => {
+interface Props {
+  options: Profile[];
+}
+
+export default function Ranking({ options }: Props) {
   const { pathname } = useRouter();
 
   return (
@@ -22,10 +26,4 @@ const Ranking = ({ options }) => {
       </div>
     </Flipper>
   );
-};
-
-Ranking.propTypes = {
-  options: PropTypes.arrayOf(PropTypes.object).isRequired,
-};
-
-export default Ranking;
+}

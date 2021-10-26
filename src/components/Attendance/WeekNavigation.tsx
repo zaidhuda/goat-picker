@@ -3,7 +3,7 @@ import Link from 'next/link';
 import NavigateNext from '@material-ui/icons/NavigateNext';
 import NavigateBefore from '@material-ui/icons/NavigateBefore';
 import { useRouter } from 'next/router';
-import useWeek from '../../hooks/useWeek';
+import useWeek from 'hooks/useWeek';
 
 export default function WeekNavigation() {
   const { getPrevWeek, getNextWeek } = useWeek();

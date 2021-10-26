@@ -7,8 +7,8 @@ import CloseIcon from '@material-ui/icons/Close';
 import MenuIcon from '@material-ui/icons/Menu';
 import classnames from 'classnames';
 
-import useFirebase from '../hooks/useFirebase';
-import useWeek from '../hooks/useWeek';
+import useFirebase from 'hooks/useFirebase';
+import useWeek from 'hooks/useWeek';
 
 export default function Navbar() {
   const { signOut } = useFirebase();

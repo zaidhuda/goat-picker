@@ -13,8 +13,8 @@ service cloud.firestore {
       allow write: if request.auth.uid == uid
     }
 
-    match /attendances/{year}/{week}/{date} {
-      allow write: if request.auth.uid != null
+    match /attendances/{date}/attendances/{uid} {
+      allow write: if request.auth.uid == uid
     }
   }
 }

@@ -1,8 +1,8 @@
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 
-import LoginButton from '../components/LoginButton';
-import useFirebase from '../hooks/useFirebase';
+import LoginButton from 'components/LoginButton';
+import useFirebase from 'hooks/useFirebase';
 
 export default function LandingPage() {
   const { push } = useRouter();
