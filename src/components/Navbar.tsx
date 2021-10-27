@@ -8,12 +8,10 @@ import MenuIcon from '@mui/icons-material/Menu';
 import classnames from 'classnames';
 
 import useFirebase from 'hooks/useFirebase';
-import useWeek from 'hooks/useWeek';
 
 export default function Navbar() {
   const { signOut } = useFirebase();
   const { pathname } = useRouter();
-  const { currentWeek, currentYear } = useWeek();
 
   const navigation = [
     {
@@ -23,7 +21,7 @@ export default function Navbar() {
     },
     {
       name: 'Attendance',
-      href: `/attendances?year=${currentYear}&week=${currentWeek}`,
+      href: '/attendances',
       current: pathname.startsWith('/attendances'),
     },
   ];
@@ -46,7 +44,7 @@ export default function Navbar() {
               </div>
               <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
                 <div className="flex-shrink-0 flex items-center">
-                  <Link href={`/goat?year=${currentYear}&week=${currentWeek}`}>
+                  <Link href="/goat">
                     <a
                       className="font-bold text-lg text-white"
                       aria-current={

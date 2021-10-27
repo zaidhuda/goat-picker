@@ -9,7 +9,7 @@ import useWeek from 'hooks/useWeek';
 export default function AttendancePage() {
   const { currentWeek, currentYear, getPrevWeek, getNextWeek } = useWeek();
   const {
-    query: { week: weekParam, year: yearParam },
+    query: { week: weekParam = currentWeek, year: yearParam = currentYear },
   } = useRouter();
 
   const week = Number(weekParam);
@@ -28,7 +28,7 @@ export default function AttendancePage() {
   return (
     <div className="space-y-8">
       <WeekNavigation prevWeekPath={prevWeekPath} nextWeekPath={nextWeekPath}>
-        <Link href={`/attendances?year=${currentYear}&week=${currentWeek}`}>
+        <Link href="/attendances">
           <a title="Go to current week">
             <h1 className="font-medium text-2xl sm:text-5xl">Week {week}</h1>
           </a>

@@ -16,7 +16,7 @@ export default function GoatPage() {
   const profiles = useProfiles();
   const { getVotes } = useVotes();
   const {
-    query: { week: weekParam, year: yearParam },
+    query: { week: weekParam = currentWeek, year: yearParam = currentYear },
   } = useRouter();
 
   const week = Number(weekParam);
