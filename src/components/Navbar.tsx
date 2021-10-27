@@ -13,19 +13,13 @@ import useWeek from 'hooks/useWeek';
 export default function Navbar() {
   const { signOut } = useFirebase();
   const { pathname } = useRouter();
-  const { getPrevWeek, currentWeek, currentYear } = useWeek();
-  const { week, year } = getPrevWeek();
+  const { currentWeek, currentYear } = useWeek();
 
   const navigation = [
     {
       name: 'Vote',
       href: '/vote',
       current: pathname.startsWith('/vote'),
-    },
-    {
-      name: 'Upcoming',
-      href: '/upcoming',
-      current: pathname.startsWith('/upcoming'),
     },
     {
       name: 'Attendance',
@@ -52,7 +46,7 @@ export default function Navbar() {
               </div>
               <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
                 <div className="flex-shrink-0 flex items-center">
-                  <Link href={`/goat?year=${year}&week=${week}`}>
+                  <Link href={`/goat?year=${currentYear}&week=${currentWeek}`}>
                     <a
                       className="font-bold text-lg text-white"
                       aria-current={

@@ -65,6 +65,8 @@ export default function GoatPage() {
     return `/goat?year=${nextYear}&week=${nextWeek}`;
   };
 
+  const isCurrentWeek = year === currentYear && week === currentWeek;
+
   useEffect(() => {
     return getVotes(year, week, setVotes);
   }, [getVotes, week, year]);
@@ -74,14 +76,15 @@ export default function GoatPage() {
       <WeekNavigation
         prevWeekPath={prevWeekPath}
         nextWeekPath={
-          !(week > currentWeek - 2 && year === currentYear)
+          !(week > currentWeek - 1 && year === currentYear)
             ? nextWeekPath
             : undefined
         }
       />
 
       <h1 className="font-light text-5xl">
-        <span className="font-bold">GOAT</span>s of week {week}
+        <strong className="font-bold">GOAT</strong>s
+        {isCurrentWeek ? null : <> of week {week}</>}
       </h1>
 
       <Ranking options={votedOptions} />
