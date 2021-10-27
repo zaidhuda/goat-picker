@@ -14,7 +14,7 @@ interface Props {
 
 export default function AttendanceDay({ date }: Props) {
   const avatarsContainer = useRef<HTMLDivElement | null>(null);
-  const [disabled, setDisabled] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const { user } = useFirebase();
   const { getAttendances, addAttendance, removeAttendance } = useAttendances();
 
@@ -25,12 +25,12 @@ export default function AttendanceDay({ date }: Props) {
   }, [user, attendances]);
 
   const toggleAttendance = () => {
-    if (!disabled && date >= DateTime.now().startOf('day')) {
-      setDisabled(true);
+    if (!submitting && date >= DateTime.now().startOf('day')) {
+      setSubmitting(true);
       if (hasUser) {
-        removeAttendance(date, () => setDisabled(false));
+        removeAttendance(date, () => setSubmitting(false));
       } else {
-        addAttendance(date, () => setDisabled(false));
+        addAttendance(date, () => setSubmitting(false));
       }
     }
   };
@@ -47,12 +47,16 @@ export default function AttendanceDay({ date }: Props) {
 
   const attendeesCount = attendances.length;
 
+  const past = date < DateTime.now().startOf('day');
+  const full = attendeesCount >= MAX_ATTENDEES && !hasUser;
+  const disabled = past || full;
+
   let style = { border: 'border-gray-300', text: 'text-gray-400' };
   if (attendeesCount >= 1)
     style = { border: 'border-green-500', text: 'text-green-500' };
   if (attendeesCount >= MAX_ATTENDEES / 2)
     style = { border: 'border-yellow-500', text: 'text-yellow-500' };
-  if (attendeesCount === MAX_ATTENDEES)
+  if (attendeesCount >= MAX_ATTENDEES)
     style = { border: 'border-red-500', text: 'text-red-500' };
 
   const CountContent = () => (
@@ -69,15 +73,13 @@ export default function AttendanceDay({ date }: Props) {
       onClick={toggleAttendance}
       className="!rounded"
       title="Press to book or remove"
-      disabled={
-        date < DateTime.now().startOf('day') ||
-        (attendeesCount === MAX_ATTENDEES && !hasUser)
-      }
+      disabled={disabled}
     >
       <div
         className={classnames(
           'border-2 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 h-[96px] sm:h-[92px] p-2 sm:p-4 rounded w-full',
-          style.border
+          style.border,
+          { 'text-gray-400': past }
         )}
       >
         <div className="flex sm:flex-col items-baseline sm:items-start justify-between min-w-[120px]">
