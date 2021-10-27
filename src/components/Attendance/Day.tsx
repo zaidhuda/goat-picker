@@ -76,7 +76,7 @@ export default function AttendanceDay({ date }: Props) {
     >
       <div
         className={classnames(
-          'border-2 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 min-h-[86px] p-2 sm:p-4 rounded w-full',
+          'border-2 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 h-[96px] sm:h-[92px] p-2 sm:p-4 rounded w-full',
           style.border
         )}
       >

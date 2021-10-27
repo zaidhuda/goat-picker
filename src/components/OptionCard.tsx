@@ -23,13 +23,17 @@ export default function OptionCard({
           { 'border-green-400': voted }
         )}
       >
-        <Avatar
-          alt={displayName}
-          title={displayName}
-          src={photoURL}
-          sx={{ width: 48, height: 48 }}
-        />
-        <figcaption className="font-semibold text-lg">{displayName}</figcaption>
+        <figure>
+          <Avatar
+            alt={displayName}
+            title={displayName}
+            src={photoURL}
+            sx={{ width: 48, height: 48 }}
+          />
+        </figure>
+        <figcaption className="font-semibold text-lg line-clamp-1">
+          {displayName}
+        </figcaption>
       </div>
     </Flipped>
   );

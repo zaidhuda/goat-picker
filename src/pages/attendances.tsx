@@ -25,7 +25,7 @@ export default function AttendancePage() {
   };
 
   return (
-    <div className="space-y-8  max-w-2xl mx-auto">
+    <div className="space-y-8">
       <WeekNavigation prevWeekPath={prevWeekPath} nextWeekPath={nextWeekPath}>
         <h1 className="font-medium text-2xl sm:text-5xl">Week {week}</h1>
       </WeekNavigation>
