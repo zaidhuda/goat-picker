@@ -1,12 +1,13 @@
 import React from 'react';
+import { useRouter } from 'next/router';
+import Link from 'next/link';
 import { getLayout } from 'components/Layout';
 import AttendanceTable from 'components/Attendance/Table';
 import WeekNavigation from 'components/WeekNavigation';
 import useWeek from 'hooks/useWeek';
-import { useRouter } from 'next/router';
 
 export default function AttendancePage() {
-  const { getPrevWeek, getNextWeek } = useWeek();
+  const { currentWeek, currentYear, getPrevWeek, getNextWeek } = useWeek();
   const {
     query: { week: weekParam, year: yearParam },
   } = useRouter();
@@ -27,7 +28,11 @@ export default function AttendancePage() {
   return (
     <div className="space-y-8">
       <WeekNavigation prevWeekPath={prevWeekPath} nextWeekPath={nextWeekPath}>
-        <h1 className="font-medium text-2xl sm:text-5xl">Week {week}</h1>
+        <Link href={`/attendances?year=${currentYear}&week=${currentWeek}`}>
+          <a title="Go to current week">
+            <h1 className="font-medium text-2xl sm:text-5xl">Week {week}</h1>
+          </a>
+        </Link>
       </WeekNavigation>
       <AttendanceTable />
     </div>
