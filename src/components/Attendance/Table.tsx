@@ -3,11 +3,13 @@ import { useRouter } from 'next/router';
 import { DateTime } from 'luxon';
 import AttendanceDay from './Day';
 import { Button } from '@mui/material';
+import useWeek from 'hooks/useWeek';
 
 export default function AttendanceTable() {
   const [weekendsVisible, showWeekends] = useState(false);
+  const { currentWeek, currentYear } = useWeek();
   const {
-    query: { week: weekParam, year: yearParam },
+    query: { week: weekParam = currentWeek, year: yearParam = currentYear },
   } = useRouter();
 
   const week = Number(weekParam);
