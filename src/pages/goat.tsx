@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import Link from 'next/link';
-import NavigateNext from '@mui/icons-material/NavigateNext';
-import NavigateBefore from '@mui/icons-material/NavigateBefore';
 
 import useWeek from 'hooks/useWeek';
 
@@ -12,33 +9,7 @@ import useVotes from 'hooks/useVotes';
 import useProfiles from 'hooks/useProfiles';
 import useOptions from 'hooks/useOptions';
 import { UserVote } from 'types/vote';
-
-const WeekNavigation = ({
-  prevWeekPath,
-  nextWeekPath,
-}: {
-  prevWeekPath?: () => string;
-  nextWeekPath?: () => string;
-}) => (
-  <div className="flex gap-8">
-    {prevWeekPath ? (
-      <Link href={prevWeekPath()}>
-        <a className="flex items-center">
-          <NavigateBefore fontSize="large" />
-          <span>Previous Week</span>
-        </a>
-      </Link>
-    ) : null}
-    {nextWeekPath ? (
-      <Link href={nextWeekPath()}>
-        <a className="flex items-center">
-          <span>Next Week</span>
-          <NavigateNext fontSize="large" />
-        </a>
-      </Link>
-    ) : null}
-  </div>
-);
+import WeekNavigation from 'components/WeekNavigation';
 
 export default function GoatPage() {
   const { currentWeek, currentYear, getPrevWeek, getNextWeek } = useWeek();
@@ -76,7 +47,7 @@ export default function GoatPage() {
       <WeekNavigation
         prevWeekPath={prevWeekPath}
         nextWeekPath={
-          !(week > currentWeek - 1 && year === currentYear)
+          !(week > currentWeek - 1 && year <= currentYear)
             ? nextWeekPath
             : undefined
         }
