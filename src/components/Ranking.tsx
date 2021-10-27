@@ -14,7 +14,7 @@ export default function Ranking({ options }: Props) {
 
   return (
     <Flipper flipKey={`${pathname}-${options.map(({ id }) => id).join()}`}>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {options.map(({ id, displayName, photoURL }) => (
           <OptionCard
             key={id}

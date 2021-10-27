@@ -10,7 +10,9 @@ export default function Layout({ children }: { children: ReactNode }) {
   return (
     <>
       <Navbar />
-      <main className="container mx-auto py-12">{children}</main>
+      <main className="container max-w-screen-md mx-auto py-12">
+        {children}
+      </main>
     </>
   );
 }
