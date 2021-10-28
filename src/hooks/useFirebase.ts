@@ -5,7 +5,7 @@ import { useState, useEffect, useCallback, Context, useContext } from 'react';
 import FirebaseContext from 'contexts/FirebaseContext';
 
 const EMAIL_DOMAIN = '@surialabs.com';
-const PROFILES = 'options';
+const PROFILES = 'profiles';
 
 export function useFirebaseProvider() {
   const [app, setApp] = useState<firebase.app.App>();
