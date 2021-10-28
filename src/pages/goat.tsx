@@ -8,7 +8,7 @@ import { getLayout } from 'components/Layout';
 import WeekNavigation from 'components/WeekNavigation';
 
 export default function GoatPage() {
-  const { currentWeek, currentYear, getPrevWeek, getNextWeek } = useWeek();
+  const { currentWeek, currentYear } = useWeek();
   const {
     query: { week: weekParam = currentWeek, year: yearParam = currentYear },
   } = useRouter();
@@ -19,25 +19,10 @@ export default function GoatPage() {
 
   const { votedOptions } = useOptions(year, week);
 
-  const prevWeekPath = () => {
-    const { week: prevWeek, year: prevYear } = getPrevWeek(year, week);
-    return `/goat?year=${prevYear}&week=${prevWeek}`;
-  };
-
-  const nextWeekPath = () => {
-    const { week: nextWeek, year: nextYear } = getNextWeek(year, week);
-    return `/goat?year=${nextYear}&week=${nextWeek}`;
-  };
-
   return (
     <div className="space-y-8">
       <WeekNavigation
-        prevWeekPath={prevWeekPath}
-        nextWeekPath={
-          !(week > currentWeek - 1 && year <= currentYear)
-            ? nextWeekPath
-            : undefined
-        }
+        hideNextWeek={week > currentWeek - 1 && year <= currentYear}
       />
 
       <h1 className="font-light text-5xl">
