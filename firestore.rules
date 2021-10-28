@@ -5,7 +5,7 @@ service cloud.firestore {
       allow read: if request.auth != null
     }
 
-    match /options/{uid} {
+    match /profiles/{uid} {
       allow write: if request.auth.uid == uid
     }
 
