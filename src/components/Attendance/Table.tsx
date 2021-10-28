@@ -15,22 +15,28 @@ export default function AttendanceTable() {
   const week = Number(weekParam);
   const year = Number(yearParam);
 
-  const getDate = (weekday: number) =>
-    DateTime.fromObject({
-      weekYear: year,
-      weekNumber: week,
-      weekday,
-    });
-
   const weekday = useMemo(
-    () => Array.from({ length: 5 }, (_, i) => getDate(i + 1)),
+    () =>
+      Array.from({ length: 5 }, (_, i) =>
+        DateTime.fromObject({
+          weekYear: year,
+          weekNumber: week,
+          weekday: i + 1,
+        })
+      ),
     [week, year]
   );
 
   const weekends = useMemo(
     () =>
       weekendsVisible
-        ? Array.from({ length: 2 }, (_, i) => getDate(i + 6))
+        ? Array.from({ length: 2 }, (_, i) =>
+            DateTime.fromObject({
+              weekYear: year,
+              weekNumber: week,
+              weekday: i + 6,
+            })
+          )
         : [],
     [week, year, weekendsVisible]
   );
