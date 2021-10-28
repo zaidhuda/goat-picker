@@ -1,28 +1,47 @@
-import { Profile } from 'types/profile';
+import { useEffect, useMemo, useState } from 'react';
 import { UserVote } from 'types/vote';
+import useProfiles from './useProfiles';
+import useVotes from './useVotes';
 
-const useOptions = (options: Profile[] = [], allVotes: UserVote[] = []) => {
-  const optionVotes = allVotes
-    .flatMap(({ votes = [] }) => votes)
-    .reduce<{ [key in string]: number }>(
-      (res, vote) => ({ ...res, [vote]: (res[vote] || 0) + 1 }),
-      {}
-    );
+const useOptions = (year: number, week: number) => {
+  const profiles = useProfiles();
+  const { getVotes } = useVotes();
+  const [votes, setVotes] = useState<UserVote[]>([]);
 
-  const optionsWithVotes = options.map((option) => ({
-    ...option,
-    votes: optionVotes[option.id],
-  }));
+  const groupedVotes = useMemo(
+    () =>
+      votes
+        .flatMap(({ votes = [] }) => votes)
+        .reduce<{ [key in string]: number }>(
+          (res, vote) => ({ ...res, [vote]: (res[vote] || 0) + 1 }),
+          {}
+        ),
+    [votes]
+  );
 
-  const voteSortedOptions = optionsWithVotes.sort((a, b) => b.votes - a.votes);
+  const profileWithVotes = useMemo(
+    () =>
+      profiles
+        .map((option) => ({
+          ...option,
+          votes: groupedVotes[option.id],
+        }))
+        .sort((a, b) => b.votes - a.votes),
+    [profiles, groupedVotes]
+  );
 
-  const votedOptions = voteSortedOptions.filter(({ votes }) => votes);
+  const votedOptions = useMemo(
+    () => profileWithVotes.filter(({ votes }) => votes),
+    [profileWithVotes]
+  );
+
+  useEffect(() => {
+    return getVotes(year, week, setVotes);
+  }, [getVotes, week, year]);
 
   return {
-    optionsWithVotes,
-    optionVotes,
+    profileWithVotes,
     votedOptions,
-    voteSortedOptions,
   };
 };
 
