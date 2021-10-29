@@ -7,6 +7,7 @@ import { ButtonBase } from '@mui/material';
 
 interface Props extends Profile {
   voted?: boolean;
+  disabled?: boolean;
 }
 
 export default function VoteButton({
@@ -14,23 +15,24 @@ export default function VoteButton({
   displayName,
   photoURL,
   voted,
+  disabled,
 }: Props) {
   const { addVote, removeVote } = useVotes();
-  const [disabled, setDisabled] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
   const handleOnClick = () => {
-    if (!disabled) {
-      setDisabled(true);
+    if (!submitting) {
+      setSubmitting(true);
       if (voted) {
-        removeVote(id, () => setDisabled(false));
+        removeVote(id, () => setSubmitting(false));
       } else {
-        addVote(id, () => setDisabled(false));
+        addVote(id, () => setSubmitting(false));
       }
     }
   };
 
   return (
-    <ButtonBase onClick={handleOnClick}>
+    <ButtonBase onClick={handleOnClick} disabled={disabled && !voted}>
       <OptionCard
         id={id}
         displayName={displayName}

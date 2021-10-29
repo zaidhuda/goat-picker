@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react';
-
+import pluralize from 'pluralize';
 import VoteButton from 'components/VoteButton';
 import { getLayout } from 'components/Layout';
+import useWeek from 'hooks/useWeek';
 import useVotes from 'hooks/useVotes';
 import useFirebase from 'hooks/useFirebase';
 import useProfiles from 'hooks/useProfiles';
-import useWeek from 'hooks/useWeek';
 import { UserVote } from 'types/vote';
 
 export default function VotePage() {
   const [votes, setVotes] = useState<UserVote[]>([]);
-  const { user } = useFirebase();
+  const { user, getConfig } = useFirebase();
+  const MAX_VOTES_PER_USER = getConfig<number>('MAX_VOTES_PER_USER', 5);
   const profiles = useProfiles();
   const { getVotes } = useVotes();
   const { currentWeek, currentYear } = useWeek();
@@ -18,6 +19,8 @@ export default function VotePage() {
   const userVotes = votes.find(({ id }) => id === user?.uid)?.votes || [];
 
   const optionsWithoutUser = profiles.filter(({ id }) => id !== user?.uid);
+
+  const availableVotes = Math.max(MAX_VOTES_PER_USER - userVotes.length);
 
   const sortedOptions = optionsWithoutUser.sort((a, b) =>
     a.displayName.localeCompare(b.displayName)
@@ -39,9 +42,18 @@ export default function VotePage() {
       </h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
         {optionsWithVoted.map((option) => (
-          <VoteButton key={option.id} {...option} />
+          <VoteButton
+            key={option.id}
+            {...option}
+            disabled={availableVotes < 1}
+          />
         ))}
       </div>
+      {availableVotes > 0 ? (
+        <p>You have {pluralize('vote', availableVotes, true)} left</p>
+      ) : (
+        <p>You have used all your votes</p>
+      )}
     </div>
   );
 }
