@@ -1,16 +1,18 @@
 import firebase from 'firebase/app';
 import 'firebase/firestore';
 import 'firebase/auth';
-import { useState, useEffect, useCallback, Context, useContext } from 'react';
+import { useState, useEffect, useCallback, useContext } from 'react';
 import FirebaseContext from 'contexts/FirebaseContext';
+import { Config } from 'types/config';
 
-const EMAIL_DOMAIN = '@surialabs.com';
 const PROFILES = 'profiles';
+const CONFIGS = 'configs';
 
 export function useFirebaseProvider() {
   const [app, setApp] = useState<firebase.app.App>();
   const [db, setDatabase] = useState<firebase.firestore.Firestore>();
   const [user, setUser] = useState<firebase.User | null>();
+  const [configs, setConfigs] = useState<{ [key in Config]?: any }>({});
 
   // *** Auth API ***
 
@@ -27,6 +29,12 @@ export function useFirebaseProvider() {
       app.auth().signOut().catch(console.error);
     }
   }, [app, user]);
+
+  const getConfig = useCallback(
+    <T>(config: Config, defaultValue: T) =>
+      (configs[config] || defaultValue) as T,
+    [configs]
+  );
 
   // Initialize Firebase app
   useEffect(() => {
@@ -52,7 +60,8 @@ export function useFirebaseProvider() {
 
   // Reset state on auth state change
   useEffect(() => {
-    if (app) {
+    const EMAIL_DOMAIN = getConfig<string>('EMAIL_DOMAIN', '');
+    if (app && EMAIL_DOMAIN) {
       return app.auth().onAuthStateChanged((newUser) => {
         if (newUser?.email?.endsWith(EMAIL_DOMAIN)) {
           setUser(newUser);
@@ -64,7 +73,7 @@ export function useFirebaseProvider() {
         }
       });
     }
-  }, [app, signOut]);
+  }, [app, getConfig, signOut]);
 
   useEffect(() => signOut, [signOut]);
 
@@ -79,6 +88,17 @@ export function useFirebaseProvider() {
     }
   }, [db, user]);
 
+  useEffect(() => {
+    if (app && db) {
+      return db
+        .collection(CONFIGS)
+        .doc((app.options as any).appId)
+        .onSnapshot((doc) =>
+          setConfigs(doc.data() as { [key in Config]?: any })
+        );
+    }
+  }, [app, db]);
+
   return {
     ready: !!app && !!db,
     app,
@@ -86,6 +106,7 @@ export function useFirebaseProvider() {
     user,
     signInWithPopup,
     signOut,
+    getConfig,
   };
 }
 

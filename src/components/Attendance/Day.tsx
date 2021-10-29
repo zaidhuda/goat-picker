@@ -6,8 +6,6 @@ import { DateTime } from 'luxon';
 import useFirebase from 'hooks/useFirebase';
 import { Avatar, AvatarGroup, ButtonBase } from '@mui/material';
 
-const MAX_ATTENDEES = 10; // TODO: Set value from API
-
 interface Props {
   date: DateTime;
 }
@@ -15,8 +13,10 @@ interface Props {
 export default function AttendanceDay({ date }: Props) {
   const avatarsContainer = useRef<HTMLDivElement | null>(null);
   const [submitting, setSubmitting] = useState(false);
-  const { user } = useFirebase();
+  const { user, getConfig } = useFirebase();
   const { getAttendances, addAttendance, removeAttendance } = useAttendances();
+
+  const MAX_ATTENDEES = getConfig<number>('MAX_ATTENDEES', 10);
 
   const [attendances, setAttendances] = useState<Profile[]>([]);
 
