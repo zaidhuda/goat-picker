@@ -7,8 +7,10 @@ import useVotes from 'hooks/useVotes';
 import useFirebase from 'hooks/useFirebase';
 import useProfiles from 'hooks/useProfiles';
 import { UserVote } from 'types/vote';
+import { LinearProgress } from '@mui/material';
 
 export default function VotePage() {
+  const [loading, setLoading] = useState(false);
   const [votes, setVotes] = useState<UserVote[]>([]);
   const { user, getConfig } = useFirebase();
   const MAX_VOTES_PER_USER = getConfig<number>('MAX_VOTES_PER_USER', 5);
@@ -32,7 +34,11 @@ export default function VotePage() {
   }));
 
   useEffect(() => {
-    return getVotes(currentYear, currentWeek, setVotes);
+    setLoading(true);
+    return getVotes(currentYear, currentWeek, (votes) => {
+      setVotes(votes);
+      setLoading(false);
+    });
   }, [getVotes, currentYear, currentWeek]);
 
   return (
@@ -40,15 +46,21 @@ export default function VotePage() {
       <h1 className="font-light text-4xl">
         Decide the next <span className="font-bold">GOAT</span>s
       </h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
-        {optionsWithVoted.map((option) => (
-          <VoteButton
-            key={option.id}
-            {...option}
-            disabled={availableVotes < 1}
-          />
-        ))}
-      </div>
+
+      {loading ? (
+        <LinearProgress />
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
+          {optionsWithVoted.map((option) => (
+            <VoteButton
+              key={option.id}
+              {...option}
+              disabled={availableVotes < 1}
+            />
+          ))}
+        </div>
+      )}
+
       {availableVotes > 0 ? (
         <p>You have {pluralize('vote', availableVotes, true)} left</p>
       ) : (
