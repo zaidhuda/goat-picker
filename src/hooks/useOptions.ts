@@ -21,12 +21,10 @@ const useOptions = (year: number, week: number) => {
 
   const profileWithVotes = useMemo(
     () =>
-      profiles
-        .map((option) => ({
-          ...option,
-          votes: groupedVotes[option.id],
-        }))
-        .sort((a, b) => b.votes - a.votes),
+      profiles.map((option) => ({
+        ...option,
+        votes: groupedVotes[option.id],
+      })),
     [profiles, groupedVotes]
   );
 
