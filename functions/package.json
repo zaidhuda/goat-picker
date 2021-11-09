@@ -14,8 +14,10 @@
   },
   "main": "index.js",
   "dependencies": {
-    "firebase-admin": "^9.8.0",
-    "firebase-functions": "^3.14.1"
+    "firebase-admin": "^10.0.0",
+    "firebase-functions": "^3.16.0",
+    "https": "^1.0.0",
+    "luxon": "^2.1.0"
   },
   "devDependencies": {
     "eslint": "^7.6.0",

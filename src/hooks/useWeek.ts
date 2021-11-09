@@ -7,20 +7,20 @@ const useWeek = () => {
 
   const getPrevWeek = (year = currentYear, week = currentWeek) => {
     const firstWeek = week === 1;
-    const previousYear = year - 1;
+    const previousYear = firstWeek ? year - 1 : year;
     const previousWeek = firstWeek
       ? DateTime.local(previousYear, 2).weeksInWeekYear
       : week - 1;
 
-    return { year: firstWeek ? previousYear : year, week: previousWeek };
+    return { year: previousYear, week: previousWeek };
   };
 
   const getNextWeek = (year = currentYear, week = currentWeek) => {
     const lastWeek = week === DateTime.local(year, 2).weeksInWeekYear;
-    const nextYear = year + 1;
+    const nextYear = lastWeek ? year + 1 : year;
     const nextWeek = lastWeek ? 1 : week + 1;
 
-    return { year: lastWeek ? nextYear : year, week: nextWeek };
+    return { year: nextYear, week: nextWeek };
   };
 
   return {
