@@ -69,19 +69,21 @@ exports.publishResultEveryMondayAtTen = functions.pubsub
       profiles.push({ id: doc.id, ...doc.data() })
     );
 
-    const mostVotedNames = profiles
-      .filter(({ id }) => mostVotedIds.includes(id))
-      .map(({ displayName }) => displayName);
+    const mostVotedProfiles = profiles.filter(({ id }) =>
+      mostVotedIds.includes(id)
+    );
 
-    let message = "Bummer, we can't find the *GOAT* :sadpepe:";
+    let message = "Bummer, we couldn't find the *GOAT* :sadpepe:";
 
-    if (highestVote > 1) {
-      if (mostVotedNames.length === 1) {
-        message = `We've found the GOAT! Congratulations, *${mostVotedNames.join()}*!`;
+    if (highestVote > 1 && mostVotedProfiles.length > 1) {
+      const mostVotedNames = new Intl.ListFormat('en').format(
+        mostVotedProfiles.map(({ displayName }) => displayName)
+      );
+
+      if (mostVotedProfiles.length === 1) {
+        message = `We've found the GOAT! Congratulations, *${mostVotedNames}*!`;
       } else {
-        message = `Congratulations to ${mostVotedNames.join(
-          ', '
-        )} for your hard work!`;
+        message = `Congratulations ${mostVotedNames}! Keep up the good work!`;
       }
     }
 
