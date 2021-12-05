@@ -75,7 +75,7 @@ exports.publishResultEveryMondayAtTen = functions.pubsub
 
     let message = "Bummer, we couldn't find the *GOAT* :sadpepe:";
 
-    if (highestVote > 1 && mostVotedProfiles.length > 1) {
+    if (highestVote > 1 && mostVotedProfiles.length >= 1) {
       const mostVotedNames = new Intl.ListFormat('en').format(
         mostVotedProfiles.map(({ displayName }) => displayName)
       );
