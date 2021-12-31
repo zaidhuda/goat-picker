@@ -4,19 +4,30 @@
     "indexes": "firestore.indexes.json"
   },
   "functions": {
-    "predeploy": ["npm --prefix \"$RESOURCE_DIR\" run lint"],
+    "predeploy": [
+      "npm --prefix \"$RESOURCE_DIR\" run lint",
+      "npm --prefix \"$RESOURCE_DIR\" run build"
+    ],
     "source": "functions"
   },
   "hosting": [
     {
       "site": "goat-picker",
       "public": "out",
-      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ]
     },
     {
       "site": "goatpicker",
       "public": "out",
-      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ]
     }
   ]
 }
