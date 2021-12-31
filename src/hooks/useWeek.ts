@@ -2,7 +2,7 @@ import { DateTime } from 'luxon';
 
 const useWeek = () => {
   const now = DateTime.now();
-  const currentYear = now.year;
+  const currentYear = now.weekYear;
   const currentWeek = now.weekNumber;
 
   const getPrevWeek = (year = currentYear, week = currentWeek) => {
