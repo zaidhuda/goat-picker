@@ -3,15 +3,21 @@ import { initializeApp } from 'firebase-admin';
 
 initializeApp();
 
-import sendReminder from './sendReminder';
-import publishResults from './publishResults';
+import sendWeeklyReminder from './sendWeeklyReminder';
+import publishAnnualStats from './publishAnnualStats';
+import publishWeeklyResult from './publishWeeklyResult';
 
 exports.sendReminderEveryFridayAtFive = pubsub
   .schedule('every friday 17:00')
   .timeZone('Asia/Kuala_Lumpur')
-  .onRun(sendReminder);
+  .onRun(sendWeeklyReminder);
 
 exports.publishResultEveryMondayAtTen = pubsub
   .schedule('every monday 10:00')
   .timeZone('Asia/Kuala_Lumpur')
-  .onRun(publishResults);
+  .onRun(publishWeeklyResult);
+
+exports.publishAnnualStats = pubsub
+  .schedule('every 3 jan 10:00')
+  .timeZone('Asia/Kuala_Lumpur')
+  .onRun(publishAnnualStats);

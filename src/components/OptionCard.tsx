@@ -18,13 +18,34 @@ export default function OptionCard({
   voted,
   votes,
 }: Props) {
+  const color = () => {
+    switch (votes) {
+      case null:
+      case undefined:
+      case 0:
+        return 'default';
+      case 1:
+        return 'info';
+      case 2:
+        return 'primary';
+      case 3:
+        return 'success';
+      case 4:
+        return 'secondary';
+      case 5:
+        return 'warning';
+      default:
+        return 'error';
+    }
+  };
+
   return (
     <Flipped flipId={id} stagger>
       <Badge
         classes={{ root: 'w-full' }}
         key={id}
         badgeContent={votes}
-        color="primary"
+        color={color()}
       >
         <div
           className={classnames(

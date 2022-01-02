@@ -1,22 +1,24 @@
 import * as https from 'https';
 
 export default function sendMessageToSlack(
-  message: string,
+  message: string | string[],
   webhook: URL
 ): Promise<void> {
-  return new Promise((resolve, reject) => {
-    const data = JSON.stringify({
-      blocks: [
-        {
-          type: 'section',
-          text: {
-            type: 'mrkdwn',
-            text: message,
-          },
-        },
-      ],
-    });
+  const buildSection = (text: string) => ({
+    type: 'section',
+    text: {
+      type: 'mrkdwn',
+      text,
+    },
+  });
 
+  const data = JSON.stringify({
+    blocks: Array.isArray(message)
+      ? message.map((msg) => buildSection(msg))
+      : [buildSection(message)],
+  });
+
+  return new Promise((resolve, reject) => {
     const req = https.request({
       hostname: webhook.hostname,
       port: webhook.port,
