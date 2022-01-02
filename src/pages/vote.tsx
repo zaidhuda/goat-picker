@@ -20,7 +20,9 @@ export default function VotePage() {
 
   const userVotes = votes.find(({ id }) => id === user?.uid)?.votes || [];
 
-  const optionsWithoutUser = profiles.filter(({ id }) => id !== user?.uid);
+  const optionsWithoutUser = profiles
+    .filter(({ hidden }) => !hidden)
+    .filter(({ id }) => id !== user?.uid);
 
   const availableVotes = Math.max(MAX_VOTES_PER_USER - userVotes.length);
 
