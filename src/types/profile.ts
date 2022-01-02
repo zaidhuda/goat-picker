@@ -4,3 +4,8 @@ export type Profile = {
   photoURL: string;
   hidden?: boolean;
 };
+
+export type ProfileWithStats = Profile & {
+  totalVotes: number;
+  totalVoted: number;
+};

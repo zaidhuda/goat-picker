@@ -18,6 +18,6 @@ exports.publishResultEveryMondayAtTen = pubsub
   .onRun(publishWeeklyResult);
 
 exports.publishAnnualStats = pubsub
-  .schedule('every 3 jan 10:00')
+  .schedule('0 10 3 1 *')
   .timeZone('Asia/Kuala_Lumpur')
   .onRun(publishAnnualStats);
