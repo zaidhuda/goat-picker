@@ -1,10 +1,11 @@
 import getWeek from './utils/getWeek';
 import getVotes from './utils/getVotes';
 import getProfiles from './utils/getProfiles';
+import getSlackNames from './utils/getSlackNames';
 import sendMessageToSlack from './utils/sendMessageToSlack';
 import getSlackGoatWebhook from './utils/getSlackGoatWebhook';
 
-export default async function publishResultEveryMondayAtTen() {
+export default async function publishWeeklyResult(): Promise<void> {
   console.log('Publishing results to Slack channel');
 
   const { previousYear, previousWeek } = getWeek();
@@ -30,9 +31,7 @@ export default async function publishResultEveryMondayAtTen() {
     const mostVotedProfiles = profiles.filter(({ id }) =>
       mostVotedUserIds.includes(id)
     );
-    const mostVotedNames = new Intl.ListFormat('en').format(
-      mostVotedProfiles.map(({ displayName }) => `*${displayName}*`)
-    );
+    const mostVotedNames = await getSlackNames(mostVotedProfiles);
 
     if (mostVotedProfiles.length === 1) {
       message = `We've found the *GOAT*! Congratulations, ${mostVotedNames}!`;

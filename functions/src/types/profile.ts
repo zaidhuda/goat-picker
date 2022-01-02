@@ -4,3 +4,8 @@ export type Profile = {
   photoURL: string;
   slackProfile?: Record<string, unknown>;
 };
+
+export type ProfileWithStats = Profile & {
+  totalVotes: number;
+  totalVoted: number;
+};

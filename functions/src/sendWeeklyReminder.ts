@@ -1,7 +1,7 @@
 import sendMessageToSlack from './utils/sendMessageToSlack';
 import getSlackGoatWebhook from './utils/getSlackGoatWebhook';
 
-export default async function sendReminderEveryFridayAtFive() {
+export default async function sendWeeklyReminder(): Promise<void> {
   console.log('Sending weekly reminder');
 
   await sendMessageToSlack(
