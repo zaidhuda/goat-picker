@@ -8,16 +8,25 @@ import MenuIcon from '@mui/icons-material/Menu';
 import classnames from 'classnames';
 
 import useFirebase from 'hooks/useFirebase';
+import useWeek from 'hooks/useWeek';
 
 export default function Navbar() {
   const { signOut } = useFirebase();
   const { pathname } = useRouter();
+  const { currentWeek, currentYear } = useWeek();
+  const lastYear = currentYear - 1;
 
   const navigation = [
     {
       name: 'Vote',
       href: '/vote',
       current: pathname.startsWith('/vote'),
+    },
+    {
+      name: `${lastYear}`,
+      href: `/stats?year=${lastYear}`,
+      current: pathname.startsWith('/stats'),
+      hidden: currentWeek > 1,
     },
     {
       name: 'Attendance',
@@ -57,21 +66,23 @@ export default function Navbar() {
                 </div>
                 <div className="hidden sm:block sm:ml-6">
                   <div className="flex space-x-4">
-                    {navigation.map((item) => (
-                      <Link key={item.name} href={item.href}>
-                        <a
-                          className={classnames(
-                            item.current
-                              ? 'bg-gray-900 text-white'
-                              : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                            'px-3 py-2 rounded-md text-sm font-medium'
-                          )}
-                          aria-current={item.current ? 'page' : undefined}
-                        >
-                          {item.name}
-                        </a>
-                      </Link>
-                    ))}
+                    {navigation
+                      .filter(({ hidden }) => !hidden)
+                      .map((item) => (
+                        <Link key={item.name} href={item.href}>
+                          <a
+                            className={classnames(
+                              item.current
+                                ? 'bg-gray-900 text-white'
+                                : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                              'px-3 py-2 rounded-md text-sm font-medium'
+                            )}
+                            aria-current={item.current ? 'page' : undefined}
+                          >
+                            {item.name}
+                          </a>
+                        </Link>
+                      ))}
                   </div>
                 </div>
               </div>
@@ -90,21 +101,23 @@ export default function Navbar() {
 
           <Disclosure.Panel className="sm:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1">
-              {navigation.map((item) => (
-                <Link key={item.name} href={item.href}>
-                  <a
-                    className={classnames(
-                      item.current
-                        ? 'bg-gray-900 text-white'
-                        : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                      'block px-3 py-2 rounded-md text-base font-medium'
-                    )}
-                    aria-current={item.current ? 'page' : undefined}
-                  >
-                    {item.name}
-                  </a>
-                </Link>
-              ))}
+              {navigation
+                .filter(({ hidden }) => !hidden)
+                .map((item) => (
+                  <Link key={item.name} href={item.href}>
+                    <a
+                      className={classnames(
+                        item.current
+                          ? 'bg-gray-900 text-white'
+                          : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                        'block px-3 py-2 rounded-md text-base font-medium'
+                      )}
+                      aria-current={item.current ? 'page' : undefined}
+                    >
+                      {item.name}
+                    </a>
+                  </Link>
+                ))}
             </div>
           </Disclosure.Panel>
         </>
