@@ -31,7 +31,7 @@ export default async function publishWeeklyResult(): Promise<void> {
     const mostVotedProfiles = profiles.filter(({ id }) =>
       mostVotedUserIds.includes(id)
     );
-    const mostVotedNames = await getSlackNames(mostVotedProfiles);
+    const mostVotedNames = getSlackNames(mostVotedProfiles);
 
     if (mostVotedProfiles.length === 1) {
       message = `We've found the *GOAT*! Congratulations, ${mostVotedNames}!`;

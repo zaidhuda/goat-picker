@@ -89,7 +89,7 @@ export default async function publishAnnualStats(): Promise<void> {
         'The most voted',
         pluralize('person', mostVoted.length),
         pluralize('was', mostVoted.length),
-        await getSlackNames(mostVoted),
+        getSlackNames(mostVoted),
         `with *${highestVoted}* votes.`,
       ].join(' '),
       [
@@ -97,10 +97,10 @@ export default async function publishAnnualStats(): Promise<void> {
         pluralize('person', mostVotes.length),
         'that voted the most',
         pluralize('was', mostVotes.length),
-        await getSlackNames(mostVotes),
+        getSlackNames(mostVotes),
         `with *${highestVotes}* votes.`,
       ].join(' '),
-      `<https://goatpicker.web.app/stats?year=${previousYear}|View stats>*`,
+      `*<https://goatpicker.web.app/stats?year=${previousYear}|View stats>*`,
     ],
     getSlackGoatWebhook()
   );
