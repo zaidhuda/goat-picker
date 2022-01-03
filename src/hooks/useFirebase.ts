@@ -83,7 +83,7 @@ export function useFirebaseProvider() {
       const { displayName, uid, photoURL } = user;
       db.collection(PROFILES)
         .doc(uid)
-        .set({ id: uid, displayName, photoURL })
+        .set({ id: uid, displayName, photoURL }, { merge: true })
         .catch(console.error);
     }
   }, [db, user]);
