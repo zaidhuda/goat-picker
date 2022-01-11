@@ -22,7 +22,7 @@ export default function GoatPage() {
   return (
     <div className="space-y-8">
       <WeekNavigation
-        hideNextWeek={week > currentWeek - 1 && year <= currentYear}
+        hideNextWeek={week > currentWeek - 1 && year === currentYear}
       />
 
       <h1 className="font-light text-5xl">
