@@ -49,6 +49,12 @@ export default function VotePage() {
         Decide the next <span className="font-bold">GOAT</span>s
       </h1>
 
+      <p className="font-thin text-sm !mt-2">
+        {availableVotes > 0
+          ? `You have ${pluralize('vote', availableVotes, true)} left`
+          : 'You have used all your votes'}
+      </p>
+
       {loading ? (
         <LinearProgress />
       ) : (
@@ -61,12 +67,6 @@ export default function VotePage() {
             />
           ))}
         </div>
-      )}
-
-      {availableVotes > 0 ? (
-        <p>You have {pluralize('vote', availableVotes, true)} left</p>
-      ) : (
-        <p>You have used all your votes</p>
       )}
     </div>
   );

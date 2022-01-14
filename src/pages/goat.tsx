@@ -1,4 +1,5 @@
 import React from 'react';
+import pluralize from 'pluralize';
 import { useRouter } from 'next/router';
 
 import useWeek from 'hooks/useWeek';
@@ -17,7 +18,9 @@ export default function GoatPage() {
   const year = Number(yearParam);
   const isCurrentWeek = year === currentYear && week === currentWeek;
 
-  const { votedOptions } = useOptions(year, week);
+  const { profileWithVotes, votedOptions } = useOptions(year, week);
+
+  const participants = profileWithVotes.filter(({ voted }) => voted);
 
   return (
     <div className="space-y-8">
@@ -29,6 +32,12 @@ export default function GoatPage() {
         <strong className="font-bold">GOAT</strong>s
         {isCurrentWeek ? null : <> of week {week}</>}
       </h1>
+
+      <p className="font-thin text-sm !mt-2">
+        {participants.length > 0
+          ? `Voted by ${pluralize('person', participants.length, true)}`
+          : 'No votes'}
+      </p>
 
       <Ranking options={votedOptions} />
     </div>

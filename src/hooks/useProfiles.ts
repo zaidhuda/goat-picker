@@ -16,7 +16,9 @@ export default function useProfiles() {
         querySnapshot.forEach((doc) => {
           data.push({ id: doc.id, ...doc.data() } as Profile);
         });
-        setProfiles(data);
+        setProfiles(
+          data.sort((a, b) => (a.displayName > b.displayName ? 1 : -1))
+        );
       });
     }
   }, [db, user]);
