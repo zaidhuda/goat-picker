@@ -1,5 +1,6 @@
 import React from 'react';
 import pluralize from 'pluralize';
+import { DateTime } from 'luxon';
 import { useRouter } from 'next/router';
 
 import useWeek from 'hooks/useWeek';
@@ -7,12 +8,12 @@ import useOptions from 'hooks/useOptions';
 import Ranking from 'components/Ranking';
 import { getLayout } from 'components/Layout';
 import WeekNavigation from 'components/WeekNavigation';
-import { DateTime } from 'luxon';
 
 export default function GoatPage() {
-  const { currentWeek, currentYear } = useWeek();
+  const { currentWeek, currentYear, getPrevWeek } = useWeek();
+  const prevWeek = getPrevWeek(currentYear, currentWeek);
   const {
-    query: { week: weekParam = currentWeek, year: yearParam = currentYear },
+    query: { week: weekParam = prevWeek.week, year: yearParam = prevWeek.year },
   } = useRouter();
 
   const week = Number(weekParam);
@@ -37,6 +38,8 @@ export default function GoatPage() {
   return (
     <div className="space-y-8">
       <WeekNavigation
+        defaultWeek={week}
+        defaultYear={year}
         hideNextWeek={week > currentWeek - 1 && year === currentYear}
       />
 
