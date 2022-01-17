@@ -61,7 +61,7 @@ export default function OptionCard({
               sx={{ width: 48, height: 48 }}
             />
           </figure>
-          <figcaption className="font-semibold text-lg line-clamp-1">
+          <figcaption className="font-semibold line-clamp-1 text-lg text-center">
             {displayName}
           </figcaption>
         </div>
