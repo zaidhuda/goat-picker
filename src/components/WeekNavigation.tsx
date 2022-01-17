@@ -10,16 +10,23 @@ interface Props {
   children?: ReactNode;
   hidePrevWeek?: boolean;
   hideNextWeek?: boolean;
+  defaultWeek?: number;
+  defaultYear?: number;
 }
 
 export default function WeekNavigation({
   children,
   hidePrevWeek,
   hideNextWeek,
+  defaultWeek,
+  defaultYear,
 }: Props) {
   const { currentWeek, currentYear, getPrevWeek, getNextWeek } = useWeek();
   const {
-    query: { week: weekParam = currentWeek, year: yearParam = currentYear },
+    query: {
+      week: weekParam = defaultWeek || currentWeek,
+      year: yearParam = defaultYear || currentYear,
+    },
   } = useRouter();
 
   const week = Number(weekParam);
