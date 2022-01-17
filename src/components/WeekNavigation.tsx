@@ -1,9 +1,10 @@
 import React, { ReactNode } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import NavigateNext from '@mui/icons-material/NavigateNext';
-import NavigateBefore from '@mui/icons-material/NavigateBefore';
+import ArrowForwardIos from '@mui/icons-material/ArrowForwardIos';
+import ArrowBackIosNew from '@mui/icons-material/ArrowBackIosNew';
 import useWeek from 'hooks/useWeek';
+import { Button } from '@mui/material';
 
 interface Props {
   children?: ReactNode;
@@ -31,11 +32,16 @@ export default function WeekNavigation({
     <div className="flex items-center justify-between gap-4 sm:gap-8">
       {hidePrevWeek ? null : (
         <Link href={prevWeekPath()}>
-          <a className="flex items-center">
-            <NavigateBefore fontSize="large" />
-            <span className="text-sm sm:text-lg">
-              Previous<span className="hidden sm:inline"> Week</span>
-            </span>
+          <a>
+            <Button
+              color="inherit"
+              className="!normal-case"
+              startIcon={<ArrowBackIosNew />}
+            >
+              <span>
+                Prev<span className="hidden sm:inline"> Week</span>
+              </span>
+            </Button>
           </a>
         </Link>
       )}
@@ -43,10 +49,15 @@ export default function WeekNavigation({
       {hideNextWeek ? null : (
         <Link href={nextWeekPath()}>
           <a className="flex items-center">
-            <span className="text-sm sm:text-lg text-right">
-              Next<span className="hidden sm:inline"> Week</span>
-            </span>
-            <NavigateNext fontSize="large" />
+            <Button
+              color="inherit"
+              className="!normal-case"
+              endIcon={<ArrowForwardIos />}
+            >
+              <span>
+                Next<span className="hidden sm:inline"> Week</span>
+              </span>
+            </Button>
           </a>
         </Link>
       )}

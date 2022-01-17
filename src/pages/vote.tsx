@@ -45,15 +45,17 @@ export default function VotePage() {
 
   return (
     <div className="space-y-12">
-      <h1 className="font-light text-4xl">
-        Decide the next <span className="font-bold">GOAT</span>s
-      </h1>
+      <div>
+        <h1 className="font-light text-4xl">
+          Decide the next <span className="font-bold">GOAT</span>s
+        </h1>
 
-      <p className="font-thin text-sm !mt-2">
-        {availableVotes > 0
-          ? `You have ${pluralize('vote', availableVotes, true)} left`
-          : 'You have used all your votes'}
-      </p>
+        <p className="font-thin text-sm mt-1">
+          {availableVotes > 0
+            ? `You have ${pluralize('vote', availableVotes, true)} left`
+            : 'You have used all your votes'}
+        </p>
+      </div>
 
       {loading ? (
         <LinearProgress />
