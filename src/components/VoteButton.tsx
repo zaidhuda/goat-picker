@@ -32,7 +32,11 @@ export default function VoteButton({
   };
 
   return (
-    <ButtonBase onClick={handleOnClick} disabled={disabled && !voted}>
+    <ButtonBase
+      onClick={handleOnClick}
+      disabled={disabled && !voted}
+      focusRipple
+    >
       <OptionCard
         variant="voting"
         id={id}

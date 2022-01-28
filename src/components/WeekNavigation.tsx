@@ -37,36 +37,32 @@ export default function WeekNavigation({
 
   return (
     <div className="flex items-center justify-between gap-4 sm:gap-8">
-      <Link href={prevWeekPath()}>
-        <a className={classNames({ invisible: hidePrevWeek })}>
-          <Button
-            color="inherit"
-            className="!normal-case"
-            startIcon={<ArrowBackIosNew />}
-          >
-            <span>
-              Prev<span className="hidden sm:inline"> Week</span>
-            </span>
-          </Button>
-        </a>
+      <Link href={prevWeekPath()} passHref>
+        <Button
+          color="inherit"
+          className={classNames('!outline !outline-offset-0 focus:!outline-2', {
+            invisible: hidePrevWeek,
+          })}
+          startIcon={<ArrowBackIosNew />}
+        >
+          <span className="normal-case">
+            Prev<span className="hidden sm:inline"> Week</span>
+          </span>
+        </Button>
       </Link>
       <WeekGraph week={week} year={year} />
-      <Link href={nextWeekPath()}>
-        <a
-          className={classNames('flex items-center', {
+      <Link href={nextWeekPath()} passHref>
+        <Button
+          color="inherit"
+          className={classNames('!outline !outline-offset-0 focus:!outline-2', {
             invisible: hideNextWeek,
           })}
+          endIcon={<ArrowForwardIos />}
         >
-          <Button
-            color="inherit"
-            className="!normal-case"
-            endIcon={<ArrowForwardIos />}
-          >
-            <span>
-              Next<span className="hidden sm:inline"> Week</span>
-            </span>
-          </Button>
-        </a>
+          <span className="normal-case">
+            Next<span className="hidden sm:inline"> Week</span>
+          </span>
+        </Button>
       </Link>
     </div>
   );

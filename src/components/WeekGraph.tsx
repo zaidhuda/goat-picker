@@ -59,8 +59,8 @@ export default function WeekGraph({ week, year, size = 5 }: Props) {
         className={
           currentWeek
             ? currentMonth
-              ? 'bg-green-400'
-              : 'bg-green-200'
+              ? 'bg-emerald-400'
+              : 'bg-emerald-200'
             : currentMonth
             ? 'bg-gray-200'
             : 'invisible'
@@ -79,7 +79,7 @@ export default function WeekGraph({ week, year, size = 5 }: Props) {
   return (
     <div
       title={`Week ${date.weekNumber}, ${date.monthLong}`}
-      className="flex relative"
+      className="cursor-default flex items-center relative"
     >
       <div className="absolute flex items-center justify-center h-full w-full">
         <span className="uppercase font-bold">{date.monthShort}</span>

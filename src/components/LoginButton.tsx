@@ -11,6 +11,7 @@ const LoginButton = () => {
       type="button"
       onClick={signInWithPopup}
       className="!rounded relative"
+      focusRipple
     >
       <img
         src="/images/google/btn_google_signin_dark_normal_web@2x.png"
