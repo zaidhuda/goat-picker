@@ -34,6 +34,7 @@ export default function VoteButton({
   return (
     <ButtonBase onClick={handleOnClick} disabled={disabled && !voted}>
       <OptionCard
+        variant="voting"
         id={id}
         displayName={displayName}
         photoURL={photoURL}

@@ -6,21 +6,21 @@ const useWeek = () => {
   const currentWeek = now.weekNumber;
 
   const getPrevWeek = (year = currentYear, week = currentWeek) => {
-    const firstWeek = week === 1;
-    const previousYear = firstWeek ? year - 1 : year;
-    const previousWeek = firstWeek
-      ? DateTime.local(previousYear, 2).weeksInWeekYear
-      : week - 1;
+    const date = DateTime.fromObject({
+      weekYear: year,
+      weekNumber: week,
+    }).minus({ weeks: 1 });
 
-    return { year: previousYear, week: previousWeek };
+    return { year: date.weekYear, week: date.weekNumber };
   };
 
   const getNextWeek = (year = currentYear, week = currentWeek) => {
-    const lastWeek = week === DateTime.local(year, 2).weeksInWeekYear;
-    const nextYear = lastWeek ? year + 1 : year;
-    const nextWeek = lastWeek ? 1 : week + 1;
+    const date = DateTime.fromObject({
+      weekYear: year,
+      weekNumber: week,
+    }).plus({ weeks: 1 });
 
-    return { year: nextYear, week: nextWeek };
+    return { year: date.weekYear, week: date.weekNumber };
   };
 
   return {
