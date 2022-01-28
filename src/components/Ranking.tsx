@@ -25,6 +25,7 @@ export default function Ranking({ options }: Props) {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
         {sortedOptions.map(({ id, displayName, photoURL, votes = 0 }) => (
           <OptionCard
+            variant="ranking"
             key={id}
             id={id}
             displayName={displayName}

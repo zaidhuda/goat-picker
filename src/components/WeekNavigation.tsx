@@ -1,13 +1,14 @@
-import React, { ReactNode } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import ArrowForwardIos from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNew from '@mui/icons-material/ArrowBackIosNew';
 import useWeek from 'hooks/useWeek';
 import { Button } from '@mui/material';
+import WeekGraph from './WeekGraph';
+import classNames from 'classnames';
 
 interface Props {
-  children?: ReactNode;
   hidePrevWeek?: boolean;
   hideNextWeek?: boolean;
   defaultWeek?: number;
@@ -15,7 +16,6 @@ interface Props {
 }
 
 export default function WeekNavigation({
-  children,
   hidePrevWeek,
   hideNextWeek,
   defaultWeek,
@@ -37,37 +37,37 @@ export default function WeekNavigation({
 
   return (
     <div className="flex items-center justify-between gap-4 sm:gap-8">
-      {hidePrevWeek ? null : (
-        <Link href={prevWeekPath()}>
-          <a>
-            <Button
-              color="inherit"
-              className="!normal-case"
-              startIcon={<ArrowBackIosNew />}
-            >
-              <span>
-                Prev<span className="hidden sm:inline"> Week</span>
-              </span>
-            </Button>
-          </a>
-        </Link>
-      )}
-      {children}
-      {hideNextWeek ? null : (
-        <Link href={nextWeekPath()}>
-          <a className="flex items-center">
-            <Button
-              color="inherit"
-              className="!normal-case"
-              endIcon={<ArrowForwardIos />}
-            >
-              <span>
-                Next<span className="hidden sm:inline"> Week</span>
-              </span>
-            </Button>
-          </a>
-        </Link>
-      )}
+      <Link href={prevWeekPath()}>
+        <a className={classNames({ invisible: hidePrevWeek })}>
+          <Button
+            color="inherit"
+            className="!normal-case"
+            startIcon={<ArrowBackIosNew />}
+          >
+            <span>
+              Prev<span className="hidden sm:inline"> Week</span>
+            </span>
+          </Button>
+        </a>
+      </Link>
+      <WeekGraph week={week} year={year} />
+      <Link href={nextWeekPath()}>
+        <a
+          className={classNames('flex items-center', {
+            invisible: hideNextWeek,
+          })}
+        >
+          <Button
+            color="inherit"
+            className="!normal-case"
+            endIcon={<ArrowForwardIos />}
+          >
+            <span>
+              Next<span className="hidden sm:inline"> Week</span>
+            </span>
+          </Button>
+        </a>
+      </Link>
     </div>
   );
 }

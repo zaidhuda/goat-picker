@@ -1,14 +1,16 @@
 import React from 'react';
 import classnames from 'classnames';
 import { Flipped } from 'react-flip-toolkit';
-import { Badge } from '@mui/material';
+import { Badge as MuiBadge, BadgeProps } from '@mui/material';
 
 import { Profile } from 'types/profile';
 import { Avatar } from '@mui/material';
+import { CheckCircle } from '@mui/icons-material';
 
 interface Props extends Profile {
   voted?: boolean;
   votes?: number;
+  variant: 'voting' | 'ranking';
 }
 
 export default function OptionCard({
@@ -17,6 +19,7 @@ export default function OptionCard({
   photoURL,
   voted,
   votes,
+  variant,
 }: Props) {
   const color = () => {
     switch (votes) {
@@ -39,17 +42,42 @@ export default function OptionCard({
     }
   };
 
-  return (
-    <Flipped flipId={id} stagger>
-      <Badge
+  const Badge = (props: BadgeProps) =>
+    variant === 'voting' ? (
+      <MuiBadge
+        classes={{
+          root: 'w-full',
+        }}
+        key={id}
+        badgeContent={
+          voted ? (
+            <CheckCircle
+              color="success"
+              className="!bg-white !border-0 !rounded-full"
+            />
+          ) : null
+        }
+        {...props}
+      />
+    ) : (
+      <MuiBadge
         classes={{ root: 'w-full' }}
         key={id}
         badgeContent={votes}
         color={color()}
-      >
+        {...props}
+      />
+    );
+
+  return (
+    <Flipped flipId={id} stagger>
+      <Badge>
         <div
           className={classnames(
-            'bg-white border-2 h-full flex items-center px-4 py-2 rounded sm:flex-col space-x-4 space-y-0 sm:space-x-0 sm:space-y-2 w-full',
+            'flex sm:flex-col items-center h-full w-full',
+            'gap-4 sm:gap-2 px-4 py-2',
+            'bg-white border-2 rounded',
+            'hover:shadow transition',
             { 'border-green-400': voted }
           )}
         >
