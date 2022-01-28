@@ -66,8 +66,8 @@ export default function AttendanceDay({ date }: Props) {
   };
   if (attendeesCount >= 1)
     style = {
-      border: 'border-green-500 ring-green-100',
-      text: 'text-green-500',
+      border: 'border-emerald-500 ring-emerald-100',
+      text: 'text-emerald-500',
     };
   if (attendeesCount >= MAX_ATTENDEES / 2)
     style = {
@@ -89,7 +89,7 @@ export default function AttendanceDay({ date }: Props) {
   return (
     <ButtonBase
       onClick={toggleAttendance}
-      className="!rounded"
+      className="!rounded !outline !outline-offset-0 focus:!outline-2"
       title="Press to book or remove"
       disabled={disabled}
     >

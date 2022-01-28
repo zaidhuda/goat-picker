@@ -1,17 +1,17 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { Disclosure } from '@headlessui/react';
-import ExitToApp from '@mui/icons-material/ExitToApp';
-import CloseIcon from '@mui/icons-material/Close';
+import classNames from 'classnames';
 import MenuIcon from '@mui/icons-material/Menu';
-import classnames from 'classnames';
+import CloseIcon from '@mui/icons-material/Close';
+import { Avatar, Button, ButtonBase, IconButton } from '@mui/material';
+import { Disclosure, Menu, Transition } from '@headlessui/react';
 
 import useFirebase from 'hooks/useFirebase';
 import useWeek from 'hooks/useWeek';
 
 export default function Navbar() {
-  const { signOut } = useFirebase();
+  const { user, signOut } = useFirebase();
   const { pathname } = useRouter();
   const { currentWeek, currentYear } = useWeek();
   const lastYear = currentYear - 1;
@@ -35,14 +35,41 @@ export default function Navbar() {
     },
   ];
 
+  const renderNavLinks = () => (
+    <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 h-full">
+      {navigation
+        .filter(({ hidden }) => !hidden)
+        .map((item) => (
+          <Link key={item.name} href={item.href} passHref>
+            <Button
+              color="inherit"
+              className={classNames(
+                'hover:!bg-gray-900 w-full sm:w-auto',
+                item.current ? 'text-white' : 'text-gray-300',
+                {
+                  '!bg-gray-900': item.current,
+                }
+              )}
+            >
+              <span className="font-semibold normal-case">{item.name}</span>
+            </Button>
+          </Link>
+        ))}
+    </div>
+  );
+
   return (
-    <Disclosure as="nav" className="bg-gray-800">
+    <Disclosure as="nav" className="bg-gray-800 text-white">
       {({ open }) => (
         <>
           <div className="container max-w-screen-md mx-auto">
             <div className="relative flex items-center justify-between h-16">
               <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
-                <Disclosure.Button className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                <Disclosure.Button
+                  as={IconButton}
+                  color="inherit"
+                  className="!outline !outline-offset-0 focus:!outline-2"
+                >
                   <span className="sr-only">Open main menu</span>
                   {open ? (
                     <CloseIcon aria-hidden="true" />
@@ -53,73 +80,73 @@ export default function Navbar() {
               </div>
               <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
                 <div className="flex-shrink-0 flex items-center">
-                  <Link href="/goat">
-                    <a
-                      className="font-bold text-lg text-white"
-                      aria-current={
-                        pathname.startsWith('/goat') ? 'page' : undefined
-                      }
+                  <Link href="/goat" passHref>
+                    <Button
+                      size="large"
+                      color="inherit"
+                      className="hover:!bg-gray-900"
                     >
-                      GOAT
-                    </a>
+                      <span className="font-bold text-lg">GOAT</span>
+                    </Button>
                   </Link>
                 </div>
                 <div className="hidden sm:block sm:ml-6">
-                  <div className="flex space-x-4">
-                    {navigation
-                      .filter(({ hidden }) => !hidden)
-                      .map((item) => (
-                        <Link key={item.name} href={item.href}>
-                          <a
-                            className={classnames(
-                              item.current
-                                ? 'bg-gray-900 text-white'
-                                : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                              'px-3 py-2 rounded-md text-sm font-medium'
-                            )}
-                            aria-current={item.current ? 'page' : undefined}
-                          >
-                            {item.name}
-                          </a>
-                        </Link>
-                      ))}
-                  </div>
+                  {renderNavLinks()}
                 </div>
               </div>
-              <div className="absolute inset-y-0 right-0 flex items-center sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                <button
-                  type="button"
-                  onClick={signOut}
-                  className="bg-gray-800 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
-                >
-                  <span className="sr-only">Logout</span>
-                  <ExitToApp aria-hidden="true" />
-                </button>
-              </div>
+              {user ? (
+                <div className="absolute inset-y-0 right-0 flex items-center sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+                  <Menu as="div" className="relative inline-block text-left">
+                    <Menu.Button
+                      as={ButtonBase}
+                      color="inherit"
+                      className="!rounded-full !outline !outline-offset-2 focus:!outline-2"
+                    >
+                      <Avatar
+                        src={user.photoURL as string}
+                        title={user.displayName as string}
+                        sx={{ width: 36, height: 36 }}
+                      />
+                    </Menu.Button>
+                    <Transition
+                      as={Fragment}
+                      enter="transition ease-out duration-100"
+                      enterFrom="opacity-0 scale-95"
+                      enterTo="opacity-100 scale-100"
+                      leave="transition ease-in duration-75"
+                      leaveFrom="opacity-100 scale-100"
+                      leaveTo="opacity-0 scale-95"
+                    >
+                      <Menu.Items className="absolute right-0 w-36 mt-2 origin-top-right bg-white rounded-md outline-none shadow-lg z-10">
+                        <Menu.Item
+                          as={Button}
+                          onClick={signOut}
+                          fullWidth
+                          color="warning"
+                          className="!normal-case"
+                        >
+                          Logout
+                        </Menu.Item>
+                      </Menu.Items>
+                    </Transition>
+                  </Menu>
+                </div>
+              ) : null}
             </div>
           </div>
-
-          <Disclosure.Panel className="sm:hidden">
-            <div className="px-2 pt-2 pb-3 space-y-1">
-              {navigation
-                .filter(({ hidden }) => !hidden)
-                .map((item) => (
-                  <Link key={item.name} href={item.href}>
-                    <a
-                      className={classnames(
-                        item.current
-                          ? 'bg-gray-900 text-white'
-                          : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                        'block px-3 py-2 rounded-md text-base font-medium'
-                      )}
-                      aria-current={item.current ? 'page' : undefined}
-                    >
-                      {item.name}
-                    </a>
-                  </Link>
-                ))}
-            </div>
-          </Disclosure.Panel>
+          <Transition
+            as={Fragment}
+            enter="transition ease-out duration-100"
+            enterFrom="opacity-0 scale-95"
+            enterTo="opacity-100 scale-100"
+            leave="transition ease-in duration-75"
+            leaveFrom="opacity-100 scale-100"
+            leaveTo="opacity-0 scale-95"
+          >
+            <Disclosure.Panel className="sm:hidden p-2">
+              {renderNavLinks()}
+            </Disclosure.Panel>
+          </Transition>
         </>
       )}
     </Disclosure>

@@ -51,6 +51,7 @@ export default function AttendanceTable() {
         size="small"
         color={weekendsVisible ? 'primary' : 'warning'}
         onClick={() => showWeekends(!weekendsVisible)}
+        className="!outline !outline-offset-0 focus:!outline-2"
       >
         {weekendsVisible ? 'Hide weekends' : 'Show me weekends'}
       </Button>

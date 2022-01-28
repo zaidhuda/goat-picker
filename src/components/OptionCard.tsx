@@ -47,6 +47,7 @@ export default function OptionCard({
       <MuiBadge
         classes={{
           root: 'w-full',
+          badge: '!p-0',
         }}
         key={id}
         badgeContent={
@@ -78,7 +79,7 @@ export default function OptionCard({
             'gap-4 sm:gap-2 px-4 py-2',
             'bg-white border-2 rounded',
             'hover:shadow transition',
-            { 'border-green-400': voted }
+            { 'border-emerald-400': voted }
           )}
         >
           <figure>
