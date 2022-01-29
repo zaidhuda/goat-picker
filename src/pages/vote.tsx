@@ -2,14 +2,16 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import pluralize from 'pluralize';
 import { IconButton, LinearProgress } from '@mui/material';
-import FormatListNumberedIcon from '@mui/icons-material/FormatListNumberedRtl';
+import PollIcon from '@mui/icons-material/Poll';
 import VoteButton from 'components/VoteButton';
 import { getLayout } from 'components/Layout';
+import WeekRangeLabel from 'components/WeekRangeLabel';
 import useWeek from 'hooks/useWeek';
 import useVotes from 'hooks/useVotes';
 import useFirebase from 'hooks/useFirebase';
 import useProfiles from 'hooks/useProfiles';
 import { UserVote } from 'types/vote';
+import WeekNavigation from 'components/WeekNavigation';
 
 export default function VotePage() {
   const [loading, setLoading] = useState(false);
@@ -46,11 +48,21 @@ export default function VotePage() {
   }, [getVotes, currentYear, currentWeek]);
 
   return (
-    <div className="space-y-12">
+    <div className="flex flex-col gap-8">
+      <div className="hidden sm:block">
+        <WeekNavigation hidePrevWeek hideNextWeek />
+      </div>
+
       <div>
-        <h1 className="flex gap-2 items-baseline sm:items-center justify-between font-light text-5xl">
+        <WeekRangeLabel year={currentYear} week={currentWeek} />
+
+        <h1 className="flex gap-2 items-center justify-between font-light text-5xl">
           <span>
-            Vote the <span className="font-bold">GOAT</span>s
+            Vote
+            <span className="hidden sm:inline">
+              {' '}
+              the <span className="font-bold">GOAT</span>s
+            </span>
           </span>
 
           <Link
@@ -65,7 +77,7 @@ export default function VotePage() {
               title="Standings"
               className="outline outline-offset-0 focus:outline-2"
             >
-              <FormatListNumberedIcon className="!text-3xl" />
+              <PollIcon className="!text-3xl" />
             </IconButton>
           </Link>
         </h1>
