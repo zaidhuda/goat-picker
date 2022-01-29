@@ -23,7 +23,7 @@ export default function GoatPage() {
   } = useStats(year) || {};
 
   return (
-    <div className="space-y-8">
+    <div className="flex flex-col gap-8">
       <h1 className="font-bold text-5xl">A year in {year}</h1>
 
       <p className="text-xl">

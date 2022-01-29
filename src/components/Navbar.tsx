@@ -35,13 +35,14 @@ export default function Navbar() {
     },
   ];
 
-  const renderNavLinks = () => (
+  const renderNavLinks = (close: () => void) => (
     <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 h-full">
       {navigation
         .filter(({ hidden }) => !hidden)
         .map((item) => (
           <Link key={item.name} href={item.href} passHref>
             <Button
+              onClick={close}
               color="inherit"
               className={classNames(
                 'hover:!bg-gray-900 w-full sm:w-auto',
@@ -59,8 +60,8 @@ export default function Navbar() {
   );
 
   return (
-    <Disclosure as="nav" className="bg-gray-800 text-white">
-      {({ open }) => (
+    <Disclosure as="nav" className="bg-gray-800 text-white sticky top-0 z-10">
+      {({ open, close }) => (
         <>
           <div className="container max-w-screen-md mx-auto">
             <div className="relative flex items-center justify-between h-16">
@@ -91,7 +92,7 @@ export default function Navbar() {
                   </Link>
                 </div>
                 <div className="hidden sm:block sm:ml-6">
-                  {renderNavLinks()}
+                  {renderNavLinks(close)}
                 </div>
               </div>
               {user ? (
@@ -117,7 +118,7 @@ export default function Navbar() {
                       leaveFrom="opacity-100 scale-100"
                       leaveTo="opacity-0 scale-95"
                     >
-                      <Menu.Items className="absolute right-0 w-36 mt-2 origin-top-right bg-white rounded-md outline-none shadow-lg z-10">
+                      <Menu.Items className="absolute right-0 w-36 mt-2 origin-top-right bg-white rounded-md outline-none drop-shadow-lg z-10">
                         <Menu.Item
                           as={Button}
                           onClick={signOut}
@@ -144,7 +145,7 @@ export default function Navbar() {
             leaveTo="opacity-0 scale-95"
           >
             <Disclosure.Panel className="sm:hidden p-2">
-              {renderNavLinks()}
+              {renderNavLinks(close)}
             </Disclosure.Panel>
           </Transition>
         </>

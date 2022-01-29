@@ -1,5 +1,8 @@
 import React, { useMemo } from 'react';
+import Link from 'next/link';
 import { DateTime } from 'luxon';
+import { ButtonBase } from '@mui/material';
+import useWeek from 'hooks/useWeek';
 
 interface Props {
   week: number;
@@ -8,6 +11,7 @@ interface Props {
 }
 
 export default function WeekGraph({ week, year, size = 5 }: Props) {
+  const { currentWeek, currentYear } = useWeek();
   const date = DateTime.fromObject({ weekNumber: week, weekYear: year }).plus({
     days: 3,
   });
@@ -50,18 +54,18 @@ export default function WeekGraph({ week, year, size = 5 }: Props) {
   }, [date]);
 
   const renderDay = (day: DateTime, dayIndex: number) => {
-    const currentMonth = day.month === date.month;
-    const currentWeek = day.weekNumber === week;
+    const isActiveMonth = day.month === date.month;
+    const isActiveWeek = day.weekNumber === week;
 
     return (
       <div
         key={dayIndex}
         className={
-          currentWeek
-            ? currentMonth
+          isActiveWeek
+            ? isActiveMonth
               ? 'bg-emerald-400'
               : 'bg-emerald-200'
-            : currentMonth
+            : isActiveMonth
             ? 'bg-gray-200'
             : 'invisible'
         }
@@ -77,16 +81,29 @@ export default function WeekGraph({ week, year, size = 5 }: Props) {
   );
 
   return (
-    <div
-      title={`Week ${date.weekNumber}, ${date.monthLong}`}
-      className="cursor-default flex items-center relative"
+    <Link
+      href={{
+        query: {
+          year: currentYear,
+          week: currentWeek,
+        },
+      }}
+      passHref
     >
-      <div className="absolute flex items-center justify-center h-full w-full">
-        <span className="uppercase font-bold">{date.monthShort}</span>
-      </div>
-      <div className="flex flex-col gap-[1px] z-[-1]">
-        {weeks.map(renderWeek)}
-      </div>
-    </div>
+      <ButtonBase
+        focusRipple
+        className="!rounded !outline !outline-offset-0 focus:!outline-2"
+        title={`Week ${date.weekNumber}, ${date.monthLong}`}
+      >
+        <div className="flex items-center relative">
+          <div className="absolute flex items-center justify-center h-full w-full">
+            <span className="uppercase font-bold">{date.monthShort}</span>
+          </div>
+          <div className="flex flex-col gap-[1px] z-[-1]">
+            {weeks.map(renderWeek)}
+          </div>
+        </div>
+      </ButtonBase>
+    </Link>
   );
 }
