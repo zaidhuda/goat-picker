@@ -1,11 +1,11 @@
 import React from 'react';
-import classnames from 'classnames';
+import classNames from 'classnames';
 import { Flipped } from 'react-flip-toolkit';
-import { Badge as MuiBadge, BadgeProps } from '@mui/material';
+import { CheckCircle } from '@mui/icons-material';
+import { Badge as MuiBadge, BadgeProps, Avatar } from '@mui/material';
 
 import { Profile } from 'types/profile';
-import { Avatar } from '@mui/material';
-import { CheckCircle } from '@mui/icons-material';
+import useFirebase from 'hooks/useFirebase';
 
 interface Props extends Profile {
   voted?: boolean;
@@ -21,24 +21,27 @@ export default function OptionCard({
   votes,
   variant,
 }: Props) {
+  const { user } = useFirebase();
+  const isCurrentUser = id === user?.uid;
+
   const color = () => {
     switch (votes) {
       case null:
       case undefined:
       case 0:
-        return 'default';
+        return 'bg-transparent';
       case 1:
-        return 'info';
+        return 'bg-blue-300 border-blue-300';
       case 2:
-        return 'primary';
+        return 'bg-blue-500 border-blue-500';
       case 3:
-        return 'success';
+        return 'bg-emerald-500 border-emerald-500';
       case 4:
-        return 'secondary';
+        return 'bg-purple-500 border-purple-500';
       case 5:
-        return 'warning';
+        return 'bg-orange-500 border-orange-500';
       default:
-        return 'error';
+        return 'bg-red-600 border-red-600';
     }
   };
 
@@ -46,7 +49,6 @@ export default function OptionCard({
     variant === 'voting' ? (
       <MuiBadge
         classes={{
-          root: 'w-full',
           badge: '!p-0',
         }}
         key={id}
@@ -62,24 +64,26 @@ export default function OptionCard({
       />
     ) : (
       <MuiBadge
-        classes={{ root: 'w-full' }}
         key={id}
         badgeContent={votes}
-        color={color()}
+        classes={{ badge: classNames('text-white', color()) }}
         {...props}
       />
     );
 
   return (
     <Flipped flipId={id} stagger>
-      <Badge>
+      <Badge className="bg-white h-full w-full">
         <div
-          className={classnames(
+          className={classNames(
             'flex sm:flex-col items-center h-full w-full',
             'gap-4 sm:gap-2 px-4 py-2',
-            'bg-white border-2 rounded',
-            'hover:drop-shadow transition',
-            { 'border-emerald-400': voted }
+            'border-2 rounded',
+            isCurrentUser ? `${color()} bg-opacity-5` : '',
+            {
+              'hover:shadow-lg transition': variant === 'voting',
+              'border-green-600': voted,
+            }
           )}
         >
           <figure>
