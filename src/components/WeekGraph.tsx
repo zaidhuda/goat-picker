@@ -11,13 +11,16 @@ interface Props {
   size?: number;
 }
 
-export default function WeekGraph({ week, year, size = 7 }: Props) {
+export default function WeekGraph({ week, year, size = 48 }: Props) {
+  const gap = size / 6;
+  const fontSize = size * 0.4;
+
   const { currentWeek, currentYear } = useWeek();
   const date = DateTime.fromObject({ weekNumber: week, weekYear: year }).plus({
     days: 3,
   });
 
-  const weeks = useMemo(() => {
+  const days = useMemo(() => {
     const days = Array.from<unknown, DateTime>(
       { length: date.daysInMonth },
       (_, dayIndex: number) =>
@@ -44,6 +47,7 @@ export default function WeekGraph({ week, year, size = 7 }: Props) {
       );
     }
 
+    // Pad days if selected week has less than 7 days
     lastDay = days[days.length - 1];
     if (lastDay.weekday === 6 && lastDay.weekNumber === date.weekNumber) {
       Array.from({ length: 7 - lastDay.weekday }, (_, index) =>
@@ -51,7 +55,7 @@ export default function WeekGraph({ week, year, size = 7 }: Props) {
       );
     }
 
-    return [...Array(Math.ceil(days.length / 7))].map(() => days.splice(0, 7));
+    return days;
   }, [date]);
 
   const renderDay = (day: DateTime, dayIndex: number) => {
@@ -62,7 +66,7 @@ export default function WeekGraph({ week, year, size = 7 }: Props) {
       <div
         key={dayIndex}
         className={classNames(
-          'flex items-center justify-center h-8 w-8',
+          'flex items-center justify-center',
           isActiveWeek
             ? isActiveMonth
               ? 'bg-emerald-400'
@@ -71,18 +75,12 @@ export default function WeekGraph({ week, year, size = 7 }: Props) {
             ? 'bg-gray-200'
             : 'invisible'
         )}
-        style={{ zoom: size / 32.0 }}
+        style={{ width: size, height: size, fontSize }}
       >
         <span>{day.day}</span>
       </div>
     );
   };
-
-  const renderWeek = (week: DateTime[], weekIndex: number) => (
-    <div key={weekIndex} className="flex gap-[1px]">
-      {week.map(renderDay)}
-    </div>
-  );
 
   return (
     <Link
@@ -96,19 +94,28 @@ export default function WeekGraph({ week, year, size = 7 }: Props) {
     >
       <ButtonBase
         focusRipple
-        className="!rounded !outline !outline-offset-0 focus:!outline-2"
+        className="!rounded"
         title={`Go to Week ${currentWeek}, ${currentYear}`}
       >
         <div
-          className="flex items-center relative"
-          style={{ height: size * 6 + 5 }}
+          className="flex items-center justify-center relative"
+          style={{ height: size, width: size }}
         >
-          <div className="absolute flex items-center justify-center h-full w-full">
-            <span className="uppercase font-bold">{date.monthShort}</span>
+          <div
+            className="absolute grid grid-cols-7 z-[-1]"
+            style={{
+              gap,
+              transform: `scale(${size / (size * 8)})`,
+              width: size * 8,
+            }}
+          >
+            {/* {weeks.map(renderWeek)} */}
+            {days.map(renderDay)}
           </div>
-          <div className="flex flex-col gap-[1px] z-[-1]">
-            {weeks.map(renderWeek)}
-          </div>
+
+          <span className="uppercase font-bold opacity-60" style={{ fontSize }}>
+            {date.monthShort}
+          </span>
         </div>
       </ButtonBase>
     </Link>
