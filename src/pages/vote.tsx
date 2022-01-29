@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
 import pluralize from 'pluralize';
+import { IconButton, LinearProgress } from '@mui/material';
+import FormatListNumberedIcon from '@mui/icons-material/FormatListNumberedRtl';
 import VoteButton from 'components/VoteButton';
 import { getLayout } from 'components/Layout';
 import useWeek from 'hooks/useWeek';
@@ -7,7 +10,6 @@ import useVotes from 'hooks/useVotes';
 import useFirebase from 'hooks/useFirebase';
 import useProfiles from 'hooks/useProfiles';
 import { UserVote } from 'types/vote';
-import { LinearProgress } from '@mui/material';
 
 export default function VotePage() {
   const [loading, setLoading] = useState(false);
@@ -46,8 +48,26 @@ export default function VotePage() {
   return (
     <div className="space-y-12">
       <div>
-        <h1 className="font-light text-4xl">
-          Decide the next <span className="font-bold">GOAT</span>s
+        <h1 className="flex gap-2 items-baseline sm:items-center justify-between font-light text-5xl">
+          <span>
+            Vote the <span className="font-bold">GOAT</span>s
+          </span>
+
+          <Link
+            href={{
+              pathname: '/goat',
+              query: { week: currentWeek, year: currentYear },
+            }}
+            passHref
+          >
+            <IconButton
+              color="primary"
+              title="Standings"
+              className="outline outline-offset-0 focus:outline-2"
+            >
+              <FormatListNumberedIcon className="!text-3xl" />
+            </IconButton>
+          </Link>
         </h1>
 
         <p className="font-thin text-sm mt-1">
