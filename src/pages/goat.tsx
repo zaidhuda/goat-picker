@@ -1,16 +1,16 @@
 import React from 'react';
 import Link from 'next/link';
 import pluralize from 'pluralize';
-import { DateTime } from 'luxon';
 import { useRouter } from 'next/router';
-import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck';
+import { IconButton } from '@mui/material';
+import BallotIcon from '@mui/icons-material/Ballot';
 
 import useWeek from 'hooks/useWeek';
 import useOptions from 'hooks/useOptions';
 import Ranking from 'components/Ranking';
 import { getLayout } from 'components/Layout';
 import WeekNavigation from 'components/WeekNavigation';
-import { IconButton } from '@mui/material';
+import WeekRangeLabel from 'components/WeekRangeLabel';
 
 export default function GoatPage() {
   const { currentWeek, currentYear, getPrevWeek } = useWeek();
@@ -28,18 +28,6 @@ export default function GoatPage() {
 
   const participants = profileWithVotes.filter(({ voted }) => voted);
 
-  const fromDate = DateTime.fromObject({
-    weekYear: year,
-    weekNumber: week,
-    weekday: 1,
-  });
-
-  const toDate = DateTime.fromObject({
-    weekYear: year,
-    weekNumber: week,
-    weekday: 7,
-  });
-
   return (
     <div className="flex flex-col gap-8 pb-12 sm:pb-0">
       <WeekNavigation
@@ -49,14 +37,7 @@ export default function GoatPage() {
       />
 
       <div>
-        <p>
-          {fromDate.toLocaleString({ day: 'numeric', month: 'short' })} -{' '}
-          {toDate.toLocaleString({
-            day: 'numeric',
-            month: 'short',
-            year: '2-digit',
-          })}
-        </p>
+        <WeekRangeLabel year={year} week={week} />
 
         <h1 className="flex gap-2 items-center justify-between font-light text-5xl">
           <span>
@@ -69,7 +50,7 @@ export default function GoatPage() {
                 title="Vote"
                 className="outline outline-offset-0 focus:outline-2"
               >
-                <PlaylistAddCheckIcon className="!text-3xl" />
+                <BallotIcon className="!text-3xl" />
               </IconButton>
             </Link>
           ) : null}

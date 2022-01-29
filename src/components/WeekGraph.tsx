@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { DateTime } from 'luxon';
 import { ButtonBase } from '@mui/material';
 import useWeek from 'hooks/useWeek';
+import classNames from 'classnames';
 
 interface Props {
   week: number;
@@ -10,7 +11,7 @@ interface Props {
   size?: number;
 }
 
-export default function WeekGraph({ week, year, size = 5 }: Props) {
+export default function WeekGraph({ week, year, size = 7 }: Props) {
   const { currentWeek, currentYear } = useWeek();
   const date = DateTime.fromObject({ weekNumber: week, weekYear: year }).plus({
     days: 3,
@@ -60,7 +61,8 @@ export default function WeekGraph({ week, year, size = 5 }: Props) {
     return (
       <div
         key={dayIndex}
-        className={
+        className={classNames(
+          'flex items-center justify-center h-8 w-8',
           isActiveWeek
             ? isActiveMonth
               ? 'bg-emerald-400'
@@ -68,9 +70,11 @@ export default function WeekGraph({ week, year, size = 5 }: Props) {
             : isActiveMonth
             ? 'bg-gray-200'
             : 'invisible'
-        }
-        style={{ width: size, height: size }}
-      />
+        )}
+        style={{ zoom: size / 32.0 }}
+      >
+        <span>{day.day}</span>
+      </div>
     );
   };
 
@@ -93,9 +97,12 @@ export default function WeekGraph({ week, year, size = 5 }: Props) {
       <ButtonBase
         focusRipple
         className="!rounded !outline !outline-offset-0 focus:!outline-2"
-        title={`Week ${date.weekNumber}, ${date.monthLong}`}
+        title={`Go to Week ${currentWeek}, ${currentYear}`}
       >
-        <div className="flex items-center relative">
+        <div
+          className="flex items-center relative"
+          style={{ height: size * 6 + 5 }}
+        >
           <div className="absolute flex items-center justify-center h-full w-full">
             <span className="uppercase font-bold">{date.monthShort}</span>
           </div>
