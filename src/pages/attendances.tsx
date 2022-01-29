@@ -5,7 +5,7 @@ import AttendanceTable from 'components/Attendance/Table';
 
 export default function AttendancePage() {
   return (
-    <div className="space-y-8">
+    <div className="flex flex-col gap-8 pb-12 sm:pb-0">
       <WeekNavigation />
       <AttendanceTable />
     </div>

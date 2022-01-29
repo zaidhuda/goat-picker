@@ -36,7 +36,15 @@ export default function WeekNavigation({
   const nextWeekPath = () => ({ query: getNextWeek(year, week) });
 
   return (
-    <div className="flex items-center justify-between gap-4 sm:gap-8">
+    <div
+      className={classNames(
+        'flex items-center justify-between gap-4 sm:gap-8',
+        'fixed bottom-0 left-0 right-0 w-full z-10',
+        'sm:relative sm:w-auto sm:z-auto',
+        'bg-white border-t-2 border-gray-200 p-2 drop-shadow-2xl',
+        'sm:border-0 sm:p-0 sm:drop-shadow-none'
+      )}
+    >
       <Link href={prevWeekPath()} passHref>
         <Button
           color="inherit"

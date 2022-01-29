@@ -41,7 +41,7 @@ export default function GoatPage() {
   });
 
   return (
-    <div className="space-y-8">
+    <div className="flex flex-col gap-8 pb-12 sm:pb-0">
       <WeekNavigation
         defaultWeek={week}
         defaultYear={year}
