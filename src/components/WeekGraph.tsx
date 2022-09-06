@@ -66,13 +66,13 @@ export default function WeekGraph({ week, year, size = 48 }: Props) {
       <div
         key={dayIndex}
         className={classNames(
-          'flex items-center justify-center',
+          'flex items-center justify-center dark:text-gray-900',
           isActiveWeek
             ? isActiveMonth
-              ? 'bg-emerald-400'
-              : 'bg-emerald-200'
+              ? 'bg-emerald-400 dark:bg-emerald-500'
+              : 'bg-emerald-200 dark:bg-emerald-700'
             : isActiveMonth
-            ? 'bg-gray-200'
+            ? 'bg-gray-200 dark:bg-gray-400'
             : 'invisible'
         )}
         style={{ width: size, height: size, fontSize }}
@@ -113,7 +113,10 @@ export default function WeekGraph({ week, year, size = 48 }: Props) {
             {days.map(renderDay)}
           </div>
 
-          <span className="uppercase font-bold opacity-60" style={{ fontSize }}>
+          <span
+            className="uppercase font-bold opacity-60 dark:text-gray-600"
+            style={{ fontSize }}
+          >
             {date.monthShort}
           </span>
         </div>

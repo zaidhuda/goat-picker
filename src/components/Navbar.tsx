@@ -4,13 +4,16 @@ import { useRouter } from 'next/router';
 import classNames from 'classnames';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
+import { DarkMode, LightMode } from '@mui/icons-material';
 import { Avatar, Button, ButtonBase, IconButton } from '@mui/material';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 
-import useFirebase from 'hooks/useFirebase';
 import useWeek from 'hooks/useWeek';
+import useFirebase from 'hooks/useFirebase';
+import useDarkMode from 'hooks/useDarkMode';
 
 export default function Navbar() {
+  const { darkMode, toggleDarkMode } = useDarkMode();
   const { user, signOut } = useFirebase();
   const { pathname } = useRouter();
   const { currentWeek, currentYear } = useWeek();
@@ -69,7 +72,7 @@ export default function Navbar() {
                 <Disclosure.Button
                   as={IconButton}
                   color="inherit"
-                  className="!outline !outline-offset-0 focus:!outline-2"
+                  className="!outline !outline-offset-0 focus:!outline-2 dark:!outline-gray-600"
                 >
                   <span className="sr-only">Open main menu</span>
                   {open ? (
@@ -95,8 +98,21 @@ export default function Navbar() {
                   {renderNavLinks(close)}
                 </div>
               </div>
-              {user ? (
-                <div className="absolute inset-y-0 right-0 flex items-center sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+
+              <div className="absolute inset-y-0 right-0 flex items-center gap-x-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+                <IconButton
+                  title="Vote"
+                  className="!text-yellow-400"
+                  onClick={() => toggleDarkMode()}
+                >
+                  {darkMode ? (
+                    <DarkMode className="!text-2xl" />
+                  ) : (
+                    <LightMode className="!text-2xl" />
+                  )}
+                </IconButton>
+
+                {user ? (
                   <Menu as="div" className="relative inline-block text-left">
                     <Menu.Button
                       as={ButtonBase}
@@ -118,7 +134,7 @@ export default function Navbar() {
                       leaveFrom="opacity-100 scale-100"
                       leaveTo="opacity-0 scale-95"
                     >
-                      <Menu.Items className="absolute right-0 w-36 mt-2 origin-top-right bg-white rounded-md outline-none drop-shadow-lg z-10">
+                      <Menu.Items className="absolute right-0 w-36 mt-2 origin-top-right bg-white dark:bg-gray-700 rounded-md outline-none drop-shadow-lg z-10">
                         <Menu.Item
                           as={Button}
                           onClick={signOut}
@@ -131,8 +147,8 @@ export default function Navbar() {
                       </Menu.Items>
                     </Transition>
                   </Menu>
-                </div>
-              ) : null}
+                ) : null}
+              </div>
             </div>
           </div>
           <Transition

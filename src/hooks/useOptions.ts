@@ -24,7 +24,7 @@ const useOptions = (year: number, week: number) => {
       profiles.map((option) => ({
         ...option,
         votes: groupedVotes[option.id],
-        voted: !!votes.find(({ id }) => id === option.id)?.votes,
+        voted: groupedVotes[option.id] > 0,
       })),
     [profiles, groupedVotes]
   );

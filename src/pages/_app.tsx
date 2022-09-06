@@ -12,6 +12,7 @@ import { useFirebaseProvider } from 'hooks/useFirebase';
 import FirebaseContext from 'contexts/FirebaseContext';
 import muiTheme from 'lib/muiTheme';
 import { ThemeProvider } from '@mui/material';
+import useDarkMode from 'hooks/useDarkMode';
 
 NProgress.configure({ showSpinner: false, trickleSpeed: 100 });
 
@@ -36,6 +37,7 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
 
   const firebase = useFirebaseProvider();
   const { ready, user } = firebase;
+  useDarkMode();
 
   useEffect(() => {
     Router.events.on('routeChangeStart', NProgress.start);

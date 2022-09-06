@@ -61,21 +61,25 @@ export default function AttendanceDay({ date }: Props) {
   const disabled = past || full;
 
   let style = {
-    border: 'border-gray-300 ring-gray-100',
+    border:
+      'border-gray-300 ring-gray-100 dark:border-gray-600 dark:ring-gray-700',
     text: 'text-gray-400',
   };
   if (attendeesCount >= 1)
     style = {
-      border: 'border-emerald-500 ring-emerald-100',
+      border: 'border-emerald-500 ring-emerald-100 dark:ring-emerald-800',
       text: 'text-emerald-500',
     };
   if (attendeesCount >= MAX_ATTENDEES / 2)
     style = {
-      border: 'border-yellow-500 ring-yellow-100',
+      border: 'border-yellow-500 ring-yellow-100 dark:ring-yellow-800',
       text: 'text-yellow-500',
     };
   if (attendeesCount >= MAX_ATTENDEES)
-    style = { border: 'border-red-500 ring-red-100', text: 'text-red-500' };
+    style = {
+      border: 'border-red-500 ring-red-100 dark:ring-red-800',
+      text: 'text-red-500',
+    };
 
   const CountContent = () => (
     <>
@@ -89,7 +93,7 @@ export default function AttendanceDay({ date }: Props) {
   return (
     <ButtonBase
       onClick={toggleAttendance}
-      className="!rounded !outline !outline-offset-0 focus:!outline-2"
+      className="!rounded !outline !outline-offset-0 focus:!outline-2 dark:!outline-gray-600"
       title="Press to book or remove"
       disabled={disabled}
     >
