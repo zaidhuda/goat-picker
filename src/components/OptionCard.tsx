@@ -29,7 +29,7 @@ export default function OptionCard({
       case null:
       case undefined:
       case 0:
-        return 'bg-transparent';
+        return 'bg-transparent border-slate-700';
       case 1:
         return 'bg-blue-300 border-blue-300';
       case 2:
@@ -56,7 +56,7 @@ export default function OptionCard({
           voted ? (
             <CheckCircle
               color="success"
-              className="!bg-white !border-0 !rounded-full"
+              className="!bg-white dark:!bg-gray-900 !border-0 !rounded-full"
             />
           ) : null
         }
@@ -66,23 +66,27 @@ export default function OptionCard({
       <MuiBadge
         key={id}
         badgeContent={votes}
-        classes={{ badge: classNames('text-white', color()) }}
+        classes={{
+          badge: classNames('text-white dark:text-gray-900', color()),
+        }}
         {...props}
       />
     );
 
   return (
     <Flipped flipId={id} stagger>
-      <Badge className="bg-white h-full w-full">
+      <Badge className="h-full w-full">
         <div
           className={classNames(
             'flex sm:flex-col items-center h-full w-full',
             'gap-4 sm:gap-2 px-4 py-2',
             'border-2 rounded',
-            isCurrentUser ? `${color()} bg-opacity-5` : '',
+            isCurrentUser
+              ? `${color()} bg-opacity-5 dark:bg-opacity-20`
+              : 'dark:border-slate-700',
             {
               'hover:shadow-lg transition': variant === 'voting',
-              'border-green-600': voted,
+              'border-green-600 dark:border-green-600': voted,
             }
           )}
         >

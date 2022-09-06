@@ -11,7 +11,7 @@ export default class MyDocument extends Document {
           {/* PWA primary color */}
           <meta name="theme-color" content={muiTheme.palette.primary.main} />
         </Head>
-        <body>
+        <body className="dark:bg-gray-900 dark:text-slate-300 transition-all">
           <Main />
           <NextScript />
         </body>
@@ -52,9 +52,9 @@ MyDocument.getInitialProps = async (ctx) => {
   ctx.renderPage = () =>
     originalRenderPage({
       enhanceApp: (App) =>
-        (function renderEhancedApp(props) {
+        function renderEhancedApp(props) {
           return sheets.collect(<App {...props} />);
-        }),
+        },
     });
 
   const initialProps = await Document.getInitialProps(ctx);
