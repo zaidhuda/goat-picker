@@ -1,6 +1,7 @@
 import firebase from 'firebase/app';
 import 'firebase/firestore';
 import 'firebase/auth';
+import 'firebase/functions';
 import { useState, useEffect, useCallback, useContext } from 'react';
 import FirebaseContext from 'contexts/FirebaseContext';
 import { Config } from 'types/config';
@@ -11,6 +12,7 @@ const CONFIGS = 'configs';
 export function useFirebaseProvider() {
   const [app, setApp] = useState<firebase.app.App>();
   const [db, setDatabase] = useState<firebase.firestore.Firestore>();
+  const [functions, setFunctions] = useState<firebase.functions.Functions>();
   const [user, setUser] = useState<firebase.User | null>();
   const [configs, setConfigs] = useState<{ [key in Config]?: any }>({});
 
@@ -58,6 +60,15 @@ export function useFirebaseProvider() {
     return () => setDatabase(undefined);
   }, [app]);
 
+  // Set up functions
+  useEffect(() => {
+    if (app) {
+      setFunctions(app.functions());
+    }
+
+    return () => setFunctions(undefined);
+  }, [app]);
+
   // Reset state on auth state change
   useEffect(() => {
     const EMAIL_DOMAIN = getConfig<string>('EMAIL_DOMAIN', '');
@@ -100,8 +111,9 @@ export function useFirebaseProvider() {
   }, [app, db]);
 
   return {
-    ready: !!app && !!db,
+    ready: !!app && !!db && !!functions,
     app,
+    functions,
     db,
     user,
     signInWithPopup,

@@ -36,6 +36,11 @@ export default function Navbar() {
       href: '/attendances',
       current: pathname.startsWith('/attendances'),
     },
+    {
+      name: 'LnL',
+      href: '/lnl',
+      current: pathname.startsWith('/lnl'),
+    },
   ];
 
   const renderNavLinks = (close: () => void) => (

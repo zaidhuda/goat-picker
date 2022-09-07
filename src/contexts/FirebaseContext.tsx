@@ -7,6 +7,7 @@ const FirebaseContext = createContext<{
   ready?: boolean;
   app?: firebase.app.App;
   db?: firebase.firestore.Firestore;
+  functions?: firebase.functions.Functions;
   user?: firebase.User | null;
   signInWithPopup: () => void;
   signOut: () => void;
