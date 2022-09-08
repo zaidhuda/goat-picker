@@ -6,21 +6,34 @@ import useStats from 'hooks/useStats';
 import pluralize from 'pluralize';
 import Ranking from 'components/Ranking';
 import { DateTime } from 'luxon';
+import { Button } from '@mui/material';
+import Link from 'next/link';
 
 export default function GoatPage() {
   const {
     query: { year: yearParam = new Date().getFullYear() },
   } = useRouter();
+  const [showMostVotes, setShowMostVotes] = React.useState(true);
+  const [showMostVoted, setShowMostVoted] = React.useState(true);
 
   const year = Number(yearParam);
   const weeks = DateTime.local(year).weeksInWeekYear;
   const {
+    busiestWeek = [0, 0],
+    highestVoted,
+    highestVotes,
+    profileWithStats = [],
     totalParticipation = 0,
-    totalVotes = 0,
     totalVoted = 0,
-    mostVoted = [],
-    mostVotes = [],
+    totalVotes = 0,
   } = useStats(year) || {};
+
+  const mostVotes = profileWithStats.filter(
+    ({ totalVotes }) => totalVotes === highestVotes
+  );
+  const mostVoted = profileWithStats.filter(
+    ({ totalVoted }) => totalVoted === highestVoted
+  );
 
   return (
     <div className="flex flex-col gap-8">
@@ -29,34 +42,69 @@ export default function GoatPage() {
       <p className="text-xl">
         In total, <strong>{totalParticipation}</strong>{' '}
         {pluralize('person', totalParticipation)} participated in the voting
-        throughout the year. They voted <strong>{totalVotes}</strong> times, for
-        a total of <strong>{totalVoted}</strong> votes. On average,{' '}
-        <strong>{Math.round(totalVoted / weeks)}</strong>{' '}
-        {pluralize('person', Math.round(totalVoted / weeks))} voted every week.
+        throughout the year. They voted <strong>{totalVoted}</strong> times, for
+        a total of <strong>{totalVotes}</strong> votes. On average,{' '}
+        <strong>{Math.round(totalVotes / weeks)}</strong>{' '}
+        {pluralize('person', Math.round(totalVotes / weeks))} voted every week.
+        The busiest week was{' '}
+        <Link
+          href={{
+            pathname: '/goat',
+            query: { year: yearParam, week: busiestWeek[0] },
+          }}
+        >
+          <a className="underline">
+            week <strong>{busiestWeek[0]}</strong>
+          </a>
+        </Link>{' '}
+        with <strong>{busiestWeek[1]}</strong>{' '}
+        {pluralize('vote', busiestWeek[1])}.
       </p>
 
       <h2 className="font-semibold text-xl">
         The most voted {pluralize('person', mostVoted.length)}{' '}
         {pluralize('was', mostVoted.length)}:
+        <Button
+          className="!p-0 ml-2"
+          onClick={() => setShowMostVoted((current) => !current)}
+        >
+          {showMostVoted ? 'All' : 'MVPs'}
+        </Button>
       </h2>
 
       <Ranking
-        options={mostVoted.map((profile) => ({
-          ...profile,
-          votes: profile.totalVoted,
-        }))}
+        options={profileWithStats
+          .map((profile) => ({
+            ...profile,
+            votes: profile.totalVoted,
+          }))
+          .filter(({ totalVoted }) => totalVoted > 0)
+          .filter(({ votes }) =>
+            showMostVoted ? votes === highestVoted : true
+          )}
       />
 
       <h2 className="font-semibold text-xl">
         The {pluralize('person', mostVotes.length)} that voted the most{' '}
         {pluralize('was', mostVotes.length)}:
+        <Button
+          className="!p-0 ml-2"
+          onClick={() => setShowMostVotes((current) => !current)}
+        >
+          {showMostVotes ? 'All' : 'MVPs'}
+        </Button>
       </h2>
 
       <Ranking
-        options={mostVotes.map((profile) => ({
-          ...profile,
-          votes: profile.totalVotes,
-        }))}
+        options={profileWithStats
+          .map((profile) => ({
+            ...profile,
+            votes: profile.totalVotes,
+          }))
+          .filter(({ hidden, totalVotes }) => !hidden || totalVotes > 0)
+          .filter(({ votes }) =>
+            showMostVotes ? votes === highestVotes : true
+          )}
       />
     </div>
   );

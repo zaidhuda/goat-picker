@@ -1,15 +1,19 @@
-import { ProfileWithStats } from './profile';
+import { firestore } from 'firebase-admin';
+import { Profile, ProfileWithStats } from './profile';
 
 export type UserVote = {
   id: string;
-  votes?: string[];
+  voted: firestore.DocumentReference<Profile>;
+  voter: firestore.DocumentReference<Profile>;
+  year: number;
+  week: number;
 };
 
-export type AnnualStats = {
+export type Stats = {
+  busiestWeek: [number, number];
   highestVoted: number;
   highestVotes: number;
-  mostVoted: ProfileWithStats[];
-  mostVotes: ProfileWithStats[];
+  profileWithStats: ProfileWithStats[];
   totalParticipation: number;
   totalVoted: number;
   totalVotes: number;

@@ -7,32 +7,32 @@ type RawTrelloCard = TrelloCard & { start: string };
 
 export default function useLnLLists() {
   const [cards, setCards] = useState<TrelloCard[]>();
-  const { functions } = useFirebase();
+  const { db } = useFirebase();
 
   useEffect(() => {
     const today = DateTime.local().startOf('day');
 
-    if (functions) {
-      functions
-        .httpsCallable('lnlSchedules')()
-        .then((res: { data: RawTrelloCard[] }) => {
-          setCards(
-            res.data
-              .filter(({ start }) => !!start)
-              .map((card) => ({
-                ...card,
-                start: DateTime.fromISO(card.start),
-              }))
-              .map((card) => ({
-                ...card,
-                today: today.equals(card.start.startOf('day')),
-              }))
-              .filter(({ start }) => DateTime.now() < start)
-              .sort((a, b) => a.start.toMillis() - b.start.toMillis())
-          );
-        });
+    if (db) {
+      db.doc('lnl/upcoming').onSnapshot((doc) => {
+        const { schedules } = doc.data() as { schedules: RawTrelloCard[] };
+        setCards(
+          schedules
+            .map((card) => ({
+              ...card,
+              start: DateTime.fromJSDate(new Date(card.name)).isValid
+                ? DateTime.fromJSDate(new Date(card.name))
+                : DateTime.fromISO(card.start),
+            }))
+            .map((card) => ({
+              ...card,
+              today: today.equals(card.start.startOf('day')),
+            }))
+            .filter(({ start }) => !!start && DateTime.now() < start)
+            .sort((a, b) => a.start.toMillis() - b.start.toMillis())
+        );
+      });
     }
-  }, [functions]);
+  }, [db]);
 
   return cards;
 }
