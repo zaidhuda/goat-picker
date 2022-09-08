@@ -22,7 +22,9 @@ export default function VotePage() {
   const { getVotes } = useVotes();
   const { currentWeek, currentYear } = useWeek();
 
-  const userVotes = votes.find(({ id }) => id === user?.uid)?.votes || [];
+  const userVotes = votes
+    .filter(({ voter }) => voter.id === user?.uid)
+    .map(({ voted }) => voted.id);
 
   const optionsWithoutUser = profiles
     .filter(({ hidden }) => !hidden)

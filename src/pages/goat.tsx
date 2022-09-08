@@ -24,9 +24,7 @@ export default function GoatPage() {
 
   const isCurrentWeek = week === currentWeek;
 
-  const { profileWithVotes, votedOptions } = useOptions(year, week);
-
-  const participants = profileWithVotes.filter(({ voted }) => voted);
+  const { participants, votedOptions } = useOptions(year, week);
 
   return (
     <div className="flex flex-col gap-8 pb-12 sm:pb-0">
@@ -64,6 +62,14 @@ export default function GoatPage() {
       </div>
 
       <Ranking options={votedOptions} />
+
+      {!isCurrentWeek ? (
+        <Link href={{ pathname: '/stats', query: { year } }}>
+          <a className="font-light italic text-gray-300 dark:text-gray-700 text-sm">
+            view stats
+          </a>
+        </Link>
+      ) : null}
     </div>
   );
 }

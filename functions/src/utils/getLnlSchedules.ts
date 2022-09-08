@@ -1,6 +1,6 @@
 import * as functions from 'firebase-functions';
 import Axios from 'axios';
-import { TrelloCard, TrelloMember } from './types/trello';
+import { TrelloCard, TrelloMember } from '../types/trello';
 
 const axiosInstance = Axios.create({
   baseURL: 'https://api.trello.com/1',
@@ -23,6 +23,7 @@ export default async function getLnlSchedules(): Promise<TrelloCard[]> {
 
     return cards.map((card: TrelloCard) => ({
       id: card.id,
+      name: card.name,
       pos: card.pos,
       start: card.start,
       url: card.url,

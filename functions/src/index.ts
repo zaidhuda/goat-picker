@@ -1,26 +1,15 @@
-import { https, pubsub } from 'firebase-functions';
+import { https } from 'firebase-functions';
 import { initializeApp } from 'firebase-admin';
 
 initializeApp();
 
-import sendWeeklyReminder from './sendWeeklyReminder';
-import publishAnnualStats from './publishAnnualStats';
-import publishWeeklyResult from './publishWeeklyResult';
-import getLnlSchedules from './getLnlSchedules';
+import auth from './utils/authentiateRequest';
+import updateStats from './requests/updateStats';
+import publishAnnualStats from './requests/publishAnnualStats';
+import publishWeeklyResults from './requests/publishWeeklyResults';
+import updateLnlSchedules from './requests/updateLnlSchedules';
 
-exports.sendReminderEveryFridayAtFive = pubsub
-  .schedule('every friday 17:00')
-  .timeZone('Asia/Kuala_Lumpur')
-  .onRun(sendWeeklyReminder);
-
-exports.publishResultEveryMondayAtTen = pubsub
-  .schedule('every monday 10:00')
-  .timeZone('Asia/Kuala_Lumpur')
-  .onRun(publishWeeklyResult);
-
-exports.publishAnnualStats = pubsub
-  .schedule('0 10 3 1 *')
-  .timeZone('Asia/Kuala_Lumpur')
-  .onRun(publishAnnualStats);
-
-exports.lnlSchedules = https.onCall(getLnlSchedules);
+exports.updateStats = https.onRequest(auth(updateStats));
+exports.publishAnnualStats = https.onRequest(auth(publishAnnualStats));
+exports.publishWeeklyResults = https.onRequest(auth(publishWeeklyResults));
+exports.updateLnlSchedules = https.onRequest(auth(updateLnlSchedules));
