@@ -13,7 +13,9 @@ import FirebaseContext from 'contexts/FirebaseContext';
 import muiTheme from 'lib/muiTheme';
 import { ThemeProvider } from '@mui/material';
 import useDarkMode from 'hooks/useDarkMode';
+import { Settings } from 'luxon';
 
+Settings.defaultZone = 'Asia/Kuala_Lumpur';
 NProgress.configure({ showSpinner: false, trickleSpeed: 100 });
 
 type NextPageWithLayout = NextPage & {
