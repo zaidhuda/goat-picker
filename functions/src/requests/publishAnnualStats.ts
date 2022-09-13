@@ -1,11 +1,15 @@
-import * as pluralize from 'pluralize';
+import { Request, Response } from 'firebase-functions/v1';
+import { firestore } from 'firebase-admin';
+import pluralize from 'pluralize';
 import getWeek from '../utils/getWeek';
 import getSlackNames from '../utils/getSlackNames';
 import sendMessageToSlack from '../utils/sendMessageToSlack';
-import getSlackGoatWebhook from '../utils/getSlackGoatWebhook';
-import { firestore } from 'firebase-admin';
 import { Stats } from '../types/vote';
-import { Request, Response } from 'firebase-functions/v1';
+import {
+  buildButtonLinkElement,
+  buildPlainTextSections,
+} from '../slack/blocks/builders';
+import { ActionsBlock } from '@slack/bolt';
 
 export default async function publishStats(
   req: Request,
@@ -36,7 +40,7 @@ export default async function publishStats(
   const mostVotesNames = getSlackNames(mostVotes);
   const mostVotedNames = getSlackNames(mostVoted);
 
-  const message = [
+  const textSections = buildPlainTextSections([
     `Here's the stats for the year *${previousYear}*:`,
     [
       `In total, *${totalParticipation}*`,
@@ -64,14 +68,26 @@ export default async function publishStats(
           mostVotedNames,
           `with *${highestVotes}* votes.`,
         ].join(' '),
-    `*<https://goatpicker.web.app/stats?year=${previousYear}|View stats>*`,
+  ]);
+
+  const blocks = [
+    ...textSections,
+    {
+      type: 'actions',
+      elements: [
+        buildButtonLinkElement({
+          text: 'View stats',
+          path: `/stats?year=${previousYear}`,
+        }),
+      ],
+    } as ActionsBlock,
   ];
 
   try {
-    await sendMessageToSlack(message, getSlackGoatWebhook());
+    await sendMessageToSlack(blocks);
 
     console.log('Published annual stats to Slack channel');
-    res.status(200).send(message);
+    res.status(200).send(blocks);
   } catch (error) {
     console.error(error);
     res.status(500).send((error as Error).message);

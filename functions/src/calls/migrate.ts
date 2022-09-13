@@ -1,4 +1,5 @@
 import { firestore } from 'firebase-admin';
+import votesPath from '../utils/firestorePaths';
 
 export default async function migrate(year: number): Promise<void> {
   const weeks = await firestore().doc(`votes/${year}`).listCollections();
@@ -16,11 +17,7 @@ export default async function migrate(year: number): Promise<void> {
         }))
         .map(async (vote: any) => {
           await firestore()
-            .collection(
-              `years/${vote.year}/weeks/${
-                vote.week < 10 ? `0${vote.week}` : vote.week
-              }/votes`
-            )
+            .collection(votesPath(vote.year, vote.week))
             .doc(`${vote.voter.id}:${vote.voted.id}`)
             .set(vote);
         });

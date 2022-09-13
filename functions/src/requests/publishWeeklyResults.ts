@@ -1,9 +1,12 @@
+import { Request, Response } from 'firebase-functions/v1';
 import getWeek from '../utils/getWeek';
 import getStats from '../utils/getStats';
 import getSlackNames from '../utils/getSlackNames';
 import sendMessageToSlack from '../utils/sendMessageToSlack';
-import getSlackGoatWebhook from '../utils/getSlackGoatWebhook';
-import { Request, Response } from 'firebase-functions/v1';
+import {
+  buildButtonLinkElement,
+  buildButtonLinkSection,
+} from '../slack/blocks/builders';
 
 export default async function publishWeeklyResults(
   req: Request,
@@ -12,16 +15,16 @@ export default async function publishWeeklyResults(
   console.log('Publishing results to Slack channel');
 
   const { previousYear, previousWeek } = getWeek();
-  const { profileWithStats, highestVotes } = await getStats({
+  const { profileWithStats, highestVoted } = await getStats({
     year: previousYear,
     week: previousWeek,
   });
 
   let message = "Bummer, we couldn't find the *GOAT* :sadpepe:";
 
-  if (highestVotes > 1) {
+  if (highestVoted > 1) {
     const mostVotedProfiles = profileWithStats.filter(
-      ({ totalVotes }) => totalVotes === highestVotes
+      ({ totalVotes }) => totalVotes === highestVoted
     );
     const mostVotedNames = getSlackNames(mostVotedProfiles);
 
@@ -32,14 +35,23 @@ export default async function publishWeeklyResults(
     }
   }
 
+  const blocks = [
+    buildButtonLinkSection(
+      message,
+      buildButtonLinkElement({
+        url: undefined,
+        text: 'View results',
+        action_id: 'open-result-modal',
+        value: `year:${previousYear},week:${previousWeek}`,
+      })
+    ),
+  ];
+
   try {
-    await sendMessageToSlack(
-      `${message}\n*<https://goatpicker.web.app/goat?year=${previousYear}&week=${previousWeek}|View result>*`,
-      getSlackGoatWebhook()
-    );
+    await sendMessageToSlack(blocks);
 
     console.log('Published results to Slack channel');
-    res.status(200).send(message);
+    res.status(200).send(blocks);
   } catch (error) {
     console.error(error);
     res.status(500).send((error as Error).message);
