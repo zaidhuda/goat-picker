@@ -4,7 +4,7 @@ import {
   ViewSubmitAction,
 } from '@slack/bolt';
 import { firestore } from 'firebase-admin';
-import votesPath from '../../utils/firestorePaths';
+import { profileRef, votesCollectionRef } from '../../utils/firestorePaths';
 import getSlackAppUser from '../../utils/getSlackAppUser';
 import getWeek from '../../utils/getWeek';
 
@@ -33,31 +33,36 @@ export default async function voteModalSubmission({
     const appUser = await getSlackAppUser(user.id);
 
     if (appUser) {
+      const bulk = firestore().bulkWriter();
       const { week, year } = getWeek();
 
-      const existingVotes = await firestore()
-        .collection(votesPath(year, week))
-        .where('voter', '==', firestore().doc(`profiles/${appUser.id}`))
-        .get();
+      await votesCollectionRef(year, week)
+        .where('voter', '==', profileRef(appUser.id))
+        .get()
+        .then(({ docs }) => docs.forEach((doc) => bulk.delete(doc.ref)));
 
-      await existingVotes.forEach((doc) => doc.ref.delete());
+      await Promise.all(
+        selected_users.map(async (id) => {
+          const selectedUser = await getSlackAppUser(id);
 
-      for await (const id of selected_users) {
-        const selectedUser = await getSlackAppUser(id);
+          if (selectedUser) {
+            bulk.set(
+              votesCollectionRef(year, week).doc(
+                `${appUser.id}:${selectedUser.id}`
+              ),
+              {
+                voter: profileRef(appUser.id),
+                voted: profileRef(selectedUser.id),
+                week,
+                year,
+                timestamp: firestore.FieldValue.serverTimestamp(),
+              }
+            );
+          }
+        })
+      );
 
-        if (selectedUser) {
-          await firestore()
-            .collection(votesPath(year, week))
-            .doc(`${appUser.id}:${selectedUser.id}`)
-            .set({
-              voter: firestore().doc(`profiles/${appUser.id}`),
-              voted: firestore().doc(`profiles/${selectedUser.id}`),
-              week,
-              year,
-              timestamp: firestore.FieldValue.serverTimestamp(),
-            });
-        }
-      }
+      await bulk.close();
     }
   }
 }

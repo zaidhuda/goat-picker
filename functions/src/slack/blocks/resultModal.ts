@@ -1,7 +1,8 @@
 import { ContextBlock, KnownBlock, ModalView } from '@slack/bolt';
 import { DateTime } from 'luxon';
 import pluralize from 'pluralize';
-import getStats from '../../utils/getStats';
+import { Stats } from '../../types/vote';
+import { weekRef } from '../../utils/firestorePaths';
 import { buildButtonLinkElement } from './builders';
 
 export default async function slackResultModal({
@@ -11,7 +12,9 @@ export default async function slackResultModal({
   year: number;
   week: number;
 }): Promise<ModalView> {
-  const { profileWithStats, highestVoted } = await getStats({ year, week });
+  const { profileWithStats, highestVoted } = (
+    await weekRef(year, week).get()
+  ).data() as Stats;
   const blocks: KnownBlock[] = [];
 
   const dateTime = DateTime.fromObject({ weekYear: year, weekNumber: week });

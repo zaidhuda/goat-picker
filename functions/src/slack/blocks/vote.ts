@@ -1,7 +1,6 @@
 import { Block, BlockAction, KnownBlock } from '@slack/bolt';
 import { firestore } from 'firebase-admin';
-import { Profile } from '../../types/profile';
-import votesPath from '../../utils/firestorePaths';
+import { profileRef, votesCollectionRef } from '../../utils/firestorePaths';
 import getSlackAppUser from '../../utils/getSlackAppUser';
 import getWeek from '../../utils/getWeek';
 
@@ -15,23 +14,22 @@ export default async function slackVoteBlocks({
   );
 
   const blocks: KnownBlock[] = [];
-  const votedUserIds = [];
+  const votedUserIds: string[] = [];
   const appUser = await getSlackAppUser(user.id);
 
   if (appUser) {
     const { week, year } = getWeek();
-    const voteDocs = await firestore()
-      .collection(votesPath(year, week))
-      .where('voter', '==', firestore().doc(`profiles/${appUser.id}`))
+    const querySnapshot = await votesCollectionRef(year, week)
+      .where('voter', '==', profileRef(appUser.id))
       .get();
 
-    for await (const doc of voteDocs.docs) {
-      const { slackId } = (await doc.get('voted').get()).data() as Profile;
-
-      if (slackId) {
-        votedUserIds.push(slackId);
-      }
-    }
+    votedUserIds.push(
+      ...(await Promise.all(
+        querySnapshot.docs.map(async (doc) =>
+          (await doc.get('voted').get()).get('slackId')
+        )
+      ))
+    );
 
     blocks.push({
       type: 'input',
