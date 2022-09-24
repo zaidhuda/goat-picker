@@ -1,5 +1,4 @@
 import { Request, Response } from 'firebase-functions/v1';
-import { firestore } from 'firebase-admin';
 import pluralize from 'pluralize';
 import getWeek from '../utils/getWeek';
 import getSlackNames from '../utils/getSlackNames';
@@ -10,6 +9,7 @@ import {
   buildPlainTextSections,
 } from '../slack/blocks/builders';
 import { ActionsBlock } from '@slack/bolt';
+import { yearRef } from '../utils/firestorePaths';
 
 export default async function publishStats(
   req: Request,
@@ -19,7 +19,7 @@ export default async function publishStats(
 
   const { previousYear } = getWeek();
 
-  const stats = await firestore().doc(`years/${previousYear}`).get();
+  const stats = await yearRef(previousYear).get();
   const {
     highestVoted,
     highestVotes,
