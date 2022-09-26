@@ -24,7 +24,7 @@ export default async function publishWeeklyResults(
 
   if (highestVoted > 1) {
     const mostVotedProfiles = profileWithStats.filter(
-      ({ totalVotes }) => totalVotes === highestVoted
+      ({ totalVoted }) => totalVoted === highestVoted
     );
     const mostVotedNames = getSlackNames(mostVotedProfiles);
 

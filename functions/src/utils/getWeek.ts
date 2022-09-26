@@ -9,11 +9,10 @@ export default function getWeek(): {
   const now = DateTime.now();
   const year = now.weekYear;
   const week = now.weekNumber;
-  const firstWeek = week === 1;
-  const previousYear = firstWeek ? year - 1 : year;
-  const previousWeek = firstWeek
-    ? DateTime.local(previousYear, 2).weeksInWeekYear
-    : week - 1;
+
+  const lastWeek = now.minus({ weeks: 1 });
+  const previousYear = lastWeek.weekYear;
+  const previousWeek = lastWeek.weekNumber;
 
   return {
     year,
