@@ -26,8 +26,8 @@ export default async function slackResultModal({
       ...profileWithStats
         .sort(
           (a, b) =>
-            a.displayName.localeCompare(b.displayName) ||
-            a.totalVoted - b.totalVoted
+            b.totalVoted - a.totalVoted ||
+            a.displayName.localeCompare(b.displayName)
         )
         .filter(({ totalVoted }) => totalVoted > 0)
         .map<ContextBlock>((profile) => ({

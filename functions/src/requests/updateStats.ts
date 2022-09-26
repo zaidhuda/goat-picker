@@ -8,8 +8,8 @@ export default async function updateStats(
   req: Request,
   res: Response
 ): Promise<void> {
-  const { year: currentYear, week: currentWeek } = getWeek();
-  const { year = currentYear, week = currentWeek } = req.query;
+  const { previousYear, previousWeek } = getWeek();
+  const { year = previousYear, week = previousWeek } = req.query;
 
   const bulk = firestore().bulkWriter();
 
