@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import pluralize from 'pluralize';
 import { useRouter } from 'next/router';
-import { IconButton } from '@mui/material';
+import { Button, IconButton } from '@mui/material';
 import BallotIcon from '@mui/icons-material/Ballot';
 
 import useWeek from 'hooks/useWeek';
@@ -11,6 +11,7 @@ import Ranking from 'components/Ranking';
 import { getLayout } from 'components/Layout';
 import WeekNavigation from 'components/WeekNavigation';
 import WeekRangeLabel from 'components/WeekRangeLabel';
+import ParticipantsDialog from 'components/ParticipantsDialog';
 
 export default function GoatPage() {
   const { currentWeek, currentYear, getPrevWeek } = useWeek();
@@ -54,11 +55,21 @@ export default function GoatPage() {
           ) : null}
         </h1>
 
-        <p className="font-thin text-sm mt-1">
-          {participants.length > 0
-            ? `Voted by ${pluralize('person', participants.length, true)}`
-            : 'No votes'}
-        </p>
+        <ParticipantsDialog participants={participants}>
+          {({ setOpen }) => (
+            <Button
+              size="small"
+              onClick={() => setOpen(participants.length >= 5)}
+              disabled={participants.length < 5}
+            >
+              <span className="font-thin normal-case text-sm">
+                {participants.length > 0
+                  ? `Voted by ${pluralize('person', participants.length, true)}`
+                  : 'No votes'}
+              </span>
+            </Button>
+          )}
+        </ParticipantsDialog>
       </div>
 
       <Ranking options={votedOptions} />
