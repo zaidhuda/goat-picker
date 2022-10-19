@@ -3,34 +3,37 @@ import { useRouter } from 'next/dist/client/router';
 import { Flipper } from 'react-flip-toolkit';
 
 import OptionCard from './OptionCard';
-import { Profile } from 'types/profile';
+import { ProfileWithStats } from 'types/profile';
 
 interface Props {
-  options: (Profile & { votes: number })[];
+  profiles?: Omit<ProfileWithStats, 'totalVotes'>[];
 }
 
-export default function Ranking({ options }: Props) {
+export default function Ranking({ profiles }: Props) {
   const { pathname } = useRouter();
 
-  const sortedOptions = useMemo(
+  const rankedProfiles = useMemo(
     () =>
-      options
-        .sort((a, b) => a.displayName.localeCompare(b.displayName))
-        .sort((a, b) => b.votes - a.votes),
-    [options]
+      profiles
+        ?.sort((a, b) => a.displayName.localeCompare(b.displayName))
+        .sort((a, b) => b.totalVoted - a.totalVoted)
+        .filter((profile) => profile.totalVoted > 0) || [],
+    [profiles]
   );
 
   return (
-    <Flipper flipKey={`${pathname}-${options.map(({ id }) => id).join()}`}>
+    <Flipper
+      flipKey={`${pathname}-${rankedProfiles.map(({ id }) => id).join()}`}
+    >
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
-        {sortedOptions.map(({ id, displayName, photoURL, votes = 0 }) => (
+        {rankedProfiles.map(({ id, displayName, photoURL, totalVoted = 0 }) => (
           <OptionCard
             variant="ranking"
             key={id}
             id={id}
             displayName={displayName}
             photoURL={photoURL}
-            votes={votes}
+            votes={totalVoted}
           />
         ))}
       </div>
