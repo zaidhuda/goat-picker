@@ -73,7 +73,7 @@ export default function GoatPage() {
       </h2>
 
       <Ranking
-        options={profileWithStats
+        profiles={profileWithStats
           .map((profile) => ({
             ...profile,
             votes: profile.totalVoted,
@@ -96,7 +96,7 @@ export default function GoatPage() {
       </h2>
 
       <Ranking
-        options={profileWithStats
+        profiles={profileWithStats
           .map((profile) => ({
             ...profile,
             votes: profile.totalVotes,

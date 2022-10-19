@@ -34,11 +34,15 @@ export default async function getStats({
     [0, 0]
   ) as [number, number];
 
-  const profileWithStats = profiles.map((profile) => ({
-    ...profile,
-    totalVotes: allVotes.filter(({ voter }) => voter.id === profile.id).length,
-    totalVoted: allVotes.filter(({ voted }) => voted.id === profile.id).length,
-  }));
+  const profileWithStats = profiles
+    .map((profile) => ({
+      ...profile,
+      totalVotes: allVotes.filter(({ voter }) => voter.id === profile.id)
+        .length,
+      totalVoted: allVotes.filter(({ voted }) => voted.id === profile.id)
+        .length,
+    }))
+    .filter(({ totalVotes, totalVoted }) => totalVotes || totalVoted);
 
   const highestVoted = profileWithStats.reduce(
     (highest, { totalVoted }) => (totalVoted > highest ? totalVoted : highest),

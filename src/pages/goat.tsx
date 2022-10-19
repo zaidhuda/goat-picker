@@ -6,11 +6,11 @@ import { IconButton } from '@mui/material';
 import BallotIcon from '@mui/icons-material/Ballot';
 
 import useWeek from 'hooks/useWeek';
-import useOptions from 'hooks/useOptions';
 import Ranking from 'components/Ranking';
 import { getLayout } from 'components/Layout';
 import WeekNavigation from 'components/WeekNavigation';
 import WeekRangeLabel from 'components/WeekRangeLabel';
+import useWeeklyStats from 'hooks/useWeeklyStats';
 
 export default function GoatPage() {
   const { currentWeek, currentYear, getPrevWeek } = useWeek();
@@ -24,7 +24,7 @@ export default function GoatPage() {
 
   const isCurrentWeek = week === currentWeek;
 
-  const { participants, votedOptions } = useOptions(year, week);
+  const stats = useWeeklyStats(year, week);
 
   return (
     <div className="flex flex-col gap-8 pb-12 sm:pb-0">
@@ -55,13 +55,13 @@ export default function GoatPage() {
         </h1>
 
         <p className="font-thin text-sm mt-1">
-          {participants.length > 0
-            ? `Voted by ${pluralize('person', participants.length, true)}`
+          {stats?.totalParticipation
+            ? `Voted by ${pluralize('person', stats.totalParticipation, true)}`
             : 'No votes'}
         </p>
       </div>
 
-      <Ranking options={votedOptions} />
+      <Ranking profiles={stats?.profileWithStats} />
 
       {!isCurrentWeek ? (
         <Link href={{ pathname: '/stats', query: { year } }}>
