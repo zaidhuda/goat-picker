@@ -1,8 +1,8 @@
 import { createContext } from 'react';
 import { FirebaseApp } from 'firebase/app';
-import { Config } from 'types/config';
-import { Firestore } from 'firebase/firestore';
 import { User } from 'firebase/auth';
+import { Firestore } from 'firebase/firestore';
+import { Config } from 'types/config';
 
 const FirebaseContext = createContext<{
   ready?: boolean;

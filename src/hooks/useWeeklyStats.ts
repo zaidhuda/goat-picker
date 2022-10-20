@@ -1,10 +1,10 @@
-import useFirebase from './useFirebase';
 import { useEffect, useState } from 'react';
-import { AnnualStats, UserVote } from 'types/vote';
-import useVotes from './useVotes';
-import useProfiles from './useProfiles';
-import useWeek from './useWeek';
 import { doc, onSnapshot } from 'firebase/firestore';
+import { AnnualStats, UserVote } from 'types/vote';
+import useFirebase from './useFirebase';
+import useProfiles from './useProfiles';
+import useVotes from './useVotes';
+import useWeek from './useWeek';
 
 export default function useWeeklyStats(year: number, week: number) {
   const [stats, setStats] =

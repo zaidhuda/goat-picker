@@ -1,15 +1,14 @@
 import React from 'react';
-import Link from 'next/link';
-import pluralize from 'pluralize';
-import { useRouter } from 'next/router';
-import { IconButton } from '@mui/material';
 import { Ballot as BallotIcon } from '@mui/icons-material';
-
-import useWeek from 'hooks/useWeek';
-import Ranking from 'components/Ranking';
+import { IconButton } from '@mui/material';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import pluralize from 'pluralize';
 import { getLayout } from 'components/Layout';
+import Ranking from 'components/Ranking';
 import WeekNavigation from 'components/WeekNavigation';
 import WeekRangeLabel from 'components/WeekRangeLabel';
+import useWeek from 'hooks/useWeek';
 import useWeeklyStats from 'hooks/useWeeklyStats';
 
 export default function GoatPage() {

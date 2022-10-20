@@ -1,15 +1,18 @@
 import React, { Fragment } from 'react';
+import { Disclosure, Menu, Transition } from '@headlessui/react';
+import {
+  Menu as MenuIcon,
+  Close as CloseIcon,
+  DarkMode,
+  LightMode,
+} from '@mui/icons-material';
+import { Avatar, Button, ButtonBase, IconButton } from '@mui/material';
+import classNames from 'classnames';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import classNames from 'classnames';
-import { Menu as MenuIcon, Close as CloseIcon } from '@mui/icons-material';
-import { DarkMode, LightMode } from '@mui/icons-material';
-import { Avatar, Button, ButtonBase, IconButton } from '@mui/material';
-import { Disclosure, Menu, Transition } from '@headlessui/react';
-
-import useWeek from 'hooks/useWeek';
-import useFirebase from 'hooks/useFirebase';
 import useDarkMode from 'hooks/useDarkMode';
+import useFirebase from 'hooks/useFirebase';
+import useWeek from 'hooks/useWeek';
 
 export default function Navbar() {
   const { darkMode, toggleDarkMode } = useDarkMode();

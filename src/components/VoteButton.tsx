@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-
-import OptionCard from './OptionCard';
-import { Profile } from 'types/profile';
-import useVotes from 'hooks/useVotes';
 import { ButtonBase } from '@mui/material';
+import useVotes from 'hooks/useVotes';
+import { Profile } from 'types/profile';
+import OptionCard from './OptionCard';
 
 interface Props extends Profile {
   voted?: boolean;

@@ -1,11 +1,10 @@
 import React from 'react';
-import classNames from 'classnames';
-import { Flipped } from 'react-flip-toolkit';
 import { CheckCircle } from '@mui/icons-material';
 import { Badge as MuiBadge, BadgeProps, Avatar } from '@mui/material';
-
-import { Profile } from 'types/profile';
+import classNames from 'classnames';
+import { Flipped } from 'react-flip-toolkit';
 import useFirebase from 'hooks/useFirebase';
+import { Profile } from 'types/profile';
 
 interface Props extends Profile {
   voted?: boolean;

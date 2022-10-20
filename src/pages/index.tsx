@@ -1,6 +1,5 @@
-import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
-
+import { useRouter } from 'next/router';
 import LoginButton from 'components/LoginButton';
 import useFirebase from 'hooks/useFirebase';
 

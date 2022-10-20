@@ -1,5 +1,5 @@
-import { collection, onSnapshot } from 'firebase/firestore';
 import { useState, useEffect } from 'react';
+import { collection, onSnapshot } from 'firebase/firestore';
 import { Profile } from 'types/profile';
 import useFirebase from './useFirebase';
 

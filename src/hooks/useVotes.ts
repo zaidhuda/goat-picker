@@ -1,6 +1,3 @@
-import useWeek from './useWeek';
-import { UserVote } from 'types/vote';
-import useFirebase from './useFirebase';
 import { useCallback } from 'react';
 import {
   collection,
@@ -10,6 +7,9 @@ import {
   serverTimestamp,
   setDoc,
 } from 'firebase/firestore';
+import { UserVote } from 'types/vote';
+import useFirebase from './useFirebase';
+import useWeek from './useWeek';
 
 const collectionPath = (year: number, week: number) =>
   `years/${year}/weeks/${week < 10 ? `0${week}` : week}/votes`;

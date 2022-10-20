@@ -1,9 +1,8 @@
 import React, { useMemo } from 'react';
 import { useRouter } from 'next/dist/client/router';
 import { Flipper } from 'react-flip-toolkit';
-
-import OptionCard from './OptionCard';
 import { ProfileWithStats } from 'types/profile';
+import OptionCard from './OptionCard';
 
 interface Props {
   profiles?: Omit<ProfileWithStats, 'totalVotes'>[];

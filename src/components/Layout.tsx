@@ -1,5 +1,4 @@
 import React, { ReactNode } from 'react';
-
 import Navbar from './Navbar';
 
 export function getLayout(page: ReactNode) {

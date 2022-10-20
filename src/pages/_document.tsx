@@ -1,6 +1,6 @@
 import React from 'react';
-import Document, { Html, Head, Main, NextScript } from 'next/document';
 import ServerStyleSheets from '@mui/styles/ServerStyleSheets';
+import Document, { Html, Head, Main, NextScript } from 'next/document';
 import muiTheme from 'lib/muiTheme';
 
 export default class MyDocument extends Document {
