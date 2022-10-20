@@ -13,6 +13,7 @@ import {
   getFirestore,
   onSnapshot,
   setDoc,
+  Timestamp,
 } from 'firebase/firestore';
 import FirebaseContext from 'contexts/FirebaseContext';
 import { Config } from 'types/config';
@@ -97,7 +98,7 @@ export function useFirebaseProvider() {
       const { displayName, uid, photoURL } = user;
       setDoc(
         doc(db, PROFILES, uid),
-        { id: uid, displayName, photoURL },
+        { id: uid, displayName, photoURL, lastSeenAt: Timestamp.now() },
         { merge: true }
       );
     }

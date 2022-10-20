@@ -1,0 +1,30 @@
+diff --git a/lib/css/preflight.css b/lib/css/preflight.css
+index bf36495d2371017f3be26f073d5ab09ed8ba5977..00f90c678f073f8f885bb15f3a6448530d29bf73 100644
+--- a/lib/css/preflight.css
++++ b/lib/css/preflight.css
+@@ -186,8 +186,8 @@ button,
+ [type='reset'],
+ [type='submit'] {
+   -webkit-appearance: button; /* 1 */
+-  background-color: transparent; /* 2 */
+-  background-image: none; /* 2 */
++  /* background-color: transparent; 2 */
++  /* background-image: none; 2 */
+ }
+ 
+ /*
+diff --git a/src/css/preflight.css b/src/css/preflight.css
+index bf36495d2371017f3be26f073d5ab09ed8ba5977..00f90c678f073f8f885bb15f3a6448530d29bf73 100644
+--- a/src/css/preflight.css
++++ b/src/css/preflight.css
+@@ -186,8 +186,8 @@ button,
+ [type='reset'],
+ [type='submit'] {
+   -webkit-appearance: button; /* 1 */
+-  background-color: transparent; /* 2 */
+-  background-image: none; /* 2 */
++  /* background-color: transparent; 2 */
++  /* background-image: none; 2 */
+ }
+ 
+ /*

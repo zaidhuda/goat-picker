@@ -18,7 +18,18 @@ export default function useProfiles() {
           data.push({ id: doc.id, ...doc.data() } as Profile);
         });
         setProfiles(
-          data.sort((a, b) => (a.displayName > b.displayName ? 1 : -1))
+          data.sort(
+            (
+              { displayName: a, hidden: a2 },
+              { displayName: b, hidden: b2 }
+            ) => {
+              if (a2 === b2) {
+                return a.localeCompare(b);
+              }
+
+              return a2 ? 1 : -1;
+            }
+          )
         );
       });
     }
