@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react';
+import { Poll as PollIcon } from '@mui/icons-material';
+import { IconButton, LinearProgress } from '@mui/material';
 import Link from 'next/link';
 import pluralize from 'pluralize';
-import { IconButton, LinearProgress } from '@mui/material';
-import { Poll as PollIcon } from '@mui/icons-material';
-import VoteButton from 'components/VoteButton';
 import { getLayout } from 'components/Layout';
+import VoteButton from 'components/VoteButton';
+import WeekNavigation from 'components/WeekNavigation';
 import WeekRangeLabel from 'components/WeekRangeLabel';
-import useWeek from 'hooks/useWeek';
-import useVotes from 'hooks/useVotes';
 import useFirebase from 'hooks/useFirebase';
 import useProfiles from 'hooks/useProfiles';
+import useVotes from 'hooks/useVotes';
+import useWeek from 'hooks/useWeek';
 import { UserVote } from 'types/vote';
-import WeekNavigation from 'components/WeekNavigation';
 
 export default function VotePage() {
   const [loading, setLoading] = useState(false);

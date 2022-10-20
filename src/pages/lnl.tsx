@@ -1,10 +1,9 @@
 import React from 'react';
 import { Avatar, AvatarGroup, ButtonBase } from '@mui/material';
 import classNames from 'classnames';
-
+import { getLayout } from 'components/Layout';
 import Loader from 'components/Loader';
 import useLnLLists from 'hooks/useLnLLists';
-import { getLayout } from 'components/Layout';
 
 export default function ProfilesPage() {
   const lnl = useLnLLists();

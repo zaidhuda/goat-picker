@@ -1,7 +1,7 @@
 import React from 'react';
+import AttendanceTable from 'components/Attendance/Table';
 import { getLayout } from 'components/Layout';
 import WeekNavigation from 'components/WeekNavigation';
-import AttendanceTable from 'components/Attendance/Table';
 
 export default function AttendancePage() {
   return (

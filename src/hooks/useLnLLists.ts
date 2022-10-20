@@ -1,8 +1,8 @@
-import useFirebase from './useFirebase';
 import { useEffect, useState } from 'react';
-import { TrelloCard } from 'types/trello';
-import { DateTime } from 'luxon';
 import { doc, onSnapshot } from 'firebase/firestore';
+import { DateTime } from 'luxon';
+import { TrelloCard } from 'types/trello';
+import useFirebase from './useFirebase';
 
 type RawTrelloCard = TrelloCard & { start: string };
 

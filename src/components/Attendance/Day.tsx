@@ -1,15 +1,15 @@
 import React, { useRef, useEffect, useMemo, useState } from 'react';
-import classnames from 'classnames';
-import useAttendances from 'hooks/useAttendances';
-import { Profile } from 'types/profile';
-import { DateTime } from 'luxon';
-import useFirebase from 'hooks/useFirebase';
 import {
   Avatar,
   AvatarGroup,
   ButtonBase,
   CircularProgress,
 } from '@mui/material';
+import classnames from 'classnames';
+import { DateTime } from 'luxon';
+import useAttendances from 'hooks/useAttendances';
+import useFirebase from 'hooks/useFirebase';
+import { Profile } from 'types/profile';
 
 interface Props {
   date: DateTime;

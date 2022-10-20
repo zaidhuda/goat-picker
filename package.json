@@ -8,7 +8,7 @@
     "start": "yarn next start",
     "export": "yarn next build && yarn next export",
     "lint": "yarn next lint",
-    "lint:fix": "yarn next lint ./src --fix",
+    "lint:fix": "yarn next lint --fix",
     "postinstall": "husky install"
   },
   "lint-staged": {

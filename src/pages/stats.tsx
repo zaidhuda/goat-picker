@@ -1,13 +1,12 @@
 import React from 'react';
-import { useRouter } from 'next/router';
-
-import { getLayout } from 'components/Layout';
-import useStats from 'hooks/useStats';
-import pluralize from 'pluralize';
-import Ranking from 'components/Ranking';
-import { DateTime } from 'luxon';
 import { Button } from '@mui/material';
+import { DateTime } from 'luxon';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
+import pluralize from 'pluralize';
+import { getLayout } from 'components/Layout';
+import Ranking from 'components/Ranking';
+import useStats from 'hooks/useStats';
 
 export default function GoatPage() {
   const {

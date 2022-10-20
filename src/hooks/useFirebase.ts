@@ -1,14 +1,5 @@
 import { useState, useEffect, useCallback, useContext } from 'react';
-import FirebaseContext from 'contexts/FirebaseContext';
-import { Config } from 'types/config';
 import { FirebaseApp, initializeApp } from 'firebase/app';
-import {
-  doc,
-  Firestore,
-  getFirestore,
-  onSnapshot,
-  setDoc,
-} from 'firebase/firestore';
 import {
   Auth,
   getAuth,
@@ -16,6 +7,15 @@ import {
   signInWithPopup as firebaseSignInWithPopup,
   User,
 } from 'firebase/auth';
+import {
+  doc,
+  Firestore,
+  getFirestore,
+  onSnapshot,
+  setDoc,
+} from 'firebase/firestore';
+import FirebaseContext from 'contexts/FirebaseContext';
+import { Config } from 'types/config';
 
 const PROFILES = 'profiles';
 const CONFIGS = 'configs';

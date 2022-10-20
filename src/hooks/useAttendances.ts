@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import {
   collection,
   deleteDoc,
@@ -6,7 +7,6 @@ import {
   setDoc,
 } from 'firebase/firestore';
 import { DateTime } from 'luxon';
-import { useCallback } from 'react';
 import { Profile } from 'types/profile';
 import useFirebase from './useFirebase';
 

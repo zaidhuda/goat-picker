@@ -1,11 +1,11 @@
 import React from 'react';
+import { ArrowForwardIos, ArrowBackIosNew } from '@mui/icons-material';
+import { Button } from '@mui/material';
+import classNames from 'classnames';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { ArrowForwardIos, ArrowBackIosNew } from '@mui/icons-material';
 import useWeek from 'hooks/useWeek';
-import { Button } from '@mui/material';
 import WeekGraph from './WeekGraph';
-import classNames from 'classnames';
 
 interface Props {
   hidePrevWeek?: boolean;

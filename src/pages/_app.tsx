@@ -1,19 +1,18 @@
 import 'styles/global.css';
 
 import { ReactElement, ReactNode, useEffect } from 'react';
-import Head from 'next/head';
+import { ThemeProvider } from '@mui/material/styles';
+import { Settings } from 'luxon';
+import { NextPage } from 'next';
 import type { AppProps } from 'next/app';
+import Head from 'next/head';
 import Router, { useRouter } from 'next/router';
 import NProgress from 'nprogress';
-
 import Loader from 'components/Loader';
-import { NextPage } from 'next';
-import { useFirebaseProvider } from 'hooks/useFirebase';
 import FirebaseContext from 'contexts/FirebaseContext';
-import muiTheme from 'lib/muiTheme';
 import useDarkMode from 'hooks/useDarkMode';
-import { Settings } from 'luxon';
-import { ThemeProvider } from '@mui/material/styles';
+import { useFirebaseProvider } from 'hooks/useFirebase';
+import muiTheme from 'lib/muiTheme';
 
 Settings.defaultZone = 'Asia/Kuala_Lumpur';
 NProgress.configure({ showSpinner: false, trickleSpeed: 100 });

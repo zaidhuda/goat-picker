@@ -1,8 +1,7 @@
 import React from 'react';
-
+import { Avatar } from '@mui/material';
 import { getLayout } from 'components/Layout';
 import useProfiles from 'hooks/useProfiles';
-import { Avatar } from '@mui/material';
 
 export default function ProfilesPage() {
   const profiles = useProfiles();

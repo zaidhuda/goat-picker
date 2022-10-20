@@ -1,9 +1,9 @@
 import React, { useMemo, useState } from 'react';
-import { useRouter } from 'next/router';
-import { DateTime } from 'luxon';
-import AttendanceDay from './Day';
 import { Button } from '@mui/material';
+import { DateTime } from 'luxon';
+import { useRouter } from 'next/router';
 import useWeek from 'hooks/useWeek';
+import AttendanceDay from './Day';
 
 export default function AttendanceTable() {
   const [weekendsVisible, showWeekends] = useState(false);
