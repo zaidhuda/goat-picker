@@ -2,6 +2,7 @@ import useFirebase from './useFirebase';
 import { useEffect, useState } from 'react';
 import { TrelloCard } from 'types/trello';
 import { DateTime } from 'luxon';
+import { doc, onSnapshot } from 'firebase/firestore';
 
 type RawTrelloCard = TrelloCard & { start: string };
 
@@ -13,7 +14,7 @@ export default function useLnLLists() {
     const today = DateTime.local().startOf('day');
 
     if (db) {
-      db.doc('lnl/upcoming').onSnapshot((doc) => {
+      return onSnapshot(doc(db, 'lnl/upcoming'), (doc) => {
         const { schedules } = doc.data() as { schedules: RawTrelloCard[] };
         setCards(
           schedules

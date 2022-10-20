@@ -1,3 +1,4 @@
+import { collection, onSnapshot } from 'firebase/firestore';
 import { useState, useEffect } from 'react';
 import { Profile } from 'types/profile';
 import useFirebase from './useFirebase';
@@ -11,7 +12,7 @@ export default function useProfiles() {
 
   useEffect(() => {
     if (db && user) {
-      return db.collection(PROFILES).onSnapshot((querySnapshot) => {
+      return onSnapshot(collection(db, PROFILES), (querySnapshot) => {
         const data: Profile[] = [];
         querySnapshot.forEach((doc) => {
           data.push({ id: doc.id, ...doc.data() } as Profile);

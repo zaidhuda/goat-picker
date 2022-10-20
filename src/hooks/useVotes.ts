@@ -1,9 +1,15 @@
-import firebase from 'firebase/app';
-import 'firebase/firestore';
 import useWeek from './useWeek';
 import { UserVote } from 'types/vote';
 import useFirebase from './useFirebase';
 import { useCallback } from 'react';
+import {
+  collection,
+  deleteDoc,
+  doc,
+  onSnapshot,
+  serverTimestamp,
+  setDoc,
+} from 'firebase/firestore';
 
 const collectionPath = (year: number, week: number) =>
   `years/${year}/weeks/${week < 10 ? `0${week}` : week}/votes`;
@@ -17,15 +23,20 @@ export default function useVotes() {
     if (db && user) {
       if (user.uid === id) return;
 
-      db.collection(collectionPath(currentYear, currentWeek))
-        .doc(docPath(user.uid, id))
-        .set({
-          voter: db.doc(`profiles/${user.uid}`),
-          voted: db.doc(`profiles/${id}`),
+      setDoc(
+        doc(
+          db,
+          collectionPath(currentYear, currentWeek),
+          docPath(user.uid, id)
+        ),
+        {
+          voter: doc(db, `profiles/${user.uid}`),
+          voted: doc(db, `profiles/${id}`),
           year: currentYear,
           week: currentWeek,
-          timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-        })
+          timestamp: serverTimestamp(),
+        }
+      )
         .then(resolve)
         .catch(console.error);
     }
@@ -33,9 +44,9 @@ export default function useVotes() {
 
   const removeVote = (id: string, resolve?: () => void) => {
     if (db && user) {
-      db.collection(collectionPath(currentYear, currentWeek))
-        .doc(docPath(user.uid, id))
-        .delete()
+      deleteDoc(
+        doc(db, collectionPath(currentYear, currentWeek), docPath(user.uid, id))
+      )
         .then(resolve)
         .catch(console.error);
     }
@@ -44,9 +55,9 @@ export default function useVotes() {
   const getVotes = useCallback(
     (year: number, week: number, resolve: (value: UserVote[]) => void) => {
       if (db && user) {
-        return db
-          .collection(collectionPath(year, week))
-          .onSnapshot((querySnapshot) => {
+        return onSnapshot(
+          collection(db, collectionPath(year, week)),
+          (querySnapshot) => {
             const data: UserVote[] = [];
             querySnapshot.forEach((doc) => {
               data.push({
@@ -55,7 +66,8 @@ export default function useVotes() {
               });
             });
             resolve(data);
-          });
+          }
+        );
       }
     },
     [db, user]
