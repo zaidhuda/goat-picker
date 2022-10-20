@@ -3,7 +3,7 @@ import Link from 'next/link';
 import pluralize from 'pluralize';
 import { useRouter } from 'next/router';
 import { IconButton } from '@mui/material';
-import BallotIcon from '@mui/icons-material/Ballot';
+import { Ballot as BallotIcon } from '@mui/icons-material';
 
 import useWeek from 'hooks/useWeek';
 import Ranking from 'components/Ranking';

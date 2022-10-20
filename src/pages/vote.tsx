@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import pluralize from 'pluralize';
 import { IconButton, LinearProgress } from '@mui/material';
-import PollIcon from '@mui/icons-material/Poll';
+import { Poll as PollIcon } from '@mui/icons-material';
 import VoteButton from 'components/VoteButton';
 import { getLayout } from 'components/Layout';
 import WeekRangeLabel from 'components/WeekRangeLabel';

@@ -1,0 +1,4 @@
+/.yarn/releases/** binary
+/.yarn/plugins/** binary
+.pnp.cjs binary
+.pnp.loader.mjs binary

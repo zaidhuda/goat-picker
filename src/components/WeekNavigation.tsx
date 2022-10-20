@@ -1,8 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import ArrowForwardIos from '@mui/icons-material/ArrowForwardIos';
-import ArrowBackIosNew from '@mui/icons-material/ArrowBackIosNew';
+import { ArrowForwardIos, ArrowBackIosNew } from '@mui/icons-material';
 import useWeek from 'hooks/useWeek';
 import { Button } from '@mui/material';
 import WeekGraph from './WeekGraph';
