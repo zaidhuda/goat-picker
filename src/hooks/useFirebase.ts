@@ -14,7 +14,7 @@ export function useFirebaseProvider() {
   const [db, setDatabase] = useState<firebase.firestore.Firestore>();
   const [functions, setFunctions] = useState<firebase.functions.Functions>();
   const [user, setUser] = useState<firebase.User | null>();
-  const [configs, setConfigs] = useState<{ [key in Config]?: any }>({});
+  const [configs, setConfigs] = useState<{ [key in Config]?: unknown }>({});
 
   // *** Auth API ***
 
@@ -103,9 +103,9 @@ export function useFirebaseProvider() {
     if (app && db) {
       return db
         .collection(CONFIGS)
-        .doc((app.options as any).appId)
+        .doc((app.options as { appId: string }).appId)
         .onSnapshot((doc) =>
-          setConfigs(doc.data() as { [key in Config]?: any })
+          setConfigs(doc.data() as { [key in Config]?: unknown })
         );
     }
   }, [app, db]);
