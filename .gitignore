@@ -47,6 +47,7 @@ build/Release
 /build
 /.next
 /out
+tsconfig.tsbuildinfo
 
 # Dependency directories
 node_modules/
