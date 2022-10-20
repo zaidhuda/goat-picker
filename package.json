@@ -100,5 +100,8 @@
     "typescript": "^4.8.4",
     "web-vitals": "^1.0.1"
   },
-  "packageManager": "yarn@3.2.4"
+  "packageManager": "yarn@3.2.4",
+  "resolutions": {
+    "tailwindcss@^3.1.8": "patch:tailwindcss@npm%3A3.1.8#./.yarn/patches/tailwindcss-npm-3.1.8-cd1248272f.patch"
+  }
 }
