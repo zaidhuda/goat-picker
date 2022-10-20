@@ -1,3 +1,10 @@
+import {
+  collection,
+  deleteDoc,
+  doc,
+  onSnapshot,
+  setDoc,
+} from 'firebase/firestore';
 import { DateTime } from 'luxon';
 import { useCallback } from 'react';
 import { Profile } from 'types/profile';
@@ -10,13 +17,14 @@ export default function useAttendances() {
 
   const addAttendance = (date: DateTime, resolve?: (value: void) => void) => {
     if (db && user) {
-      db.collection(`${ATTENDANCES}/${date.toISODate()}/attendances`)
-        .doc(user.uid)
-        .set({
+      setDoc(
+        doc(db, `${ATTENDANCES}/${date.toISODate()}/attendances/${user.uid}`),
+        {
           id: user.uid,
           displayName: user.displayName,
           photoURL: user.photoURL,
-        })
+        }
+      )
         .then(resolve)
         .catch(console.error);
     }
@@ -27,9 +35,9 @@ export default function useAttendances() {
     resolve?: (value: void) => void
   ) => {
     if (db && user) {
-      db.collection(`${ATTENDANCES}/${date.toISODate()}/attendances`)
-        .doc(user.uid)
-        .delete()
+      deleteDoc(
+        doc(db, `${ATTENDANCES}/${date.toISODate()}/attendances/${user.uid}`)
+      )
         .then(resolve)
         .catch(console.error);
     }
@@ -38,15 +46,16 @@ export default function useAttendances() {
   const getAttendances = useCallback(
     (date: DateTime, resolve: (value: Profile[]) => void) => {
       if (db && user) {
-        return db
-          .collection(`${ATTENDANCES}/${date.toISODate()}/attendances`)
-          .onSnapshot((querySnapshot) => {
+        return onSnapshot(
+          collection(db, `${ATTENDANCES}/${date.toISODate()}/attendances`),
+          (querySnapshot) => {
             const data: Profile[] = [];
             querySnapshot.forEach((doc) => {
               data.push(doc.data() as Profile);
             });
             resolve(data);
-          });
+          }
+        );
       }
     },
     [db, user]

@@ -1,11 +1,10 @@
-import firebase from 'firebase/app';
-import 'firebase/firestore';
+import { DocumentReference } from 'firebase/firestore';
 import { Profile, ProfileWithStats } from './profile';
 
 export type UserVote = {
   id: string;
-  voted: firebase.firestore.DocumentReference<Profile>;
-  voter: firebase.firestore.DocumentReference<Profile>;
+  voted: DocumentReference<Profile>;
+  voter: DocumentReference<Profile>;
   year: number;
   week: number;
 };

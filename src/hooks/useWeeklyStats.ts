@@ -4,6 +4,7 @@ import { AnnualStats, UserVote } from 'types/vote';
 import useVotes from './useVotes';
 import useProfiles from './useProfiles';
 import useWeek from './useWeek';
+import { doc, onSnapshot } from 'firebase/firestore';
 
 export default function useWeeklyStats(year: number, week: number) {
   const [stats, setStats] =
@@ -15,11 +16,12 @@ export default function useWeeklyStats(year: number, week: number) {
 
   useEffect(() => {
     if (db && currentWeek !== week) {
-      return db
-        .doc(`years/${year}/weeks/${week < 10 ? `0${week}` : `${week}`}`)
-        .onSnapshot((doc) => {
+      return onSnapshot(
+        doc(db, `years/${year}/weeks/${week < 10 ? `0${week}` : `${week}`}`),
+        (doc) => {
           setStats(doc.data() as AnnualStats);
-        });
+        }
+      );
     }
 
     return getVotes(year, week, (votes: UserVote[]) => {
