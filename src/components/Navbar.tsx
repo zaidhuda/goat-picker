@@ -24,24 +24,25 @@ export default function Navbar() {
   const navigation = [
     {
       name: 'Vote',
-      href: '/vote',
-      current: pathname.startsWith('/vote'),
+      url: {
+        pathname: '/vote',
+      },
     },
     {
       name: `${lastYear}`,
-      href: `/stats?year=${lastYear}`,
-      current: pathname.startsWith('/stats'),
+      url: {
+        pathname: '/stats',
+        query: {
+          year: lastYear,
+        },
+      },
       hidden: currentWeek > 1,
     },
     {
-      name: 'Attendance',
-      href: '/attendances',
-      current: pathname.startsWith('/attendances'),
-    },
-    {
       name: 'LnL',
-      href: '/lnl',
-      current: pathname.startsWith('/lnl'),
+      url: {
+        pathname: '/lnl',
+      },
     },
   ];
 
@@ -50,15 +51,17 @@ export default function Navbar() {
       {navigation
         .filter(({ hidden }) => !hidden)
         .map((item) => (
-          <Link key={item.name} href={item.href} passHref>
+          <Link key={item.name} href={item.url} passHref>
             <Button
               onClick={close}
               color="inherit"
               className={classNames(
                 'hover:!bg-gray-900 w-full sm:w-auto',
-                item.current ? 'text-white' : 'text-gray-300',
+                pathname.startsWith(item.url.pathname)
+                  ? 'text-white'
+                  : 'text-gray-300',
                 {
-                  '!bg-gray-900': item.current,
+                  '!bg-gray-900': pathname.startsWith(item.url.pathname),
                 }
               )}
             >
