@@ -3,28 +3,11 @@ import { Menu, Transition } from '@headlessui/react';
 import { MoreVert } from '@mui/icons-material';
 import { Avatar, Button, IconButton } from '@mui/material';
 import classNames from 'classnames';
-import { Timestamp } from 'firebase/firestore';
-import { DateTime } from 'luxon';
+import LastSeen from 'components/LastSeen';
 import { getLayout } from 'components/Layout';
+import useFirebase from 'hooks/useFirebase';
 import useProfiles from 'hooks/useProfiles';
 import { Profile } from 'types/profile';
-
-const renderLastSeen = (lastSeen?: Timestamp) => {
-  if (!lastSeen) {
-    return 'Never';
-  }
-
-  const lastSeenDate = DateTime.fromJSDate(lastSeen.toDate());
-  const minutesSince = lastSeenDate.until(DateTime.now()).length('minutes');
-
-  if (minutesSince < 1) {
-    return 'Just now';
-  } else if (minutesSince < 15) {
-    return lastSeenDate.toRelative();
-  } else {
-    return lastSeenDate.toJSDate().toLocaleString();
-  }
-};
 
 type MenuAction =
   | 'slackId'
@@ -90,14 +73,18 @@ const ProfileMenu = ({
 );
 
 export default function ProfilesPage() {
+  const { user } = useFirebase();
   const [showAll, setShowAll] = useState(false);
 
   const profiles = useProfiles();
+  const currentUser = profiles.find((profile) => profile.id === user?.uid);
 
   const handleMenuClick =
     ({ slackId, displayName }: Profile) =>
     (action: MenuAction) =>
     () => {
+      if (!currentUser?.isAdmin) return;
+
       switch (action) {
         case 'slackId':
           const newSlackId = prompt(`Update ${displayName} Slack ID:`, slackId);
@@ -135,7 +122,7 @@ export default function ProfilesPage() {
             <th className="py-3">#</th>
             <th className="text-left">Name</th>
             <th className="hidden md:table-cell">Last Seen</th>
-            <th />
+            {currentUser?.isAdmin ? <th /> : null}
           </tr>
         </thead>
         <tbody>
@@ -165,14 +152,16 @@ export default function ProfilesPage() {
                   </div>
                 </td>
                 <td className="text-center hidden md:table-cell">
-                  {renderLastSeen(profile.lastSeenAt)}
+                  <LastSeen lastSeen={profile.lastSeenAt} />
                 </td>
-                <td className="px-2" width={1}>
-                  <ProfileMenu
-                    profile={profile}
-                    onMenuClick={handleMenuClick(profile)}
-                  />
-                </td>
+                {currentUser?.isAdmin ? (
+                  <td className="px-2" width={1}>
+                    <ProfileMenu
+                      profile={profile}
+                      onMenuClick={handleMenuClick(profile)}
+                    />
+                  </td>
+                ) : null}
               </tr>
             ))}
         </tbody>
