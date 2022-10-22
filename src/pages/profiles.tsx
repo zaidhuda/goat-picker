@@ -105,7 +105,11 @@ const ProfileMenu = ({
   </Menu>
 );
 
-export default function ProfilesPage() {
+type Props = {
+  as?: 'page' | 'component';
+};
+
+export default function ProfilesPage({ as = 'page' }: Props) {
   const { user } = useFirebase();
   const profiles = useProfiles();
   const { updateUser } = useProfileManager(user);
@@ -158,10 +162,8 @@ export default function ProfilesPage() {
       }
     };
 
-  return (
-    <div className="space-y-12">
-      <h1 className="font-light text-4xl">Users</h1>
-
+  const profilesTable = (
+    <>
       <table className="table-auto w-full cursor-default">
         <thead>
           <tr>
@@ -227,6 +229,16 @@ export default function ProfilesPage() {
       >
         {showAll ? 'Hide Inactive' : 'Show All'}
       </Button>
+    </>
+  );
+
+  if (as === 'component') return profilesTable;
+
+  return (
+    <div className="space-y-12">
+      <h1 className="font-light text-4xl">Users</h1>
+
+      {profilesTable}
     </div>
   );
 }
