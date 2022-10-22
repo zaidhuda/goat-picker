@@ -21,7 +21,7 @@ export default function OptionCard({
   variant,
 }: Props) {
   const { user } = useFirebase();
-  const isCurrentUser = id === user?.uid;
+  const isCurrentUser = id === user?.id;
 
   const color = () => {
     switch (votes) {

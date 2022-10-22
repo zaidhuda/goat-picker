@@ -1,16 +1,15 @@
 import React, { Fragment } from 'react';
-import { Disclosure, Menu, Transition } from '@headlessui/react';
+import { Disclosure, Transition } from '@headlessui/react';
 import { Menu as MenuIcon, Close as CloseIcon } from '@mui/icons-material';
-import { Avatar, Button, ButtonBase, IconButton } from '@mui/material';
+import { Button, IconButton } from '@mui/material';
 import classNames from 'classnames';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import useFirebase from 'hooks/useFirebase';
 import useWeek from 'hooks/useWeek';
+import NavbarUserMenu from './NavbarUserMenu';
 import ThemeIcon from './ThemeIcon';
 
 export default function Navbar() {
-  const { user, signOut } = useFirebase();
   const { pathname } = useRouter();
   const { currentWeek, currentYear } = useWeek();
   const lastYear = currentYear - 1;
@@ -106,42 +105,7 @@ export default function Navbar() {
               <div className="absolute inset-y-0 right-0 flex items-center gap-x-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                 <ThemeIcon />
 
-                {user ? (
-                  <Menu as="div" className="relative inline-block text-left">
-                    <Menu.Button
-                      as={ButtonBase}
-                      color="inherit"
-                      className="!rounded-full !outline !outline-offset-2 focus:!outline-2"
-                    >
-                      <Avatar
-                        src={user.photoURL as string}
-                        title={user.displayName as string}
-                        sx={{ width: 36, height: 36 }}
-                      />
-                    </Menu.Button>
-                    <Transition
-                      as={Fragment}
-                      enter="transition ease-out duration-100"
-                      enterFrom="opacity-0 scale-95"
-                      enterTo="opacity-100 scale-100"
-                      leave="transition ease-in duration-75"
-                      leaveFrom="opacity-100 scale-100"
-                      leaveTo="opacity-0 scale-95"
-                    >
-                      <Menu.Items className="absolute right-0 w-36 mt-2 origin-top-right bg-white dark:bg-gray-700 rounded-md outline-none drop-shadow-lg z-10">
-                        <Menu.Item
-                          as={Button}
-                          onClick={signOut}
-                          fullWidth
-                          color="warning"
-                          className="!normal-case"
-                        >
-                          Logout
-                        </Menu.Item>
-                      </Menu.Items>
-                    </Transition>
-                  </Menu>
-                ) : null}
+                <NavbarUserMenu />
               </div>
             </div>
           </div>

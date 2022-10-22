@@ -10,6 +10,7 @@ import {
 import {
   doc,
   Firestore,
+  getDoc,
   getFirestore,
   onSnapshot,
   setDoc,
@@ -17,6 +18,7 @@ import {
 } from 'firebase/firestore';
 import FirebaseContext from 'contexts/FirebaseContext';
 import { Config } from 'types/config';
+import { Profile } from 'types/profile';
 
 const PROFILES = 'profiles';
 const CONFIGS = 'configs';
@@ -24,7 +26,7 @@ const CONFIGS = 'configs';
 export function useFirebaseProvider() {
   const [app, setApp] = useState<FirebaseApp>();
   const [auth, setAuth] = useState<Auth>();
-  const [user, setUser] = useState<User | null>();
+  const [user, setUser] = useState<Profile | null>();
   const [db, setDatabase] = useState<Firestore>();
   const [configs, setConfigs] = useState<{ [key in Config]?: unknown }>({});
 
@@ -37,15 +39,41 @@ export function useFirebaseProvider() {
   };
 
   const signOut = useCallback(() => {
-    if (auth && user) {
+    if (auth) {
       auth.signOut().catch(console.error);
     }
-  }, [auth, user]);
+  }, [auth]);
 
   const getConfig = useCallback(
     <T>(config: Config, defaultValue: T) =>
       (configs[config] || defaultValue) as T,
     [configs]
+  );
+
+  // Add user to options
+  const saveUser = useCallback(
+    (user: User) => {
+      if (db && user) {
+        const { displayName, uid, photoURL } = user;
+        const docRef = doc(db, PROFILES, uid);
+        setDoc(
+          docRef,
+          {
+            id: uid,
+            displayName,
+            photoURL,
+            hidden: false,
+            lastSeenAt: Timestamp.now(),
+          },
+          { merge: true }
+        ).then(() =>
+          getDoc(docRef).then((doc) => setUser(doc.data() as Profile))
+        );
+      } else {
+        setUser(null);
+      }
+    },
+    [db]
   );
 
   // Initialize Firebase app
@@ -78,37 +106,19 @@ export function useFirebaseProvider() {
   // Reset state on auth state change
   useEffect(() => {
     const EMAIL_DOMAIN = getConfig<string>('EMAIL_DOMAIN', '');
-    if (auth && EMAIL_DOMAIN) {
-      return auth?.onAuthStateChanged((newUser) => {
-        if (newUser?.email?.endsWith(EMAIL_DOMAIN)) {
-          setUser(newUser);
-        } else if (newUser?.email) {
+    if (db && auth && EMAIL_DOMAIN) {
+      return auth?.onAuthStateChanged((authState) => {
+        if (authState?.email?.endsWith(EMAIL_DOMAIN)) {
+          saveUser(authState);
+        } else if (authState?.email) {
           alert(`${EMAIL_DOMAIN} email only`);
           signOut();
         } else {
-          setUser(newUser);
+          setUser(null);
         }
       });
     }
-  }, [auth, getConfig, signOut]);
-
-  // Add user to options
-  useEffect(() => {
-    if (db && user) {
-      const { displayName, uid, photoURL } = user;
-      setDoc(
-        doc(db, PROFILES, uid),
-        {
-          id: uid,
-          displayName,
-          photoURL,
-          hidden: false,
-          lastSeenAt: Timestamp.now(),
-        },
-        { merge: true }
-      );
-    }
-  }, [db, user]);
+  }, [db, auth, getConfig, saveUser, signOut]);
 
   useEffect(() => {
     if (db) {

@@ -23,12 +23,12 @@ export default function VotePage() {
   const { currentWeek, currentYear } = useWeek();
 
   const userVotes = votes
-    .filter(({ voter }) => voter.id === user?.uid)
+    .filter(({ voter }) => voter.id === user?.id)
     .map(({ voted }) => voted.id);
 
   const optionsWithoutUser = profiles
     .filter(({ hidden }) => !hidden)
-    .filter(({ id }) => id !== user?.uid);
+    .filter(({ id }) => id !== user?.id);
 
   const availableVotes = Math.max(MAX_VOTES_PER_USER - userVotes.length);
 

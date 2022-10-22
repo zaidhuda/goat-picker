@@ -108,15 +108,14 @@ const ProfileMenu = ({
 export default function ProfilesPage() {
   const { user } = useFirebase();
   const profiles = useProfiles();
-  const currentUser = profiles.find((profile) => profile.id === user?.uid);
-  const { updateUser } = useProfileManager(currentUser);
+  const { updateUser } = useProfileManager(user);
   const [showAll, setShowAll] = useState(false);
 
   const handleMenuClick =
     ({ id, slackId, displayName }: Profile) =>
     (action: MenuAction) =>
     () => {
-      if (!currentUser?.isAdmin) return;
+      if (!user?.isAdmin) return;
 
       switch (action) {
         case 'slackId': {
@@ -169,7 +168,7 @@ export default function ProfilesPage() {
             <th className="py-3">#</th>
             <th className="text-left">Name</th>
             <th className="hidden md:table-cell">Last Seen</th>
-            {currentUser?.isAdmin ? <th /> : null}
+            {user?.isAdmin ? <th /> : null}
           </tr>
         </thead>
         <tbody>
@@ -207,7 +206,7 @@ export default function ProfilesPage() {
                 <td className="text-center hidden md:table-cell">
                   <LastSeen lastSeen={profile.lastSeenAt} />
                 </td>
-                {currentUser?.isAdmin ? (
+                {user?.isAdmin ? (
                   <td className="px-2" width={1}>
                     <ProfileMenu
                       profile={profile}
