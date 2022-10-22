@@ -111,16 +111,15 @@ export function useFirebaseProvider() {
   }, [db, user]);
 
   useEffect(() => {
-    if (app && app.options.appId && db) {
-      return onSnapshot(doc(db, CONFIGS, app.options.appId), (doc) =>
+    if (db) {
+      return onSnapshot(doc(db, CONFIGS, 'web'), (doc) =>
         setConfigs(doc.data() as { [key in Config]?: unknown })
       );
     }
-  }, [app, db]);
+  }, [db]);
 
   return {
-    ready: !!app && !!db,
-    app,
+    ready: !!db,
     db,
     user,
     signInWithPopup,

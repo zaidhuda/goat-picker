@@ -1,12 +1,10 @@
 import { createContext } from 'react';
-import { FirebaseApp } from 'firebase/app';
 import { User } from 'firebase/auth';
 import { Firestore } from 'firebase/firestore';
 import { Config } from 'types/config';
 
 const FirebaseContext = createContext<{
   ready?: boolean;
-  app?: FirebaseApp;
   db?: Firestore;
   user?: User | null;
   signInWithPopup: () => void;
