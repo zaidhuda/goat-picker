@@ -1,32 +1,30 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect } from 'react';
+import usePreferences from './usePreferences';
 
-const STORAGE_KEY = 'dark-mode';
+const THEMES = ['light', 'dark', 'auto'] as const;
 
 export default function useDarkMode() {
-  const [darkMode, setDarkMode] = useState<boolean>(false);
+  const {
+    preferences: { THEME },
+    setPreference,
+  } = usePreferences();
 
-  const toggleDarkMode = () => {
-    setDarkMode((enabled) => {
-      if (window !== undefined) {
-        window.localStorage.setItem(STORAGE_KEY, !enabled ? 'true' : 'false');
-        document.querySelector('html')?.classList.toggle('dark');
-      }
-      return !enabled;
-    });
-  };
+  const toggleTheme = useCallback(() => {
+    const nextTheme = THEMES[(THEMES.indexOf(THEME) + 1) % THEMES.length];
+    setPreference('THEME', nextTheme);
+  }, [THEME, setPreference]);
 
   useEffect(() => {
-    if (window !== undefined) {
-      const savedTheme = window.localStorage.getItem(STORAGE_KEY);
-      const darkModeEnabled = savedTheme === 'true';
-      setDarkMode(darkModeEnabled);
-      if (darkModeEnabled) {
-        document.querySelector('html')?.classList.add('dark');
-      } else {
-        document.querySelector('html')?.classList.remove('dark');
-      }
+    if (
+      THEME === 'dark' ||
+      (THEME === 'auto' &&
+        window.matchMedia('(prefers-color-scheme: dark)').matches)
+    ) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
     }
-  }, []);
+  }, [THEME]);
 
-  return { darkMode, toggleDarkMode };
+  return { theme: THEME, toggleTheme };
 }

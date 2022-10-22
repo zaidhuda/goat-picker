@@ -1,21 +1,15 @@
 import React, { Fragment } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
-import {
-  Menu as MenuIcon,
-  Close as CloseIcon,
-  DarkMode,
-  LightMode,
-} from '@mui/icons-material';
+import { Menu as MenuIcon, Close as CloseIcon } from '@mui/icons-material';
 import { Avatar, Button, ButtonBase, IconButton } from '@mui/material';
 import classNames from 'classnames';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import useDarkMode from 'hooks/useDarkMode';
 import useFirebase from 'hooks/useFirebase';
 import useWeek from 'hooks/useWeek';
+import ThemeIcon from './ThemeIcon';
 
 export default function Navbar() {
-  const { darkMode, toggleDarkMode } = useDarkMode();
   const { user, signOut } = useFirebase();
   const { pathname } = useRouter();
   const { currentWeek, currentYear } = useWeek();
@@ -110,17 +104,7 @@ export default function Navbar() {
               </div>
 
               <div className="absolute inset-y-0 right-0 flex items-center gap-x-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                <IconButton
-                  title="Vote"
-                  className="!text-yellow-400"
-                  onClick={() => toggleDarkMode()}
-                >
-                  {darkMode ? (
-                    <DarkMode className="!text-2xl" />
-                  ) : (
-                    <LightMode className="!text-2xl" />
-                  )}
-                </IconButton>
+                <ThemeIcon />
 
                 {user ? (
                   <Menu as="div" className="relative inline-block text-left">
