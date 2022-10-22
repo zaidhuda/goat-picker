@@ -6,7 +6,7 @@ import muiTheme from 'lib/muiTheme';
 export default class MyDocument extends Document {
   render() {
     return (
-      <Html lang="en">
+      <Html lang="en" className="dark">
         <Head>
           {/* PWA primary color */}
           <meta name="theme-color" content={muiTheme.palette.primary.main} />
