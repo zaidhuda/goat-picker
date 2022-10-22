@@ -10,6 +10,12 @@ service cloud.firestore {
     }
 
     match /profiles/{uid} {
+      allow write: if
+      	request.auth.uid == uid ||
+      	get(/databases/$(database)/documents/profiles/$(request.auth.uid)).data.isAdmin == true
+    }
+
+    match /votes/{year}/{week}/{uid} {
       allow write: if request.auth.uid == uid
     }
 

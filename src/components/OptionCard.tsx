@@ -6,7 +6,7 @@ import { Flipped } from 'react-flip-toolkit';
 import useFirebase from 'hooks/useFirebase';
 import { Profile } from 'types/profile';
 
-interface Props extends Profile {
+interface Props extends Omit<Profile, 'docUrl'> {
   voted?: boolean;
   votes?: number;
   variant: 'voting' | 'ranking';

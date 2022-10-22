@@ -1,13 +1,31 @@
 import React, { Fragment, useState } from 'react';
 import { Menu, Transition } from '@headlessui/react';
-import { MoreVert } from '@mui/icons-material';
+import {
+  AdminPanelSettings,
+  DataObject,
+  MoreVert,
+  PersonAdd,
+  PersonRemove,
+} from '@mui/icons-material';
 import { Avatar, Button, IconButton } from '@mui/material';
 import classNames from 'classnames';
 import LastSeen from 'components/LastSeen';
 import { getLayout } from 'components/Layout';
 import useFirebase from 'hooks/useFirebase';
+import useProfileManager from 'hooks/useProfileManager';
 import useProfiles from 'hooks/useProfiles';
 import { Profile } from 'types/profile';
+
+const SlackIcon = (props: { title?: string }) => (
+  <img
+    {...props}
+    alt="Slack"
+    src={'/images/slack.ico'}
+    width={16}
+    height={16}
+    className="object-contain"
+  />
+);
 
 type MenuAction =
   | 'slackId'
@@ -17,7 +35,7 @@ type MenuAction =
   | 'removeAdmin';
 
 const ProfileMenu = ({
-  profile: { hidden, isAdmin },
+  profile: { docUrl, hidden, isAdmin },
   onMenuClick,
 }: {
   profile: Profile;
@@ -25,7 +43,7 @@ const ProfileMenu = ({
 }) => (
   <Menu as="div" className="relative inline-block text-left">
     <Menu.Button as={Fragment}>
-      <IconButton>
+      <IconButton color="primary">
         <MoreVert className="dark:text-white text-base" />
       </IconButton>
     </Menu.Button>
@@ -38,7 +56,19 @@ const ProfileMenu = ({
       leaveFrom="opacity-100 scale-100"
       leaveTo="opacity-0 scale-95"
     >
-      <Menu.Items className="absolute right-0 top-[-10px] w-36 mt-2 origin-top-right bg-white dark:bg-gray-700 rounded-md outline-none drop-shadow-lg z-10">
+      <Menu.Items className="absolute right-0 w-36 mt-2 origin-top-right bg-white dark:bg-gray-700 rounded-md outline-none drop-shadow-lg z-10">
+        <Menu.Item>
+          <a href={docUrl} target={docUrl}>
+            <Button
+              fullWidth
+              color="secondary"
+              className="!normal-case"
+              startIcon={<DataObject />}
+            >
+              Firestore
+            </Button>
+          </a>
+        </Menu.Item>
         {!hidden ? (
           <Menu.Item
             as={Button}
@@ -46,6 +76,7 @@ const ProfileMenu = ({
             className="!normal-case"
             color="error"
             onClick={onMenuClick(isAdmin ? 'removeAdmin' : 'setAdmin')}
+            startIcon={<AdminPanelSettings />}
           >
             {isAdmin ? 'Remove admin' : 'Make admin'}
           </Menu.Item>
@@ -55,6 +86,7 @@ const ProfileMenu = ({
           fullWidth
           className="!normal-case"
           onClick={onMenuClick('slackId')}
+          startIcon={<SlackIcon />}
         >
           Slack ID
         </Menu.Item>
@@ -64,6 +96,7 @@ const ProfileMenu = ({
           color={hidden ? 'success' : 'warning'}
           className="!normal-case"
           onClick={onMenuClick(hidden ? 'activate' : 'deactivate')}
+          startIcon={hidden ? <PersonAdd /> : <PersonRemove />}
         >
           {hidden ? 'Activate' : 'Deactivate'}
         </Menu.Item>
@@ -74,41 +107,55 @@ const ProfileMenu = ({
 
 export default function ProfilesPage() {
   const { user } = useFirebase();
-  const [showAll, setShowAll] = useState(false);
-
   const profiles = useProfiles();
   const currentUser = profiles.find((profile) => profile.id === user?.uid);
+  const { updateUser } = useProfileManager(currentUser);
+  const [showAll, setShowAll] = useState(false);
 
   const handleMenuClick =
-    ({ slackId, displayName }: Profile) =>
+    ({ id, slackId, displayName }: Profile) =>
     (action: MenuAction) =>
     () => {
       if (!currentUser?.isAdmin) return;
 
       switch (action) {
-        case 'slackId':
+        case 'slackId': {
           const newSlackId = prompt(`Update ${displayName} Slack ID:`, slackId);
           if (newSlackId !== null && newSlackId !== slackId) {
-            confirm(`Change ${displayName} Slack ID to ${newSlackId}?`) &&
-              alert(`New Slack ID: ${newSlackId}. Not implemented yet.`);
+            if (confirm(`Change ${displayName} Slack ID to ${newSlackId}?`)) {
+              updateUser(id, { slackId: newSlackId });
+            }
           }
           break;
-        case 'activate':
-          confirm(`Activate ${displayName}?`) &&
-            alert(`Activating ${displayName}. Not implemented yet.`);
+        }
+        case 'activate': {
+          if (confirm(`Activate ${displayName}?`)) {
+            updateUser(id, { hidden: false });
+          }
+
           break;
-        case 'deactivate':
-          confirm(`Deactivate ${displayName}?`) &&
-            alert(`Deactivating ${displayName}. Not implemented yet.`);
+        }
+        case 'deactivate': {
+          if (confirm(`Deactivate ${displayName}?`)) {
+            updateUser(id, { hidden: true });
+          }
+
           break;
-        case 'setAdmin':
-          confirm(`Make ${displayName} admin?`) &&
-            alert(`Making ${displayName} admin. Not implemented yet.`);
+        }
+        case 'setAdmin': {
+          if (confirm(`Make ${displayName} admin?`)) {
+            updateUser(id, { isAdmin: true });
+          }
+
           break;
-        case 'removeAdmin':
-          confirm(`Remove ${displayName} from admin?`) &&
-            alert(`Removing ${displayName} from admin. Not implemented yet.`);
+        }
+        case 'removeAdmin': {
+          if (confirm(`Remove ${displayName} from admin?`)) {
+            updateUser(id, { isAdmin: false });
+          }
+
           break;
+        }
       }
     };
 
@@ -140,7 +187,7 @@ export default function ProfilesPage() {
                   <div className="flex gap-2">
                     <Avatar
                       src={profile.photoURL}
-                      sx={{ width: 24, height: 24 }}
+                      sx={{ width: 28, height: 28 }}
                     />
                     <p
                       className={classNames('line-clamp-1', {
@@ -149,6 +196,12 @@ export default function ProfilesPage() {
                     >
                       {profile.displayName}
                     </p>
+                    {profile.isAdmin ? (
+                      <AdminPanelSettings titleAccess="Admin" />
+                    ) : null}
+                    {profile.slackId ? (
+                      <SlackIcon title={`Slack ID: ${profile.slackId}`} />
+                    ) : null}
                   </div>
                 </td>
                 <td className="text-center hidden md:table-cell">

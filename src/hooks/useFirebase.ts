@@ -98,7 +98,13 @@ export function useFirebaseProvider() {
       const { displayName, uid, photoURL } = user;
       setDoc(
         doc(db, PROFILES, uid),
-        { id: uid, displayName, photoURL, lastSeenAt: Timestamp.now() },
+        {
+          id: uid,
+          displayName,
+          photoURL,
+          hidden: false,
+          lastSeenAt: Timestamp.now(),
+        },
         { merge: true }
       );
     }

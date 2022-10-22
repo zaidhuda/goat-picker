@@ -8,6 +8,7 @@ export type Profile = {
   slackId?: string;
   lastSeenAt?: Timestamp;
   isAdmin?: boolean;
+  docUrl: string;
 };
 
 export type ProfileWithStats = Profile & {

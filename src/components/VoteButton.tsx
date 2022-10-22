@@ -4,7 +4,7 @@ import useVotes from 'hooks/useVotes';
 import { Profile } from 'types/profile';
 import OptionCard from './OptionCard';
 
-interface Props extends Profile {
+interface Props extends Omit<Profile, 'docUrl'> {
   voted?: boolean;
   disabled?: boolean;
 }
