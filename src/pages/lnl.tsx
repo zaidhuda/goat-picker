@@ -33,8 +33,9 @@ export default function ProfilesPage() {
                     }
                   )}
                 >
-                  <dt className="text-lg">
-                    {item.start.toFormat('dd MMMM yyyy')}
+                  <dt className="text-lg text-left">
+                    <p>{item.start.toFormat('dd MMMM yyyy')}</p>
+                    <p className="text-gray-500">{item.start.toRelative()}</p>
                   </dt>
                   <dd>
                     <AvatarGroup>
