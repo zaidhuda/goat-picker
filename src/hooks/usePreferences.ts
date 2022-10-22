@@ -14,7 +14,7 @@ export default function usePreferences() {
 
   useEffect(() => {
     if (db && user) {
-      return onSnapshot(doc(db, PREFERENCES, user.uid), (doc) => {
+      return onSnapshot(doc(db, PREFERENCES, user.id), (doc) => {
         setPreferences((state) => ({
           ...state,
           ...(doc.data() as Preferences),
@@ -28,7 +28,7 @@ export default function usePreferences() {
     value: Preferences[typeof key]
   ) => {
     if (db && user) {
-      setDoc(doc(db, PREFERENCES, user.uid), { [key]: value }, { merge: true });
+      setDoc(doc(db, PREFERENCES, user.id), { [key]: value }, { merge: true });
     }
   };
 

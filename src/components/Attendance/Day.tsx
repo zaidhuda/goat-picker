@@ -27,7 +27,7 @@ export default function AttendanceDay({ date }: Props) {
   const [attendances, setAttendances] = useState<Profile[]>([]);
 
   const hasUser = useMemo(() => {
-    return user && attendances.some(({ id }) => id === user?.uid);
+    return user && attendances.some(({ id }) => id === user?.id);
   }, [user, attendances]);
 
   const toggleAttendance = () => {

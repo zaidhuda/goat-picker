@@ -18,9 +18,9 @@ export default function useAttendances() {
   const addAttendance = (date: DateTime, resolve?: (value: void) => void) => {
     if (db && user) {
       setDoc(
-        doc(db, `${ATTENDANCES}/${date.toISODate()}/attendances/${user.uid}`),
+        doc(db, `${ATTENDANCES}/${date.toISODate()}/attendances/${user.id}`),
         {
-          id: user.uid,
+          id: user.id,
           displayName: user.displayName,
           photoURL: user.photoURL,
         }
@@ -36,7 +36,7 @@ export default function useAttendances() {
   ) => {
     if (db && user) {
       deleteDoc(
-        doc(db, `${ATTENDANCES}/${date.toISODate()}/attendances/${user.uid}`)
+        doc(db, `${ATTENDANCES}/${date.toISODate()}/attendances/${user.id}`)
       )
         .then(resolve)
         .catch(console.error);

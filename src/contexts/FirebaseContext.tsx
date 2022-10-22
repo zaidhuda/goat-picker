@@ -1,12 +1,12 @@
 import { createContext } from 'react';
-import { User } from 'firebase/auth';
 import { Firestore } from 'firebase/firestore';
 import { Config } from 'types/config';
+import { Profile } from 'types/profile';
 
 const FirebaseContext = createContext<{
   ready?: boolean;
   db?: Firestore;
-  user?: User | null;
+  user?: Profile | null;
   signInWithPopup: () => void;
   signOut: () => void;
   getConfig: <T = void>(config: Config, defaultValue: T) => T;

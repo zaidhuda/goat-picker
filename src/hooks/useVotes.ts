@@ -21,16 +21,12 @@ export default function useVotes() {
 
   const addVote = (id: string, resolve?: () => void) => {
     if (db && user) {
-      if (user.uid === id) return;
+      if (user.id === id) return;
 
       setDoc(
-        doc(
-          db,
-          collectionPath(currentYear, currentWeek),
-          docPath(user.uid, id)
-        ),
+        doc(db, collectionPath(currentYear, currentWeek), docPath(user.id, id)),
         {
-          voter: doc(db, `profiles/${user.uid}`),
+          voter: doc(db, `profiles/${user.id}`),
           voted: doc(db, `profiles/${id}`),
           year: currentYear,
           week: currentWeek,
@@ -45,7 +41,7 @@ export default function useVotes() {
   const removeVote = (id: string, resolve?: () => void) => {
     if (db && user) {
       deleteDoc(
-        doc(db, collectionPath(currentYear, currentWeek), docPath(user.uid, id))
+        doc(db, collectionPath(currentYear, currentWeek), docPath(user.id, id))
       )
         .then(resolve)
         .catch(console.error);

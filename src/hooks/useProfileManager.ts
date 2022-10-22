@@ -4,7 +4,7 @@ import useFirebase from './useFirebase';
 
 const PROFILES = 'profiles';
 
-export default function useProfileManager(currentUser?: Profile) {
+export default function useProfileManager(currentUser?: Profile | null) {
   const { db } = useFirebase();
 
   const updateUser = (
