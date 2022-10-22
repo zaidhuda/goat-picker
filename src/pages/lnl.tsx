@@ -5,7 +5,7 @@ import { getLayout } from 'components/Layout';
 import Loader from 'components/Loader';
 import useLnLLists from 'hooks/useLnLLists';
 
-export default function ProfilesPage() {
+export default function LnlPage() {
   const lnl = useLnLLists();
 
   return (
@@ -58,7 +58,7 @@ export default function ProfilesPage() {
   );
 }
 
-ProfilesPage.options = {
+LnlPage.options = {
   withUser: true,
   layout: getLayout,
   head: { title: 'Upcoming Lunch & Learns' },

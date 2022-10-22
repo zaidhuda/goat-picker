@@ -8,27 +8,29 @@ export default function LastSeen({ lastSeen }: Props) {
   const [lastSeenText, setLastSeenText] = useState<string | null>();
 
   useEffect(() => {
-    if (lastSeen) {
-      const timeout = setTimeout(() => {
-        setLastSeenText(() => {
-          const lastSeenDate = DateTime.fromJSDate(lastSeen.toDate());
-          const minutesSince = lastSeenDate
-            .until(DateTime.now())
-            .length('minutes');
+    const getLastSeenText = () => {
+      if (lastSeen) {
+        const lastSeenDate = DateTime.fromJSDate(lastSeen.toDate());
+        const minutesSince = lastSeenDate
+          .until(DateTime.now())
+          .length('minutes');
 
-          if (minutesSince < 1) {
-            return 'Just now';
-          } else if (minutesSince < 15) {
-            return lastSeenDate.toRelative();
-          } else {
-            return lastSeenDate.toJSDate().toLocaleString();
-          }
-        });
-      }, 1000);
+        if (minutesSince < 1) {
+          return 'Just now';
+        }
 
-      return () => clearTimeout(timeout);
-    }
-  }, [lastSeen, lastSeenText]);
+        return lastSeenDate.toRelative();
+      }
+    };
+
+    setLastSeenText(getLastSeenText);
+
+    const interval = setInterval(() => {
+      setLastSeenText(getLastSeenText);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [lastSeen]);
 
   if (!lastSeen || !lastSeenText) {
     return <span>Never</span>;
