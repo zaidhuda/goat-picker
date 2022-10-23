@@ -17,7 +17,7 @@ export default function VotePage() {
   const [loading, setLoading] = useState(false);
   const [votes, setVotes] = useState<UserVote[]>([]);
   const { user, getConfig } = useFirebase();
-  const MAX_VOTES_PER_USER = getConfig<number>('MAX_VOTES_PER_USER', 5);
+  const MAX_VOTES_PER_USER = getConfig('MAX_VOTES_PER_USER', 5);
   const profiles = useProfiles();
   const { getVotes } = useVotes();
   const { currentWeek, currentYear } = useWeek();

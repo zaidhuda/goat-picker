@@ -5,7 +5,7 @@ import { ProfileWithStats } from 'types/profile';
 import OptionCard from './OptionCard';
 
 interface Props {
-  profiles?: Omit<ProfileWithStats, 'totalVotes'>[];
+  profiles?: (ProfileWithStats & { votes: number })[];
 }
 
 export default function Ranking({ profiles }: Props) {
@@ -15,8 +15,7 @@ export default function Ranking({ profiles }: Props) {
     () =>
       profiles
         ?.sort((a, b) => a.displayName.localeCompare(b.displayName))
-        .sort((a, b) => b.totalVoted - a.totalVoted)
-        .filter((profile) => profile.totalVoted > 0) || [],
+        .sort((a, b) => b.votes - a.votes) || [],
     [profiles]
   );
 
@@ -25,14 +24,14 @@ export default function Ranking({ profiles }: Props) {
       flipKey={`${pathname}-${rankedProfiles.map(({ id }) => id).join()}`}
     >
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
-        {rankedProfiles.map(({ id, displayName, photoURL, totalVoted = 0 }) => (
+        {rankedProfiles.map(({ id, displayName, photoURL, votes = 0 }) => (
           <OptionCard
             variant="ranking"
             key={id}
             id={id}
             displayName={displayName}
             photoURL={photoURL}
-            votes={totalVoted}
+            votes={votes}
           />
         ))}
       </div>

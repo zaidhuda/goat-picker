@@ -35,5 +35,13 @@ service cloud.firestore {
     match /attendances/{date}/attendances/{uid} {
       allow write: if request.auth.uid == uid
     }
+
+    match /preferences/{uid} {
+      allow write: if request.auth.uid == uid
+    }
+
+    match /configs/web {
+      allow write: if get(/databases/$(database)/documents/profiles/$(request.auth.uid)).data.isAdmin == true
+    }
   }
 }

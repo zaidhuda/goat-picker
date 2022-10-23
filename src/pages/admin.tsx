@@ -4,6 +4,7 @@ import { Button } from '@mui/material';
 import { getLayout } from 'components/Layout';
 import useFirebase from 'hooks/useFirebase';
 import ProfilesPage from './profiles';
+import SettingsPage from './settings';
 
 const TABS = ['Users', 'Settings'];
 
@@ -36,7 +37,9 @@ export default function AdminPage() {
           <Tab.Panel as="div" className="flex flex-col gap-8">
             <ProfilesPage as="component" />
           </Tab.Panel>
-          <Tab.Panel></Tab.Panel>
+          <Tab.Panel>
+            <SettingsPage as="component" />
+          </Tab.Panel>
         </Tab.Panels>
       </Tab.Group>
     </div>

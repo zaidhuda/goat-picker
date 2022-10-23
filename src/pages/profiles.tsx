@@ -179,12 +179,12 @@ export default function ProfilesPage({ as = 'page' }: Props) {
             .map((profile, index) => (
               <tr
                 key={profile.id}
-                className="bg-black dark:bg-white odd:!bg-opacity-5 even:!bg-opacity-0"
+                className="bg-black dark:bg-white odd:!bg-opacity-5 even:!bg-opacity-0 h-14"
               >
                 <td className="px-2" width={1}>
                   {index + 1}
                 </td>
-                <td className="py-4">
+                <td>
                   <div className="flex gap-2">
                     <Avatar
                       src={profile.photoURL}
