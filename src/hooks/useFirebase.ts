@@ -17,7 +17,7 @@ import {
   Timestamp,
 } from 'firebase/firestore';
 import FirebaseContext from 'contexts/FirebaseContext';
-import { Config } from 'types/config';
+import { Configurations } from 'types/config';
 import { Profile } from 'types/profile';
 
 const PROFILES = 'profiles';
@@ -28,7 +28,7 @@ export function useFirebaseProvider() {
   const [auth, setAuth] = useState<Auth>();
   const [user, setUser] = useState<Profile | null>();
   const [db, setDatabase] = useState<Firestore>();
-  const [configs, setConfigs] = useState<{ [key in Config]?: unknown }>({});
+  const [configs, setConfigs] = useState<Configurations>({});
 
   const signInWithPopup = () => {
     if (auth) {
@@ -45,8 +45,10 @@ export function useFirebaseProvider() {
   }, [auth]);
 
   const getConfig = useCallback(
-    <T>(config: Config, defaultValue: T) =>
-      (configs[config] || defaultValue) as T,
+    <T extends keyof Configurations>(
+      config: T,
+      defaultValue: NonNullable<Configurations[T]>
+    ) => configs[config] || defaultValue,
     [configs]
   );
 
@@ -105,7 +107,7 @@ export function useFirebaseProvider() {
 
   // Reset state on auth state change
   useEffect(() => {
-    const EMAIL_DOMAIN = getConfig<string>('EMAIL_DOMAIN', '');
+    const EMAIL_DOMAIN = getConfig('EMAIL_DOMAIN', '');
     if (db && auth && EMAIL_DOMAIN) {
       return auth?.onAuthStateChanged((authState) => {
         if (authState?.email?.endsWith(EMAIL_DOMAIN)) {
@@ -123,7 +125,7 @@ export function useFirebaseProvider() {
   useEffect(() => {
     if (db) {
       return onSnapshot(doc(db, CONFIGS, 'web'), (doc) =>
-        setConfigs(doc.data() as { [key in Config]?: unknown })
+        setConfigs(doc.data() as Configurations)
       );
     }
   }, [db]);
@@ -132,6 +134,7 @@ export function useFirebaseProvider() {
     ready: !!db,
     db,
     user,
+    configs,
     signInWithPopup,
     signOut,
     getConfig,

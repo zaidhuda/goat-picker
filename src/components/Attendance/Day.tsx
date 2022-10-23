@@ -22,7 +22,7 @@ export default function AttendanceDay({ date }: Props) {
   const { user, getConfig } = useFirebase();
   const { getAttendances, addAttendance, removeAttendance } = useAttendances();
 
-  const MAX_ATTENDEES = getConfig<number>('MAX_ATTENDEES', 10);
+  const MAX_ATTENDEES = getConfig('MAX_ATTENDEES', 10);
 
   const [attendances, setAttendances] = useState<Profile[]>([]);
 

@@ -25,6 +25,14 @@ export default function GoatPage() {
 
   const stats = useWeeklyStats(year, week);
 
+  const goats = stats?.profileWithStats
+    .map(({ totalVoted, ...rest }) => ({
+      ...rest,
+      totalVoted,
+      votes: totalVoted,
+    }))
+    .filter(({ votes }) => votes > 0);
+
   return (
     <div className="flex flex-col gap-8 pb-12 sm:pb-0">
       <WeekNavigation
@@ -60,7 +68,7 @@ export default function GoatPage() {
         </p>
       </div>
 
-      <Ranking profiles={stats?.profileWithStats} />
+      <Ranking profiles={goats} />
 
       {!isCurrentWeek ? (
         <Link href={{ pathname: '/stats', query: { year } }}>
