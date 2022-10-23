@@ -1,13 +1,10 @@
 import { useState, useEffect } from 'react';
-import { collection, onSnapshot } from 'firebase/firestore';
+import { collection, Firestore, onSnapshot } from 'firebase/firestore';
 import { Profile } from 'types/profile';
-import useFirebase from './useFirebase';
 
 const PROFILES = 'profiles';
 
-export default function useProfiles() {
-  const { db, user } = useFirebase();
-
+export default function useProfiles(db?: Firestore, user?: Profile | null) {
   const [profiles, setProfiles] = useState<Profile[]>([]);
 
   useEffect(() => {

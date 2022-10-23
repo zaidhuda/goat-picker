@@ -19,6 +19,7 @@ import {
 import FirebaseContext from 'contexts/FirebaseContext';
 import { Configurations } from 'types/config';
 import { Profile } from 'types/profile';
+import useProfiles from './useProfiles';
 
 const PROFILES = 'profiles';
 const CONFIGS = 'configs';
@@ -29,6 +30,8 @@ export function useFirebaseProvider() {
   const [user, setUser] = useState<Profile | null>();
   const [db, setDatabase] = useState<Firestore>();
   const [configs, setConfigs] = useState<Configurations>({});
+
+  const profiles = useProfiles(db, user);
 
   const signInWithPopup = () => {
     if (auth) {
@@ -135,6 +138,7 @@ export function useFirebaseProvider() {
     db,
     user,
     configs,
+    profiles,
     signInWithPopup,
     signOut,
     getConfig,

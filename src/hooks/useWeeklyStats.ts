@@ -2,16 +2,14 @@ import { useEffect, useState } from 'react';
 import { doc, onSnapshot } from 'firebase/firestore';
 import { AnnualStats, UserVote } from 'types/vote';
 import useFirebase from './useFirebase';
-import useProfiles from './useProfiles';
 import useVotes from './useVotes';
 import useWeek from './useWeek';
 
 export default function useWeeklyStats(year: number, week: number) {
   const [stats, setStats] =
     useState<Pick<AnnualStats, 'profileWithStats' | 'totalParticipation'>>();
-  const { db } = useFirebase();
+  const { db, profiles } = useFirebase();
   const { currentWeek } = useWeek();
-  const profiles = useProfiles();
   const { getVotes } = useVotes();
 
   useEffect(() => {
@@ -41,13 +39,15 @@ export default function useWeeklyStats(year: number, week: number) {
         { votes: {}, voted: {} }
       );
 
-      const profileWithStats = profiles
-        .map((profile) => ({
-          ...profile,
-          totalVotes: groupedVotes.votes[profile.id] || 0,
-          totalVoted: groupedVotes.voted[profile.id] || 0,
-        }))
-        .filter(({ totalVoted, totalVotes }) => totalVoted || totalVotes);
+      const profileWithStats =
+        profiles
+          ?.map((profile) => ({
+            ...profile,
+            totalVotes: groupedVotes.votes[profile.id] || 0,
+            totalVoted: groupedVotes.voted[profile.id] || 0,
+          }))
+          .filter(({ totalVoted, totalVotes }) => totalVoted || totalVotes) ||
+        [];
 
       setStats({
         totalParticipation: Object.keys(groupedVotes.votes).length,

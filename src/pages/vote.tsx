@@ -8,7 +8,6 @@ import VoteButton from 'components/VoteButton';
 import WeekNavigation from 'components/WeekNavigation';
 import WeekRangeLabel from 'components/WeekRangeLabel';
 import useFirebase from 'hooks/useFirebase';
-import useProfiles from 'hooks/useProfiles';
 import useVotes from 'hooks/useVotes';
 import useWeek from 'hooks/useWeek';
 import { UserVote } from 'types/vote';
@@ -16,9 +15,8 @@ import { UserVote } from 'types/vote';
 export default function VotePage() {
   const [loading, setLoading] = useState(false);
   const [votes, setVotes] = useState<UserVote[]>([]);
-  const { user, getConfig } = useFirebase();
+  const { user, profiles, getConfig } = useFirebase();
   const MAX_VOTES_PER_USER = getConfig('MAX_VOTES_PER_USER', 5);
-  const profiles = useProfiles();
   const { getVotes } = useVotes();
   const { currentWeek, currentYear } = useWeek();
 
@@ -26,9 +24,10 @@ export default function VotePage() {
     .filter(({ voter }) => voter.id === user?.id)
     .map(({ voted }) => voted.id);
 
-  const optionsWithoutUser = profiles
-    .filter(({ hidden }) => !hidden)
-    .filter(({ id }) => id !== user?.id);
+  const optionsWithoutUser =
+    profiles
+      ?.filter(({ hidden }) => !hidden)
+      .filter(({ id }) => id !== user?.id) || [];
 
   const availableVotes = Math.max(MAX_VOTES_PER_USER - userVotes.length);
 

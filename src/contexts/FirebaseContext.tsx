@@ -8,6 +8,7 @@ const FirebaseContext = createContext<{
   db?: Firestore;
   user?: Profile | null;
   configs?: Configurations;
+  profiles?: Profile[];
   signInWithPopup: () => void;
   signOut: () => void;
   getConfig: GetConfigFn;
