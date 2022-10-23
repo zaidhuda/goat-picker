@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Profile } from 'types/profile';
 import { UserVote } from 'types/vote';
-import useProfiles from './useProfiles';
+import useFirebase from './useFirebase';
 import useVotes from './useVotes';
 
 const useOptions = (year: number, week: number) => {
-  const profiles = useProfiles();
+  const { profiles } = useFirebase();
   const { getVotes } = useVotes();
   const [votes, setVotes] = useState<UserVote[]>([]);
 
@@ -19,7 +19,7 @@ const useOptions = (year: number, week: number) => {
     );
 
     return Object.keys(groupedVotes).map((id) => ({
-      ...profiles.find((profile) => profile.id === id),
+      ...profiles?.find((profile) => profile.id === id),
       votes: groupedVotes[id],
     }));
   }, [votes, profiles]);
@@ -34,7 +34,7 @@ const useOptions = (year: number, week: number) => {
     );
 
     return Object.keys(groupedVotes).map((id) => ({
-      ...(profiles.find((profile) => profile.id === id) as Profile),
+      ...(profiles?.find((profile) => profile.id === id) as Profile),
       votes: groupedVotes[id],
     }));
   }, [votes, profiles]);
@@ -47,6 +47,6 @@ const useOptions = (year: number, week: number) => {
     participants,
     votedOptions,
   };
-};;
+};
 
 export default useOptions;

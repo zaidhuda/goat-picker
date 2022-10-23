@@ -13,7 +13,6 @@ import LastSeen from 'components/LastSeen';
 import { getLayout } from 'components/Layout';
 import useFirebase from 'hooks/useFirebase';
 import useProfileManager from 'hooks/useProfileManager';
-import useProfiles from 'hooks/useProfiles';
 import { Profile } from 'types/profile';
 
 const SlackIcon = (props: { title?: string }) => (
@@ -110,8 +109,7 @@ type Props = {
 };
 
 export default function ProfilesPage({ as = 'page' }: Props) {
-  const { user } = useFirebase();
-  const profiles = useProfiles();
+  const { user, profiles } = useFirebase();
   const { updateUser } = useProfileManager(user);
   const [showAll, setShowAll] = useState(false);
 
@@ -175,7 +173,7 @@ export default function ProfilesPage({ as = 'page' }: Props) {
         </thead>
         <tbody>
           {profiles
-            .filter(({ hidden }) => showAll || !hidden)
+            ?.filter(({ hidden }) => showAll || !hidden)
             .map((profile, index) => (
               <tr
                 key={profile.id}
