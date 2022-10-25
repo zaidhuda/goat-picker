@@ -12,6 +12,7 @@ import Loader from 'components/Loader';
 import FirebaseContext from 'contexts/FirebaseContext';
 import useDarkMode from 'hooks/useDarkMode';
 import { useFirebaseProvider } from 'hooks/useFirebase';
+import useUserTracker from 'hooks/useUserTracker';
 import muiTheme from 'lib/muiTheme';
 
 Settings.defaultZone = 'Asia/Kuala_Lumpur';
@@ -38,7 +39,9 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
 
   const firebase = useFirebaseProvider();
   const { ready, user } = firebase;
+
   useDarkMode();
+  useUserTracker(firebase);
 
   useEffect(() => {
     Router.events.on('routeChangeStart', NProgress.start);
