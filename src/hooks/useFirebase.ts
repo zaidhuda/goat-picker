@@ -10,7 +10,6 @@ import {
 import {
   doc,
   Firestore,
-  getDoc,
   getFirestore,
   onSnapshot,
   setDoc,
@@ -27,6 +26,7 @@ const CONFIGS = 'configs';
 export function useFirebaseProvider() {
   const [app, setApp] = useState<FirebaseApp>();
   const [auth, setAuth] = useState<Auth>();
+  const [currentUser, setCurrentUser] = useState<User | null>();
   const [user, setUser] = useState<Profile | null>();
   const [db, setDatabase] = useState<Firestore>();
   const [configs, setConfigs] = useState<Configurations>({});
@@ -53,32 +53,6 @@ export function useFirebaseProvider() {
       defaultValue: NonNullable<Configurations[T]>
     ) => configs[config] || defaultValue,
     [configs]
-  );
-
-  // Add user to options
-  const saveUser = useCallback(
-    (user: User) => {
-      if (db && user) {
-        const { displayName, uid, photoURL } = user;
-        const docRef = doc(db, PROFILES, uid);
-        setDoc(
-          docRef,
-          {
-            id: uid,
-            displayName,
-            photoURL,
-            hidden: false,
-            lastSeenAt: Timestamp.now(),
-          },
-          { merge: true }
-        ).then(() =>
-          getDoc(docRef).then((doc) => setUser(doc.data() as Profile))
-        );
-      } else {
-        setUser(null);
-      }
-    },
-    [db]
   );
 
   // Initialize Firebase app
@@ -114,7 +88,19 @@ export function useFirebaseProvider() {
     if (db && auth && EMAIL_DOMAIN) {
       return auth?.onAuthStateChanged((authState) => {
         if (authState?.email?.endsWith(EMAIL_DOMAIN)) {
-          saveUser(authState);
+          setCurrentUser(authState);
+          const { displayName, uid, photoURL } = authState;
+          setDoc(
+            doc(db, PROFILES, uid),
+            {
+              id: uid,
+              displayName,
+              photoURL,
+              hidden: false,
+              lastSeenAt: Timestamp.now(),
+            },
+            { merge: true }
+          );
         } else if (authState?.email) {
           alert(`${EMAIL_DOMAIN} email only`);
           signOut();
@@ -123,7 +109,15 @@ export function useFirebaseProvider() {
         }
       });
     }
-  }, [db, auth, getConfig, saveUser, signOut]);
+  }, [db, auth, getConfig, signOut]);
+
+  useEffect(() => {
+    if (db && currentUser) {
+      return onSnapshot(doc(db, PROFILES, currentUser.uid), (doc) =>
+        setUser(doc.data() as Profile)
+      );
+    }
+  }, [db, currentUser]);
 
   useEffect(() => {
     if (db) {

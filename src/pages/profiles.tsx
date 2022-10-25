@@ -110,7 +110,7 @@ type Props = {
 
 export default function ProfilesPage({ as = 'page' }: Props) {
   const { user, profiles } = useFirebase();
-  const { updateUser } = useProfileManager(user);
+  const { updateUser } = useProfileManager();
   const [showAll, setShowAll] = useState(false);
 
   const handleMenuClick =

@@ -4,14 +4,14 @@ import useFirebase from './useFirebase';
 
 const PROFILES = 'profiles';
 
-export default function useProfileManager(currentUser?: Profile | null) {
-  const { db } = useFirebase();
+export default function useProfileManager() {
+  const { db, user } = useFirebase();
 
   const updateUser = (
     id: string,
     data: Pick<Profile, 'hidden' | 'isAdmin' | 'slackId'>
   ) => {
-    if (db && currentUser?.isAdmin) {
+    if (db && user?.isAdmin) {
       setDoc(doc(db, PROFILES, id), data, { merge: true });
     }
   };
