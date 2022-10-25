@@ -9,6 +9,7 @@ import {
 } from 'firebase/auth';
 import {
   doc,
+  enableMultiTabIndexedDbPersistence,
   Firestore,
   getFirestore,
   onSnapshot,
@@ -31,7 +32,7 @@ export function useFirebaseProvider() {
   const [db, setDatabase] = useState<Firestore>();
   const [configs, setConfigs] = useState<Configurations>({});
 
-  const profiles = useProfiles(db, user);
+  const profiles = useProfiles(db, currentUser);
 
   const signInWithPopup = () => {
     if (auth) {
@@ -76,7 +77,9 @@ export function useFirebaseProvider() {
   // Set up firestore
   useEffect(() => {
     if (app) {
-      setDatabase(getFirestore(app));
+      const db = getFirestore(app);
+      setDatabase(db);
+      enableMultiTabIndexedDbPersistence(db).catch((err) => console.error(err));
     }
 
     return () => setDatabase(undefined);

@@ -10,7 +10,6 @@ import Router, { useRouter } from 'next/router';
 import NProgress from 'nprogress';
 import Loader from 'components/Loader';
 import FirebaseContext from 'contexts/FirebaseContext';
-import useDarkMode from 'hooks/useDarkMode';
 import { useFirebaseProvider } from 'hooks/useFirebase';
 import useUserTracker from 'hooks/useUserTracker';
 import muiTheme from 'lib/muiTheme';
@@ -40,7 +39,6 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const firebase = useFirebaseProvider();
   const { ready, user } = firebase;
 
-  useDarkMode();
   useUserTracker(firebase);
 
   useEffect(() => {

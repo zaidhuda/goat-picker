@@ -95,6 +95,9 @@ export default function OptionCard({
               title={displayName}
               src={photoURL}
               sx={{ width: 48, height: 48 }}
+              imgProps={{
+                referrerPolicy: 'no-referrer',
+              }}
             />
           </figure>
           <figcaption className="font-semibold line-clamp-1 text-lg text-center">

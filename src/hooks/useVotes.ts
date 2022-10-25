@@ -4,8 +4,11 @@ import {
   deleteDoc,
   doc,
   onSnapshot,
+  query,
+  QueryConstraint,
   serverTimestamp,
   setDoc,
+  where,
 } from 'firebase/firestore';
 import { UserVote } from 'types/vote';
 import useFirebase from './useFirebase';
@@ -49,10 +52,18 @@ export default function useVotes() {
   };
 
   const getVotes = useCallback(
-    (year: number, week: number, resolve: (value: UserVote[]) => void) => {
-      if (db && user) {
+    (
+      year: number,
+      week: number,
+      resolve: (value: UserVote[]) => void,
+      ...queryConstraints: QueryConstraint[]
+    ) => {
+      if (db) {
         return onSnapshot(
-          collection(db, collectionPath(year, week)),
+          query(
+            collection(db, collectionPath(year, week)),
+            ...queryConstraints
+          ),
           (querySnapshot) => {
             const data: UserVote[] = [];
             querySnapshot.forEach((doc) => {
@@ -66,12 +77,27 @@ export default function useVotes() {
         );
       }
     },
-    [db, user]
+    [db]
+  );
+
+  const getUserVotes = useCallback(
+    (year: number, week: number, resolve: (value: UserVote[]) => void) => {
+      if (db && user) {
+        return getVotes(
+          year,
+          week,
+          resolve,
+          where('voter', '==', doc(db, `profiles/${user?.id}`))
+        );
+      }
+    },
+    [db, user, getVotes]
   );
 
   return {
     addVote,
     removeVote,
     getVotes,
+    getUserVotes,
   };
 }

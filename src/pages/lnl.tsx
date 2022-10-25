@@ -42,8 +42,11 @@ export default function LnlPage() {
                       {item.members.map((member) => (
                         <Avatar
                           key={member.fullName}
-                          src={`${member.avatarUrl}/170.png`}
+                          src={`${member.avatarUrl}/50.png`}
                           title={member.fullName}
+                          imgProps={{
+                            referrerPolicy: 'no-referrer',
+                          }}
                         />
                       ))}
                     </AvatarGroup>

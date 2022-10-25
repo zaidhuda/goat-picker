@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Poll as PollIcon } from '@mui/icons-material';
-import { IconButton, LinearProgress } from '@mui/material';
+import { IconButton } from '@mui/material';
 import Link from 'next/link';
 import pluralize from 'pluralize';
 import { getLayout } from 'components/Layout';
@@ -17,7 +17,7 @@ export default function VotePage() {
   const [votes, setVotes] = useState<UserVote[]>([]);
   const { user, profiles, getConfig } = useFirebase();
   const MAX_VOTES_PER_USER = getConfig('MAX_VOTES_PER_USER', 5);
-  const { getVotes } = useVotes();
+  const { getUserVotes } = useVotes();
   const { currentWeek, currentYear } = useWeek();
 
   const userVotes = votes
@@ -42,11 +42,11 @@ export default function VotePage() {
 
   useEffect(() => {
     setLoading(true);
-    return getVotes(currentYear, currentWeek, (votes) => {
+    return getUserVotes(currentYear, currentWeek, (votes) => {
       setVotes(votes);
       setLoading(false);
     });
-  }, [getVotes, currentYear, currentWeek]);
+  }, [getUserVotes, currentYear, currentWeek]);
 
   return (
     <div className="flex flex-col gap-8">
@@ -90,19 +90,15 @@ export default function VotePage() {
         </p>
       </div>
 
-      {loading ? (
-        <LinearProgress />
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
-          {optionsWithVoted.map((option) => (
-            <VoteButton
-              key={option.id}
-              {...option}
-              disabled={availableVotes < 1}
-            />
-          ))}
-        </div>
-      )}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
+        {optionsWithVoted.map((option) => (
+          <VoteButton
+            key={option.id}
+            {...option}
+            disabled={loading || availableVotes < 1}
+          />
+        ))}
+      </div>
     </div>
   );
 }
