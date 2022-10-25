@@ -1,15 +1,16 @@
 import { useState, useEffect } from 'react';
+import { User } from 'firebase/auth';
 import { collection, Firestore, onSnapshot } from 'firebase/firestore';
 import { Profile } from 'types/profile';
 
 const PROFILES = 'profiles';
 
-export default function useProfiles(db?: Firestore, user?: Profile | null) {
+export default function useProfiles(db?: Firestore, user?: User | null) {
   const [profiles, setProfiles] = useState<Profile[]>([]);
 
   useEffect(() => {
-    if (db && user?.id) {
-      const projectId = db?.app.options.projectId;
+    if (db && user) {
+      const projectId = db.app.options.projectId;
       const appFirestore = `https://console.firebase.google.com/project/${projectId}/firestore/data`;
 
       return onSnapshot(collection(db, PROFILES), (querySnapshot) => {
@@ -37,7 +38,7 @@ export default function useProfiles(db?: Firestore, user?: Profile | null) {
         );
       });
     }
-  }, [db, user?.id]);
+  }, [db, user]);
 
   return profiles;
 }

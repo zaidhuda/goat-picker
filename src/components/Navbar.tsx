@@ -91,7 +91,9 @@ export default function Navbar() {
                     <Button
                       size="large"
                       color="inherit"
-                      className="hover:!bg-gray-900"
+                      className={classNames('hover:!bg-gray-900', {
+                        '!bg-gray-900': pathname.startsWith('/goat'),
+                      })}
                     >
                       <span className="font-bold text-lg">GOAT</span>
                     </Button>

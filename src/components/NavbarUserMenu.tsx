@@ -20,6 +20,9 @@ export default function NavbarUserMenu() {
           src={user.photoURL as string}
           title={user.displayName as string}
           sx={{ width: 36, height: 36 }}
+          imgProps={{
+            referrerPolicy: 'no-referrer',
+          }}
         />
       </Menu.Button>
       <Transition

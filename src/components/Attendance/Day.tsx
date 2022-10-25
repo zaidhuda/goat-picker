@@ -133,6 +133,9 @@ export default function AttendanceDay({ date }: Props) {
                   src={photoURL}
                   alt={displayName}
                   title={displayName}
+                  imgProps={{
+                    referrerPolicy: 'no-referrer',
+                  }}
                 />
               ))}
             </AvatarGroup>

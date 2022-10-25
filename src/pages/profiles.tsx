@@ -187,6 +187,9 @@ export default function ProfilesPage({ as = 'page' }: Props) {
                     <Avatar
                       src={profile.photoURL}
                       sx={{ width: 28, height: 28 }}
+                      imgProps={{
+                        referrerPolicy: 'no-referrer',
+                      }}
                     />
                     <p
                       className={classNames('line-clamp-1', {
