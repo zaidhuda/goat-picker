@@ -5,14 +5,21 @@ import LoginButton from 'components/LoginButton';
 import useFirebase from 'hooks/useFirebase';
 
 export default function LandingPage() {
-  const { push } = useRouter();
+  const {
+    push,
+    query: { redirect = '/vote' },
+  } = useRouter();
   const { user } = useFirebase();
 
   useEffect(() => {
+    const redirectUrl = new URL(redirect as string, window.location.origin);
     if (user) {
-      push('/vote');
+      push({
+        pathname: redirectUrl.pathname,
+        search: redirectUrl.search,
+      });
     }
-  }, [user, push]);
+  }, [user, redirect, push]);
 
   return (
     <div className="fixed flex flex-col h-screen items-center justify-center space-y-12 w-screen">
