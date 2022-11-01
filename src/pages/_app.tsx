@@ -55,7 +55,12 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
 
   useEffect(() => {
     if (Component.options?.withUser && ready && user === null) {
-      push('/');
+      push({
+        pathname: '/',
+        query: {
+          redirect: `${window.location.pathname}${window.location.search}`,
+        },
+      });
     }
   }, [ready, user, push, Component]);
 
