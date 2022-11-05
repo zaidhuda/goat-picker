@@ -3,12 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "yarn next dev",
-    "build": "yarn next build",
-    "start": "yarn next start",
-    "export": "yarn next build && yarn next export",
-    "lint": "yarn next lint",
-    "lint:fix": "yarn next lint --fix"
+    "app:dev": "yarn next dev",
+    "app:build": "yarn next build",
+    "app:start": "yarn next start",
+    "app:export": "yarn next build && yarn next export",
+    "app:lint": "yarn next lint",
+    "app:lint:fix": "yarn next lint --fix"
   },
   "lint-staged": {
     "*": [

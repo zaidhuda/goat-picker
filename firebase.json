@@ -10,7 +10,7 @@
   "hosting": [
     {
       "site": "goat-picker",
-      "public": "out",
+      "public": "public",
       "ignore": [
         "firebase.json",
         "**/.*",
@@ -23,7 +23,7 @@
     },
     {
       "site": "goatpicker",
-      "public": "out",
+      "public": "public",
       "ignore": [
         "firebase.json",
         "**/.*",
