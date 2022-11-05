@@ -1,4 +1,4 @@
-import { firestore } from 'firebase-admin';
+import { getFirestore } from 'firebase-admin/firestore';
 import { Request, Response } from 'firebase-functions/v1';
 import { weekRef, yearRef } from '../utils/firestorePaths';
 import getStats from '../utils/getStats';
@@ -11,7 +11,7 @@ export default async function updateStats(
   const { previousYear, previousWeek } = getWeek();
   const { year = previousYear, week = previousWeek } = req.query;
 
-  const bulk = firestore().bulkWriter();
+  const bulk = getFirestore().bulkWriter();
 
   bulk.set(yearRef(Number(year)), await getStats({ year: Number(year) }), {
     merge: true,

@@ -1,12 +1,16 @@
-import { initializeApp } from 'firebase-admin';
+import * as dotenv from 'dotenv';
+dotenv.config();
+
+import { initializeApp } from 'firebase-admin/app';
 import { Settings } from 'luxon';
 import { App } from '@slack/bolt';
-import voteModalSubmission from './handler.ts/voteModalSubmission';
-import openVoteModal from './handler.ts/openVoteModal';
-import openResultModal from './handler.ts/openResultModal';
 
 Settings.defaultZone = 'Asia/Kuala_Lumpur';
 initializeApp();
+
+import voteModalSubmission from './handler/voteModalSubmission';
+import openVoteModal from './handler/openVoteModal';
+import openResultModal from './handler/openResultModal';
 
 const app = new App({
   appToken: process.env.APP_TOKEN,

@@ -1,6 +1,6 @@
-import { firestore } from 'firebase-admin';
 import getProfiles from './getProfiles';
 import { Stats, UserVote } from '../types/vote';
+import { getFirestore } from 'firebase-admin/firestore';
 
 export default async function getStats({
   year,
@@ -10,7 +10,7 @@ export default async function getStats({
   week?: number;
 }): Promise<Stats> {
   const profiles = await getProfiles();
-  let query = firestore().collectionGroup('votes').where('year', '==', year);
+  let query = getFirestore().collectionGroup('votes').where('year', '==', year);
 
   if (week) {
     query = query.where('week', '==', week);

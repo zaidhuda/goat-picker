@@ -20,6 +20,7 @@ module.exports = {
   },
   ignorePatterns: [
     '/lib/**/*', // Ignore built files.
+    'app.yaml.js',
   ],
   plugins: ['@typescript-eslint', 'import'],
   rules: {
