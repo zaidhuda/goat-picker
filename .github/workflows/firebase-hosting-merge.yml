@@ -15,8 +15,8 @@ jobs:
         with:
           node-version: 16
       - run: yarn install
-      - run: yarn export
-      - run: mv packages/app/out out
+      - run: yarn app:export
+      - run: mv packages/app/out public
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'

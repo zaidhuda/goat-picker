@@ -1,15 +1,15 @@
 {
   "name": "api",
   "scripts": {
-    "lint": "eslint --ext .js,.ts .",
-    "build": "yarn run lint && tsc",
-    "serve": "yarn run build && firebase emulators:start --only functions",
-    "shell": "yarn run build && firebase functions:shell",
-    "deploy": "firebase deploy --only functions",
-    "logs": "firebase functions:log",
-    "start": "node ./lib/slack/index.js",
-    "gcp-build": "tsc -p .",
-    "gcp-deploy": "gcloud app deploy"
+    "api:lint": "eslint --ext .js,.ts .",
+    "api:build": "yarn run api:lint && tsc",
+    "api:serve": "yarn run api:build && firebase emulators:start --only functions",
+    "api:shell": "yarn run api:build && firebase functions:shell",
+    "api:deploy": "firebase deploy --only functions",
+    "api:logs": "firebase functions:log",
+    "api:start": "node ./lib/slack/index.js",
+    "api:gcp-build": "tsc -p .",
+    "api:gcp-deploy": "gcloud app deploy"
   },
   "engines": {
     "node": "16"
