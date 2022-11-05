@@ -5,7 +5,7 @@
   },
   "functions": {
     "predeploy": ["npm --prefix \"$RESOURCE_DIR\" run build"],
-    "source": "functions"
+    "source": "packages/api"
   },
   "hosting": [
     {
@@ -14,7 +14,11 @@
       "ignore": [
         "firebase.json",
         "**/.*",
-        "**/node_modules/**"
+        "LICENSE",
+        "README.md",
+        "package.json",
+        "yarn.lock",
+        "packages/**"
       ]
     },
     {
@@ -23,7 +27,11 @@
       "ignore": [
         "firebase.json",
         "**/.*",
-        "**/node_modules/**"
+        "LICENSE",
+        "README.md",
+        "package.json",
+        "yarn.lock",
+        "packages/**"
       ]
     }
   ]
