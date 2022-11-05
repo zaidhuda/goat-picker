@@ -1,4 +1,4 @@
-import { firestore } from 'firebase-admin';
+import { getFirestore, QueryDocumentSnapshot } from 'firebase-admin/firestore';
 import { Profile } from '../types/profile';
 
 const PROFILES = 'profiles';
@@ -6,8 +6,8 @@ const PROFILES = 'profiles';
 export default async function getProfiles(): Promise<Profile[]> {
   const profiles: Profile[] = [];
 
-  (await firestore().collection(PROFILES).get()).forEach(
-    (doc: firestore.QueryDocumentSnapshot) =>
+  (await getFirestore().collection(PROFILES).get()).forEach(
+    (doc: QueryDocumentSnapshot) =>
       profiles.push({ id: doc.id, ...doc.data() } as Profile)
   );
 

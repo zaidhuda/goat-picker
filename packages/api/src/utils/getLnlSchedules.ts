@@ -1,5 +1,5 @@
-import * as functions from 'firebase-functions';
 import Axios from 'axios';
+import { config } from 'firebase-functions/v1';
 import { TrelloCard, TrelloMember } from '../types/trello';
 
 const axiosInstance = Axios.create({
@@ -7,7 +7,7 @@ const axiosInstance = Axios.create({
 });
 
 export default async function getLnlSchedules(): Promise<TrelloCard[]> {
-  const { key, token, lnl_card_id } = functions.config().trello;
+  const { key, token, lnl_card_id } = config().trello;
 
   try {
     const { data: cards } = await axiosInstance.get(

@@ -1,5 +1,4 @@
-import { config } from 'firebase-functions';
-import { Request, Response } from 'firebase-functions/v1';
+import { config, Request, Response } from 'firebase-functions/v1';
 
 export default function authentiateRequest(
   next: (req: Request, res: Response) => void

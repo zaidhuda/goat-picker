@@ -1,5 +1,5 @@
 import { Block, BlockAction, KnownBlock } from '@slack/bolt';
-import { firestore } from 'firebase-admin';
+import { getFirestore } from 'firebase-admin/firestore';
 import { profileRef, votesCollectionRef } from '../../utils/firestorePaths';
 import getSlackAppUser from '../../utils/getSlackAppUser';
 import getWeek from '../../utils/getWeek';
@@ -9,7 +9,7 @@ export default async function slackVoteBlocks({
 }: {
   user: BlockAction['user'];
 }): Promise<Block[]> {
-  const maxVotes = (await firestore().doc(`configs/slackbot`).get()).get(
+  const maxVotes = (await getFirestore().doc(`configs/slackbot`).get()).get(
     'MAX_VOTES_PER_USER'
   );
 

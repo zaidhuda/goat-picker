@@ -1,6 +1,6 @@
-import { https } from 'firebase-functions';
-import { initializeApp } from 'firebase-admin';
+import { initializeApp } from 'firebase-admin/app';
 import { Settings } from 'luxon';
+import { https } from 'firebase-functions/v1';
 
 Settings.defaultZone = 'Asia/Kuala_Lumpur';
 initializeApp();
