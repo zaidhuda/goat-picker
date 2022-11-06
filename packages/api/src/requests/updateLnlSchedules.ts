@@ -1,5 +1,5 @@
+import { Request, Response } from 'express';
 import { getFirestore } from 'firebase-admin/firestore';
-import { Request, Response } from 'firebase-functions/v1';
 import getLnlSchedules from '../utils/getLnlSchedules';
 
 export default async function updateLnlSchedules(

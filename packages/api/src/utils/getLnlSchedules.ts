@@ -1,5 +1,4 @@
 import Axios from 'axios';
-import { config } from 'firebase-functions/v1';
 import { TrelloCard, TrelloMember } from '../types/trello';
 
 const axiosInstance = Axios.create({
@@ -7,15 +6,21 @@ const axiosInstance = Axios.create({
 });
 
 export default async function getLnlSchedules(): Promise<TrelloCard[]> {
-  const { key, token, lnl_card_id } = config().trello;
+  const { TRELLO_KEY, TRELLO_LNL_CARD_ID, TRELLO_TOKEN } = process.env;
+
+  if (!TRELLO_KEY || !TRELLO_LNL_CARD_ID || !TRELLO_TOKEN) {
+    throw new Error(
+      'TRELLO_KEY, TRELLO_LNL_CARD_ID, or TRELLO_TOKEN is not defined'
+    );
+  }
 
   try {
     const { data: cards } = await axiosInstance.get(
-      `/lists/${lnl_card_id}/cards`,
+      `/lists/${TRELLO_LNL_CARD_ID}/cards`,
       {
         params: {
-          key,
-          token,
+          TRELLO_KEY,
+          TRELLO_TOKEN,
           members: true,
         },
       }

@@ -1,5 +1,5 @@
+import { Request, Response } from 'express';
 import { getFirestore } from 'firebase-admin/firestore';
-import { Request, Response } from 'firebase-functions/v1';
 import { weekRef, yearRef } from '../utils/firestorePaths';
 import getStats from '../utils/getStats';
 import getWeek from '../utils/getWeek';
