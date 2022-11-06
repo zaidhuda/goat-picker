@@ -19,8 +19,8 @@ export default async function getLnlSchedules(): Promise<TrelloCard[]> {
       `/lists/${TRELLO_LNL_CARD_ID}/cards`,
       {
         params: {
-          TRELLO_KEY,
-          TRELLO_TOKEN,
+          key: TRELLO_KEY,
+          token: TRELLO_TOKEN,
           members: true,
         },
       }
