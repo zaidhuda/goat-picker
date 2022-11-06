@@ -9,4 +9,7 @@ node_modules/
 
 app.yaml
 .runtimeconfig.json
-.env
+.env.local
+.env.*.local
+
+.eslintcache

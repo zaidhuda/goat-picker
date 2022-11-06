@@ -1,4 +1,3 @@
-import { Request, Response } from 'firebase-functions/v1';
 import pluralize from 'pluralize';
 import getWeek from '../utils/getWeek';
 import getSlackNames from '../utils/getSlackNames';
@@ -10,6 +9,7 @@ import {
 } from '../slack/blocks/builders';
 import { ActionsBlock } from '@slack/bolt';
 import { yearRef } from '../utils/firestorePaths';
+import { Request, Response } from 'express';
 
 export default async function publishStats(
   req: Request,

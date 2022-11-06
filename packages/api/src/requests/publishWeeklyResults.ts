@@ -1,4 +1,3 @@
-import { Request, Response } from 'firebase-functions/v1';
 import getWeek from '../utils/getWeek';
 import getStats from '../utils/getStats';
 import getSlackNames from '../utils/getSlackNames';
@@ -7,6 +6,7 @@ import {
   buildButtonLinkElement,
   buildButtonLinkSection,
 } from '../slack/blocks/builders';
+import { Request, Response } from 'express';
 
 export default async function publishWeeklyResults(
   req: Request,

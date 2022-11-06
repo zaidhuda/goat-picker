@@ -3977,15 +3977,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
-      ["@types/cors", [\
-        ["npm:2.8.12", {\
-          "packageLocation": "./.yarn/cache/@types-cors-npm-2.8.12-ff52e8e514-8c45f112c7.zip/node_modules/@types/cors/",\
-          "packageDependencies": [\
-            ["@types/cors", "npm:2.8.12"]\
-          ],\
-          "linkType": "HARD"\
-        }]\
-      ]],\
       ["@types/express", [\
         ["npm:4.17.14", {\
           "packageLocation": "./.yarn/cache/@types-express-npm-4.17.14-076e1b4711-15c1af46d0.zip/node_modules/@types/express/",\
@@ -3994,16 +3985,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/body-parser", "npm:1.19.2"],\
             ["@types/express-serve-static-core", "npm:4.17.31"],\
             ["@types/qs", "npm:6.9.7"],\
-            ["@types/serve-static", "npm:1.15.0"]\
-          ],\
-          "linkType": "HARD"\
-        }],\
-        ["npm:4.17.3", {\
-          "packageLocation": "./.yarn/cache/@types-express-npm-4.17.3-ac3232298a-9895c322dc.zip/node_modules/@types/express/",\
-          "packageDependencies": [\
-            ["@types/express", "npm:4.17.3"],\
-            ["@types/body-parser", "npm:1.19.2"],\
-            ["@types/express-serve-static-core", "npm:4.17.31"],\
             ["@types/serve-static", "npm:1.15.0"]\
           ],\
           "linkType": "HARD"\
@@ -4821,18 +4802,20 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["api", "workspace:packages/api"],\
             ["@slack/bolt", "npm:3.12.2"],\
+            ["@types/express", "npm:4.17.14"],\
             ["@types/luxon", "npm:3.1.0"],\
             ["@types/node", "npm:18.11.9"],\
             ["@types/pluralize", "npm:0.0.29"],\
             ["@typescript-eslint/eslint-plugin", "virtual:ee30e4e8621888118e3112c9a4791d8c9d181961a7fc656afb8f9862703185d5aaf75e7d8371b318217947e6ff3ef744eedc1fa54c88d453e07d11fef918be75#npm:5.42.0"],\
             ["@typescript-eslint/parser", "virtual:ee30e4e8621888118e3112c9a4791d8c9d181961a7fc656afb8f9862703185d5aaf75e7d8371b318217947e6ff3ef744eedc1fa54c88d453e07d11fef918be75#npm:5.42.0"],\
             ["axios", "npm:0.27.2"],\
-            ["dotenv", "npm:16.0.3"],\
+            ["dotenv-flow", "npm:3.2.0"],\
             ["eslint", "npm:8.26.0"],\
             ["eslint-config-google", "virtual:ee30e4e8621888118e3112c9a4791d8c9d181961a7fc656afb8f9862703185d5aaf75e7d8371b318217947e6ff3ef744eedc1fa54c88d453e07d11fef918be75#npm:0.14.0"],\
             ["eslint-plugin-import", "virtual:ee30e4e8621888118e3112c9a4791d8c9d181961a7fc656afb8f9862703185d5aaf75e7d8371b318217947e6ff3ef744eedc1fa54c88d453e07d11fef918be75#npm:2.26.0"],\
+            ["express", "npm:4.18.2"],\
             ["firebase-admin", "npm:11.2.0"],\
-            ["firebase-functions", "virtual:ee30e4e8621888118e3112c9a4791d8c9d181961a7fc656afb8f9862703185d5aaf75e7d8371b318217947e6ff3ef744eedc1fa54c88d453e07d11fef918be75#npm:4.0.2"],\
+            ["lint-staged", "npm:13.0.3"],\
             ["luxon", "npm:3.1.0"],\
             ["pluralize", "npm:8.0.0"],\
             ["typescript", "patch:typescript@npm%3A4.8.4#~builtin<compat/typescript>::version=4.8.4&hash=701156"],\
@@ -5722,17 +5705,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
-      ["cors", [\
-        ["npm:2.8.5", {\
-          "packageLocation": "./.yarn/cache/cors-npm-2.8.5-c9935a2d12-ced838404c.zip/node_modules/cors/",\
-          "packageDependencies": [\
-            ["cors", "npm:2.8.5"],\
-            ["object-assign", "npm:4.1.1"],\
-            ["vary", "npm:1.1.2"]\
-          ],\
-          "linkType": "HARD"\
-        }]\
-      ]],\
       ["cosmiconfig", [\
         ["npm:7.0.1", {\
           "packageLocation": "./.yarn/cache/cosmiconfig-npm-7.0.1-dd19ae2403-4be63e7117.zip/node_modules/cosmiconfig/",\
@@ -6098,10 +6070,20 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["dotenv", [\
-        ["npm:16.0.3", {\
-          "packageLocation": "./.yarn/cache/dotenv-npm-16.0.3-4cc29121dc-afcf03f373.zip/node_modules/dotenv/",\
+        ["npm:8.6.0", {\
+          "packageLocation": "./.yarn/cache/dotenv-npm-8.6.0-2ce3e9f7bb-38e902c80b.zip/node_modules/dotenv/",\
           "packageDependencies": [\
-            ["dotenv", "npm:16.0.3"]\
+            ["dotenv", "npm:8.6.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["dotenv-flow", [\
+        ["npm:3.2.0", {\
+          "packageLocation": "./.yarn/cache/dotenv-flow-npm-3.2.0-46fffd82c1-8e34ea8f5c.zip/node_modules/dotenv-flow/",\
+          "packageDependencies": [\
+            ["dotenv-flow", "npm:3.2.0"],\
+            ["dotenv", "npm:8.6.0"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -7441,33 +7423,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["jwks-rsa", "npm:2.1.5"],\
             ["node-forge", "npm:1.3.1"],\
             ["uuid", "npm:9.0.0"]\
-          ],\
-          "linkType": "HARD"\
-        }]\
-      ]],\
-      ["firebase-functions", [\
-        ["npm:4.0.2", {\
-          "packageLocation": "./.yarn/cache/firebase-functions-npm-4.0.2-7597900806-ccc7acb34a.zip/node_modules/firebase-functions/",\
-          "packageDependencies": [\
-            ["firebase-functions", "npm:4.0.2"]\
-          ],\
-          "linkType": "SOFT"\
-        }],\
-        ["virtual:ee30e4e8621888118e3112c9a4791d8c9d181961a7fc656afb8f9862703185d5aaf75e7d8371b318217947e6ff3ef744eedc1fa54c88d453e07d11fef918be75#npm:4.0.2", {\
-          "packageLocation": "./.yarn/__virtual__/firebase-functions-virtual-c5be6a0ac9/0/cache/firebase-functions-npm-4.0.2-7597900806-ccc7acb34a.zip/node_modules/firebase-functions/",\
-          "packageDependencies": [\
-            ["firebase-functions", "virtual:ee30e4e8621888118e3112c9a4791d8c9d181961a7fc656afb8f9862703185d5aaf75e7d8371b318217947e6ff3ef744eedc1fa54c88d453e07d11fef918be75#npm:4.0.2"],\
-            ["@types/cors", "npm:2.8.12"],\
-            ["@types/express", "npm:4.17.3"],\
-            ["@types/firebase-admin", null],\
-            ["cors", "npm:2.8.5"],\
-            ["express", "npm:4.18.2"],\
-            ["firebase-admin", "npm:11.2.0"],\
-            ["node-fetch", "virtual:94e2650e81a726e7adc8f0f6e639be3d7648493f2f2b84c27eee40ecea9a62ed0532e681c130c39c234a2ad47b19ceeb2d6987857059ffec26dfbe9101153344#npm:2.6.7"]\
-          ],\
-          "packagePeers": [\
-            "@types/firebase-admin",\
-            "firebase-admin"\
           ],\
           "linkType": "HARD"\
         }]\
