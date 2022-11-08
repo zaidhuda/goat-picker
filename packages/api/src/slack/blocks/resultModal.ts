@@ -1,4 +1,4 @@
-import { ContextBlock, KnownBlock, ModalView } from '@slack/bolt';
+import { ContextBlock, ImageElement, KnownBlock, ModalView } from '@slack/bolt';
 import { DateTime } from 'luxon';
 import pluralize from 'pluralize';
 import { Stats } from '../../types/vote';
@@ -12,7 +12,7 @@ export default async function slackResultModal({
   year: number;
   week: number;
 }): Promise<ModalView> {
-  const { profileWithStats, highestVoted } = (
+  const { profileWithStats, highestVoted, totalParticipation, totalVotes } = (
     await weekRef(year, week).get()
   ).data() as Stats;
   const blocks: KnownBlock[] = [];
@@ -21,37 +21,71 @@ export default async function slackResultModal({
   const startDate = dateTime.startOf('week').toFormat('dd');
   const endDate = dateTime.endOf('week').toFormat('dd LLLL');
 
-  if (highestVoted > 0) {
-    blocks.push(
-      ...profileWithStats
-        .sort(
-          (a, b) =>
-            b.totalVoted - a.totalVoted ||
-            a.displayName.localeCompare(b.displayName)
-        )
-        .filter(({ totalVoted }) => totalVoted > 0)
-        .map<ContextBlock>((profile) => ({
-          type: 'context',
-          elements: [
-            {
+  const highestVotedProfiles = profileWithStats.filter(
+    (profile) => profile.totalVoted === highestVoted
+  );
+
+  const otherProfiles = profileWithStats.filter(
+    (profile) => profile.totalVoted !== highestVoted && profile.totalVoted > 0
+  );
+
+  blocks.push(
+    ...highestVotedProfiles
+      .sort(
+        (a, b) =>
+          b.totalVoted - a.totalVoted ||
+          a.displayName.localeCompare(b.displayName)
+      )
+      .map<ContextBlock>((profile) => ({
+        type: 'context',
+        elements: [
+          {
+            type: 'image',
+            image_url: profile.photoURL,
+            alt_text: profile.displayName,
+          },
+          {
+            type: 'plain_text',
+            text: profile.displayName,
+            emoji: true,
+          },
+          {
+            type: 'plain_text',
+            text: pluralize('vote', profile.totalVoted, true),
+            emoji: true,
+          },
+          {
+            type: 'plain_text',
+            text: '🏆',
+            emoji: true,
+          },
+        ],
+      }))
+  );
+
+  blocks.push(
+    ...Array.from({ length: highestVoted - 1 })
+      .map<ContextBlock>((_, index) => ({
+        type: 'context',
+        elements: [
+          ...otherProfiles
+            .filter(({ totalVoted }) => index + 1 === totalVoted)
+            .sort((a, b) => a.displayName.localeCompare(b.displayName))
+            .map<ImageElement>((profile) => ({
               type: 'image',
               image_url: profile.photoURL,
               alt_text: profile.displayName,
-            },
-            {
-              type: 'plain_text',
-              text: profile.displayName,
-              emoji: true,
-            },
-            {
-              type: 'plain_text',
-              text: pluralize('vote', profile.totalVoted, true),
-              emoji: true,
-            },
-          ],
-        }))
-    );
-  }
+            })),
+          {
+            type: 'plain_text',
+            text: pluralize('vote', index + 1, true),
+            emoji: true,
+          },
+        ],
+      }))
+      .filter((block) => block.elements.length > 1)
+      .reverse()
+  );
 
   if (blocks.length === 0) {
     blocks.push({
@@ -84,6 +118,20 @@ export default async function slackResultModal({
       },
       { type: 'divider' },
       ...blocks,
+      {
+        type: 'context',
+        elements: [
+          {
+            type: 'plain_text',
+            text: `${pluralize('vote', totalVotes, true)} from ${pluralize(
+              'person',
+              totalParticipation,
+              true
+            )}`,
+            emoji: true,
+          },
+        ],
+      },
     ],
   };
 }

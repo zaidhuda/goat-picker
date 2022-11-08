@@ -13,7 +13,7 @@ import updateStats from './requests/updateStats';
 import publishAnnualStats from './requests/publishAnnualStats';
 import publishWeeklyResults from './requests/publishWeeklyResults';
 import updateLnlSchedules from './requests/updateLnlSchedules';
-import slackApp from './slack';
+import { slackReceiver } from './slack';
 
 const app = express();
 const port = process.env.PORT || 8080;
@@ -22,7 +22,7 @@ app.get('/update-stats', auth, updateStats);
 app.get('/publish-annual-stats', auth, publishAnnualStats);
 app.get('/publish-weekly-results', auth, publishWeeklyResults);
 app.get('/update-lnl-schedules', auth, updateLnlSchedules);
-app.use('/slack', slackApp.router);
+app.use('/slack', slackReceiver.router);
 
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);

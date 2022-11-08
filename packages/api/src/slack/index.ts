@@ -4,20 +4,34 @@ import voteModalSubmission from './handler/voteModalSubmission';
 import openVoteModal from './handler/openVoteModal';
 import openResultModal from './handler/openResultModal';
 
-const receiver = new ExpressReceiver({
+export const slackReceiver = new ExpressReceiver({
   signingSecret: `${process.env.SLACK_SIGNING_SECRET}`,
   endpoints: '/',
 });
 
-const app = new App({
+const appOptions = process.env.SLACK_SOCKET_MODE
+  ? {
+      socketMode: true,
+      appToken: process.env.SLACK_APP_TOKEN,
+    }
+  : {
+      receiver: slackReceiver,
+    };
+
+export const slackApp = new App({
   token: process.env.SLACK_BOT_OAUTH_TOKEN,
-  receiver,
+  ...appOptions,
 });
 
-app.action('button-link', ({ ack }) => ack());
-app.action('button-link-2', ({ ack }) => ack());
-app.action('open-vote-modal', openVoteModal);
-app.action('open-result-modal', openResultModal);
-app.view('vote-modal-submission', voteModalSubmission);
+slackApp.action('button-link', ({ ack }) => ack());
+slackApp.action('button-link-2', ({ ack }) => ack());
+slackApp.action('open-vote-modal', openVoteModal);
+slackApp.action('open-result-modal', openResultModal);
+slackApp.view('vote-modal-submission', voteModalSubmission);
 
-export default receiver;
+(async () => {
+  if (process.env.SLACK_SOCKET_MODE) {
+    await slackApp.start();
+    console.log('⚡️ Bolt app started');
+  }
+})();
