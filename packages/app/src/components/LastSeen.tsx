@@ -33,7 +33,7 @@ export default function LastSeen({ lastSeen }: Props) {
   }, [lastSeen]);
 
   if (!lastSeen || !lastSeenText) {
-    return <span>Never</span>;
+    return <span className="font-extralight italic">Never seen</span>;
   }
 
   return (
