@@ -7,6 +7,7 @@ export type Profile = {
   hidden?: boolean;
   slackId?: string;
   lastSeenAt?: Timestamp;
+  lastSeenOnSlackAt?: Timestamp;
   isAdmin?: boolean;
   docUrl: string;
 };

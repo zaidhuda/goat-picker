@@ -1,108 +1,15 @@
-import React, { Fragment, useState } from 'react';
-import { Menu, Transition } from '@headlessui/react';
-import {
-  AdminPanelSettings,
-  DataObject,
-  MoreVert,
-  PersonAdd,
-  PersonRemove,
-} from '@mui/icons-material';
-import { Avatar, Button, IconButton } from '@mui/material';
+import React, { useState } from 'react';
+import { AdminPanelSettings } from '@mui/icons-material';
+import { Avatar, Button } from '@mui/material';
 import classNames from 'classnames';
+import { Timestamp } from 'firebase/firestore';
 import LastSeen from 'components/LastSeen';
 import { getLayout } from 'components/Layout';
+import ProfileMenu, { ProfileMenuAction } from 'components/ProfileMenu';
+import SlackIcon from 'components/SlackIcon';
 import useFirebase from 'hooks/useFirebase';
 import useProfileManager from 'hooks/useProfileManager';
 import { Profile } from 'types/profile';
-
-const SlackIcon = (props: { title?: string }) => (
-  <img
-    {...props}
-    alt="Slack"
-    src={'/images/slack.ico'}
-    width={16}
-    height={16}
-    className="object-contain"
-  />
-);
-
-type MenuAction =
-  | 'slackId'
-  | 'activate'
-  | 'deactivate'
-  | 'setAdmin'
-  | 'removeAdmin';
-
-const ProfileMenu = ({
-  profile: { docUrl, hidden, isAdmin },
-  onMenuClick,
-}: {
-  profile: Profile;
-  onMenuClick: (action: MenuAction) => () => void;
-}) => (
-  <Menu as="div" className="relative inline-block text-left">
-    <Menu.Button as={Fragment}>
-      <IconButton color="primary">
-        <MoreVert className="dark:text-white text-base" />
-      </IconButton>
-    </Menu.Button>
-    <Transition
-      as={Fragment}
-      enter="transition ease-out duration-100"
-      enterFrom="opacity-0 scale-95"
-      enterTo="opacity-100 scale-100"
-      leave="transition ease-in duration-75"
-      leaveFrom="opacity-100 scale-100"
-      leaveTo="opacity-0 scale-95"
-    >
-      <Menu.Items className="absolute right-0 w-36 mt-2 origin-top-right bg-white dark:bg-gray-700 rounded-md outline-none drop-shadow-lg z-10">
-        <Menu.Item>
-          <a href={docUrl} target={docUrl}>
-            <Button
-              fullWidth
-              color="secondary"
-              className="!normal-case"
-              startIcon={<DataObject />}
-            >
-              Firestore
-            </Button>
-          </a>
-        </Menu.Item>
-        {!hidden ? (
-          <Menu.Item
-            as={Button}
-            fullWidth
-            className="!normal-case"
-            color="error"
-            onClick={onMenuClick(isAdmin ? 'removeAdmin' : 'setAdmin')}
-            startIcon={<AdminPanelSettings />}
-          >
-            {isAdmin ? 'Remove admin' : 'Make admin'}
-          </Menu.Item>
-        ) : null}
-        <Menu.Item
-          as={Button}
-          fullWidth
-          className="!normal-case"
-          onClick={onMenuClick('slackId')}
-          startIcon={<SlackIcon />}
-        >
-          Slack ID
-        </Menu.Item>
-        <Menu.Item
-          as={Button}
-          fullWidth
-          color={hidden ? 'success' : 'warning'}
-          className="!normal-case"
-          onClick={onMenuClick(hidden ? 'activate' : 'deactivate')}
-          startIcon={hidden ? <PersonAdd /> : <PersonRemove />}
-        >
-          {hidden ? 'Activate' : 'Deactivate'}
-        </Menu.Item>
-      </Menu.Items>
-    </Transition>
-  </Menu>
-);
 
 type Props = {
   as?: 'page' | 'component';
@@ -115,7 +22,7 @@ export default function ProfilesPage({ as = 'page' }: Props) {
 
   const handleMenuClick =
     ({ id, slackId, displayName }: Profile) =>
-    (action: MenuAction) =>
+    (action: ProfileMenuAction) =>
     () => {
       if (!user?.isAdmin) return;
 
@@ -160,6 +67,73 @@ export default function ProfilesPage({ as = 'page' }: Props) {
       }
     };
 
+  const renderRow = (profile: Profile, index: number) => {
+    const latestLastSeen = (
+      [profile?.lastSeenAt, profile?.lastSeenOnSlackAt].filter(
+        Boolean
+      ) as Timestamp[]
+    ).sort((a, b) => b.toMillis() - a.toMillis())[0];
+
+    const lastSeenOnSlack =
+      !!latestLastSeen && profile.lastSeenOnSlackAt === latestLastSeen;
+
+    return (
+      <tr
+        key={profile.id}
+        className="bg-black dark:bg-white odd:!bg-opacity-5 even:!bg-opacity-0 h-14"
+      >
+        <td className="px-2" width={1}>
+          {index + 1}
+        </td>
+        <td>
+          <div className="flex gap-2 items-center">
+            <Avatar
+              src={profile.photoURL}
+              sx={{ width: 28, height: 28 }}
+              imgProps={{
+                referrerPolicy: 'no-referrer',
+              }}
+            />
+            <div className="flex flex-col">
+              <div className="flex items-center gap-2">
+                <p
+                  className={classNames('line-clamp-1', {
+                    'line-through': profile.hidden,
+                  })}
+                >
+                  {profile.displayName}
+                </p>
+                {profile.isAdmin ? (
+                  <AdminPanelSettings titleAccess="Admin" />
+                ) : null}
+                {profile.slackId ? (
+                  <SlackIcon title={`Slack ID: ${profile.slackId}`} />
+                ) : null}
+              </div>
+              <p className="md:hidden font-thin text-xs !text-opacity-30 text-black dark:text-white">
+                <LastSeen lastSeen={latestLastSeen} />
+              </p>
+            </div>
+          </div>
+        </td>
+        <td className="hidden md:table-cell text-center">
+          <div className="inline-flex gap-2 w-fit">
+            <LastSeen lastSeen={latestLastSeen} />
+            {lastSeenOnSlack ? <SlackIcon title="Last seen on Slack" /> : null}
+          </div>
+        </td>
+        {user?.isAdmin ? (
+          <td className="px-2" width={1}>
+            <ProfileMenu
+              profile={profile}
+              onMenuClick={handleMenuClick(profile)}
+            />
+          </td>
+        ) : null}
+      </tr>
+    );
+  };
+
   const profilesTable = (
     <>
       <table className="table-auto w-full cursor-default">
@@ -172,53 +146,7 @@ export default function ProfilesPage({ as = 'page' }: Props) {
           </tr>
         </thead>
         <tbody>
-          {profiles
-            ?.filter(({ hidden }) => showAll || !hidden)
-            .map((profile, index) => (
-              <tr
-                key={profile.id}
-                className="bg-black dark:bg-white odd:!bg-opacity-5 even:!bg-opacity-0 h-14"
-              >
-                <td className="px-2" width={1}>
-                  {index + 1}
-                </td>
-                <td>
-                  <div className="flex gap-2">
-                    <Avatar
-                      src={profile.photoURL}
-                      sx={{ width: 28, height: 28 }}
-                      imgProps={{
-                        referrerPolicy: 'no-referrer',
-                      }}
-                    />
-                    <p
-                      className={classNames('line-clamp-1', {
-                        'line-through': profile.hidden,
-                      })}
-                    >
-                      {profile.displayName}
-                    </p>
-                    {profile.isAdmin ? (
-                      <AdminPanelSettings titleAccess="Admin" />
-                    ) : null}
-                    {profile.slackId ? (
-                      <SlackIcon title={`Slack ID: ${profile.slackId}`} />
-                    ) : null}
-                  </div>
-                </td>
-                <td className="text-center hidden md:table-cell">
-                  <LastSeen lastSeen={profile.lastSeenAt} />
-                </td>
-                {user?.isAdmin ? (
-                  <td className="px-2" width={1}>
-                    <ProfileMenu
-                      profile={profile}
-                      onMenuClick={handleMenuClick(profile)}
-                    />
-                  </td>
-                ) : null}
-              </tr>
-            ))}
+          {profiles?.filter(({ hidden }) => showAll || !hidden).map(renderRow)}
         </tbody>
       </table>
 
