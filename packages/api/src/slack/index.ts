@@ -3,6 +3,7 @@ import { App, ExpressReceiver } from '@slack/bolt';
 import voteModalSubmission from './handler/voteModalSubmission';
 import openVoteModal from './handler/openVoteModal';
 import openResultModal from './handler/openResultModal';
+import trackUserLastSeenOnSlack from './handler/trackUserLastSeenOnSlack';
 
 export const slackReceiver = new ExpressReceiver({
   signingSecret: `${process.env.SLACK_SIGNING_SECRET}`,
@@ -23,6 +24,7 @@ export const slackApp = new App({
   ...appOptions,
 });
 
+slackApp.use(trackUserLastSeenOnSlack);
 slackApp.action('button-link', ({ ack }) => ack());
 slackApp.action('button-link-2', ({ ack }) => ack());
 slackApp.action('open-vote-modal', openVoteModal);
