@@ -1,5 +1,6 @@
-import { Block, BlockAction, KnownBlock } from '@slack/bolt';
+import { Block, BlockAction, ContextBlock, KnownBlock } from '@slack/bolt';
 import { getFirestore } from 'firebase-admin/firestore';
+import { Profile } from '../../types/profile';
 import { profileRef, votesCollectionRef } from '../../utils/firestorePaths';
 import getSlackAppUser from '../../utils/getSlackAppUser';
 import getWeek from '../../utils/getWeek';
@@ -14,7 +15,7 @@ export default async function slackVoteBlocks({
   );
 
   const blocks: KnownBlock[] = [];
-  const votedUserIds: string[] = [];
+  const votedUsers: Profile[] = [];
   const appUser = await getSlackAppUser(user.id);
 
   if (appUser) {
@@ -23,10 +24,10 @@ export default async function slackVoteBlocks({
       .where('voter', '==', profileRef(appUser.id))
       .get();
 
-    votedUserIds.push(
+    votedUsers.push(
       ...(await Promise.all(
         querySnapshot.docs.map(async (doc) =>
-          (await doc.get('voted').get()).get('slackId')
+          (await doc.get('voted').get()).data()
         )
       ))
     );
@@ -40,7 +41,9 @@ export default async function slackVoteBlocks({
         type: 'multi_users_select',
         action_id: 'select',
         max_selected_items: maxVotes,
-        initial_users: votedUserIds,
+        initial_users: votedUsers
+          .map(({ slackId }) => slackId)
+          .filter(Boolean) as string[],
       },
       label: {
         type: 'plain_text',
@@ -48,6 +51,37 @@ export default async function slackVoteBlocks({
         emoji: true,
       },
     });
+  }
+
+  if (votedUsers.length) {
+    blocks.push({
+      type: 'section',
+      text: {
+        type: 'plain_text',
+        text: 'Current votes:',
+        emoji: true,
+      },
+    });
+
+    blocks.push(
+      ...votedUsers
+        .sort((a, b) => a.displayName.localeCompare(b.displayName))
+        .map<ContextBlock>((profile) => ({
+          type: 'context',
+          elements: [
+            {
+              type: 'image',
+              image_url: profile.photoURL,
+              alt_text: profile.displayName,
+            },
+            {
+              type: 'plain_text',
+              text: profile.displayName,
+              emoji: true,
+            },
+          ],
+        }))
+    );
   }
 
   return blocks;
