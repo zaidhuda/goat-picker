@@ -22,11 +22,13 @@ export default async function slackResultModal({
   const endDate = dateTime.endOf('week').toFormat('dd LLLL');
 
   const highestVotedProfiles = profileWithStats.filter(
-    (profile) => profile.totalVoted === highestVoted
+    (profile) => highestVoted > 1 && profile.totalVoted === highestVoted
   );
 
   const otherProfiles = profileWithStats.filter(
-    (profile) => profile.totalVoted !== highestVoted && profile.totalVoted > 0
+    (profile) =>
+      highestVoted < 2 ||
+      (profile.totalVoted !== highestVoted && profile.totalVoted > 0)
   );
 
   blocks.push(
@@ -64,7 +66,7 @@ export default async function slackResultModal({
   );
 
   blocks.push(
-    ...Array.from({ length: highestVoted - 1 })
+    ...Array.from({ length: Math.max(highestVoted - 1, 1) })
       .map<ContextBlock>((_, index) => ({
         type: 'context',
         elements: [
