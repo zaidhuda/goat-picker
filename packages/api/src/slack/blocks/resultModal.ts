@@ -67,24 +67,35 @@ export default async function slackResultModal({
 
   blocks.push(
     ...Array.from({ length: Math.max(highestVoted - 1, 1) })
-      .map<ContextBlock>((_, index) => ({
-        type: 'context',
-        elements: [
-          ...otherProfiles
-            .filter(({ totalVoted }) => index + 1 === totalVoted)
-            .sort((a, b) => a.displayName.localeCompare(b.displayName))
-            .map<ImageElement>((profile) => ({
-              type: 'image',
-              image_url: profile.photoURL,
-              alt_text: profile.displayName,
-            })),
-          {
-            type: 'plain_text',
-            text: pluralize('vote', index + 1, true),
-            emoji: true,
-          },
-        ],
-      }))
+      .map<ContextBlock>((_, index) => {
+        const profiles = otherProfiles
+          .filter(({ totalVoted }) => index + 1 === totalVoted)
+          .sort((a, b) => a.displayName.localeCompare(b.displayName));
+        const more = profiles.length > 5 && {
+          type: 'plain_text',
+          text: `+${profiles.length - 5} more`,
+          emoji: true,
+        };
+
+        return {
+          type: 'context',
+          elements: [
+            ...profiles
+              .map<ImageElement>((profile) => ({
+                type: 'image',
+                image_url: profile.photoURL,
+                alt_text: profile.displayName,
+              }))
+              .slice(0, 5),
+            more,
+            {
+              type: 'plain_text',
+              text: pluralize('vote', index + 1, true),
+              emoji: true,
+            },
+          ].filter(Boolean) as ContextBlock['elements'],
+        };
+      })
       .filter((block) => block.elements.length > 1)
       .reverse()
   );
