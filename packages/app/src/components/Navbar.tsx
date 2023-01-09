@@ -32,6 +32,12 @@ export default function Navbar() {
       hidden: currentWeek > 1,
     },
     {
+      name: 'Attendances',
+      url: {
+        pathname: '/attendances',
+      },
+    },
+    {
       name: 'LnL',
       url: {
         pathname: '/lnl',

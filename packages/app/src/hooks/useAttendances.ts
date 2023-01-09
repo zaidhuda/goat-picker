@@ -1,13 +1,15 @@
 import { useCallback } from 'react';
 import {
-  collection,
+  collectionGroup,
   deleteDoc,
   doc,
   onSnapshot,
+  query,
   setDoc,
+  where,
 } from 'firebase/firestore';
 import { DateTime } from 'luxon';
-import { Profile } from 'types/profile';
+import { Attendance } from 'types/attendance';
 import useFirebase from './useFirebase';
 
 const ATTENDANCES = 'attendances';
@@ -23,6 +25,7 @@ export default function useAttendances() {
           id: user.id,
           displayName: user.displayName,
           photoURL: user.photoURL,
+          date: date.toISODate(),
         }
       )
         .then(resolve)
@@ -44,14 +47,23 @@ export default function useAttendances() {
   };
 
   const getAttendances = useCallback(
-    (date: DateTime, resolve: (value: Profile[]) => void) => {
+    (year: number, week: number, resolve: (value: Attendance[]) => void) => {
       if (db && user) {
+        const date = DateTime.fromObject({
+          weekYear: year,
+          weekNumber: week,
+        }).startOf('week');
+
         return onSnapshot(
-          collection(db, `${ATTENDANCES}/${date.toISODate()}/attendances`),
+          query(
+            collectionGroup(db, 'attendances'),
+            where('date', '>=', date.toISODate()),
+            where('date', '<=', date.endOf('week').toISODate())
+          ),
           (querySnapshot) => {
-            const data: Profile[] = [];
+            const data: Attendance[] = [];
             querySnapshot.forEach((doc) => {
-              data.push(doc.data() as Profile);
+              data.push(doc.data() as Attendance);
             });
             resolve(data);
           }
